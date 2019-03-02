@@ -1,0 +1,25 @@
+{
+  "name": "sample-project",
+  "version": "1.0.0",
+  "description": "sample project for the trool library",
+  "main": "start.ts",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/seanpmaxwell/Trool.git"
+  },
+  "keywords": [
+    "trool",
+    "sample",
+    "project",
+    "sample-project"
+  ],
+  "author": "sean maxwell",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/seanpmaxwell/Trool/issues"
+  },
+  "homepage": "https://github.com/seanpmaxwell/Trool#readme"
+}

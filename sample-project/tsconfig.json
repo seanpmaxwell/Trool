@@ -1,0 +1,32 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "module": "commonjs",
+    "strict": true,
+    "baseUrl": "./",
+    "sourceMap": true,
+    "removeComments": true,
+    "experimentalDecorators": true,
+    "target": "es5",
+    "emitDecoratorMetadata": true,
+    "moduleResolution": "node",
+    "strictNullChecks": true,
+    "importHelpers": true,
+    "types": [
+      "node"
+    ],
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "lib": [
+      "es2015",
+      "dom"
+    ]
+  },
+  "include": [
+    "./lib/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
