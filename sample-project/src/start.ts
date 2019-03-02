@@ -1,10 +1,11 @@
 /**
- *
+ * Sample project for the trool library
  *
  * created by Sean Maxwell Mar 2, 2019
  */
 
-import { cinfo, cerr } from 'simple-color-print';
-import Trool from 'trool';
+import CustomerProcessor from './CustomerProcessor';
 
-new Trool();
+
+const customerProcessor = new CustomerProcessor();
+customerProcessor.processCustomers();

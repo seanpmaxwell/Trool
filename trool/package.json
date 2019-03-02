@@ -30,6 +30,7 @@
   },
   "homepage": "https://github.com/seanpmaxwell/Trool#readme",
   "dependencies": {
+    "csvtojson": "^2.0.8",
     "simple-color-print": "^1.0.6"
   },
   "devDependencies": {

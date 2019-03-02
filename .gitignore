@@ -6,10 +6,10 @@
 # Misc
 **/node_modules
 **/package-lock.json
-src/test.js
+trool/test.js
 
 
 # Transpiled files
-**/src/**/*.js
-**/src/**/*.js.map
-**/lib/**/*.d.ts
+**/**/*.js
+**/**/*.js.map
+**/**/*.d.ts
