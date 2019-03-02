@@ -1,0 +1,14 @@
+# IntelliJ project files
+*.iml
+.idea/
+
+
+# Misc
+**/node_modules
+**/package-lock.json
+
+
+# Transpiled files
+**/src/**/*.js
+**/src/**/*.js.map
+**/lib/**/*.d.ts
