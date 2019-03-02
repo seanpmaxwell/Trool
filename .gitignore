@@ -6,6 +6,7 @@
 # Misc
 **/node_modules
 **/package-lock.json
+src/test.js
 
 
 # Transpiled files

@@ -10,8 +10,10 @@
     "target": "es5",
     "emitDecoratorMetadata": true,
     "moduleResolution": "node",
-    "strictNullChecks": true,
     "importHelpers": true,
+    "paths": {
+      "trool": ["../src"]
+    },
     "types": [
       "node"
     ],
@@ -24,7 +26,7 @@
     ]
   },
   "include": [
-    "./lib/**/*.ts"
+    "./src/**/*"
   ],
   "exclude": [
     "node_modules"

@@ -3,14 +3,16 @@
   "compilerOptions": {
     "module": "commonjs",
     "strict": true,
+    "noImplicitAny": true,
     "baseUrl": "./",
+    "declaration": true,
+    "declarationDir": "lib/",
     "sourceMap": true,
     "removeComments": true,
     "experimentalDecorators": true,
     "target": "es5",
     "emitDecoratorMetadata": true,
     "moduleResolution": "node",
-    "strictNullChecks": true,
     "importHelpers": true,
     "types": [
       "node"
@@ -24,7 +26,7 @@
     ]
   },
   "include": [
-    "./lib/**/*.ts"
+    "./lib/**/*"
   ],
   "exclude": [
     "node_modules"
