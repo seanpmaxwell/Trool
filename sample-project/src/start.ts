@@ -5,9 +5,9 @@
  */
 
 import { cinfo, cerr } from 'simple-color-print';
-import { TicketOpts } from './Ticket';
+import { TicketOpts } from './models/Ticket';
 import PriceCalculator from './PriceCalculator';
-import Visitor from './Visitor';
+import Visitor from './models/Visitor';
 
 
 

@@ -9,14 +9,14 @@ import * as path from 'path';
 import { cinfo, cerr } from 'simple-color-print';
 
 import Trool, { FactsObject } from 'trool';
-import Ticket, { TicketOpts } from './Ticket';
-import Visitor from './Visitor';
+import Ticket, { TicketOpts } from './models/Ticket';
+import Visitor from './models/Visitor';
 
 
 class PriceCalculator {
 
     private _trool: Trool;
-    private readonly _CSV_FILE = 'VisitorRules.csv';
+    private readonly _CSV_FILE = 'rule-files/VisitorRules.csv';
 
 
     constructor() {
