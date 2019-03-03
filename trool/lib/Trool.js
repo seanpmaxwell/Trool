@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = require("tslib");
 var csvtojson = require("csvtojson");
+var simple_color_print_1 = require("simple-color-print");
 var Trool = (function () {
     function Trool() {
         this._FACT_FORMAT_ERR = 'End of fact reached without a start';
@@ -15,17 +16,16 @@ var Trool = (function () {
                         updatedFacts = {};
                         _a.label = 1;
                     case 1:
-                        _a.trys.push([1, 3, 4, 5]);
+                        _a.trys.push([1, 3, , 4]);
                         return [4, csvtojson().fromFile(filePath)];
                     case 2:
                         jsonArr = _a.sent();
                         factArr = this._iterateArr(jsonArr);
-                        return [3, 5];
+                        return [2, factArr];
                     case 3:
                         err_1 = _a.sent();
                         throw err_1;
-                    case 4: return [2, updatedFacts];
-                    case 5: return [2];
+                    case 4: return [2];
                 }
             });
         });
@@ -57,6 +57,7 @@ var Trool = (function () {
         return factArr;
     };
     Trool.prototype._processFacts = function (factArr) {
+        simple_color_print_1.cinfo(factArr);
         return {};
     };
     return Trool;

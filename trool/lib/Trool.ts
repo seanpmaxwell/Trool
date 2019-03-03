@@ -14,18 +14,16 @@ class Trool {
     private readonly _FACT_FORMAT_ERR = 'End of fact reached without a start';
 
 
-    public async applyRules(factsObject: FactsObject, filePath: string): Promise<FactsObject | Error> {
+    public async applyRules(factsObject: FactsObject, filePath: string): Promise<FactsObject> {
 
         let updatedFacts = {};
 
         try {
             const jsonArr = await csvtojson().fromFile(filePath);
             const factArr = this._iterateArr(jsonArr);
-
+            return factArr as any;
         } catch (err) {
             throw err;
-        } finally {
-            return updatedFacts;
         }
     }
 
@@ -67,9 +65,7 @@ class Trool {
 
     private _processFacts(factArr: Object[][]): FactsObject {
 
-
-
-
+        cinfo(factArr);
         return {};
     }
 }
@@ -82,6 +78,7 @@ export default Trool;
 // Operators.push(new Operator('notEqual', (a, b) => a !== b))
 // Operators.push(new Operator('in', (a, b) => b.indexOf(a) > -1))
 // Operators.push(new Operator('notIn', (a, b) => b.indexOf(a) === -1))
+// add isBetween here
 //
 // Operators.push(new Operator('contains', (a, b) => a.indexOf(b) > -1, Array.isArray))
 // Operators.push(new Operator('doesNotContain', (a, b) => a.indexOf(b) === -1, Array.isArray))

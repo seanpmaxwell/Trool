@@ -4,34 +4,34 @@
  * created by Sean Maxwell Mar 2, 2019
  */
 
-
-type ticketOpts = 'Regular' | 'Seasonal';
-
 class Ticket {
 
-    public basePrice: number;
-    public option: ticketOpts;
-    public eventDate: Date;
+    private _option: TicketOpts;
+    private _price: number;
+    private _freeTshirt: boolean;
 
 
-    constructor(option: ticketOpts, eventDate: Date, basePrice: number) {
-        this.basePrice = basePrice;
-        this.eventDate = eventDate;
-        this.option = option;
+    constructor(option: TicketOpts) {
+        this._option = option;
+        this._price = 0;
+        this._freeTshirt = false;
     }
 
 
-    // Base on Regular or Seasonal
-    public setBasePrice(basePrice: number): void {
-        this.basePrice = basePrice;
+    get price(): number {
+        return this._price;
     }
 
 
-    // Update the basePrice based on time till event
-    // Price will increase as times goes on
-    public addToBasePrice(toAdd: number): void {
-        this.basePrice += toAdd;
+    set price(price: number) {
+        this._price = price;
+    }
+
+
+    set freeTshirt(freeTshirt: boolean) {
+        this._freeTshirt = freeTshirt;
     }
 }
 
+export type TicketOpts = 'Regular' | 'Season' | null;
 export default Ticket;

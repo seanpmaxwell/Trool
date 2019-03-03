@@ -1,0 +1,17 @@
+,,,,,,,,
+Start: Visitors,Condition,Condition,Condition,Condition,Condition,Action,Action,Action
+,inBetween(“age”),greaterThan(“age”),lessThan(“age”),inBetween(“partySize”),greaterThan(“partySize”),addToDiscount(“discount”),set(“customerType”),set(“FreeTshirt”)
+Add Discount – Adult,"18, 64",,,,,0,Adult,
+Add Discount – Senior,,65,,,,30,Senior,
+Add Discount – Child,,,18,,,15,Child,
+Add Discount – Medium Party,,,,"5,9",,5,,FALSE
+Add Discount – Large Party,,,,,10,10,,TRUE
+End,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+Start: Tickets,Condition,Action,,,,,,
+,equals(“option”),set(“price”),,,,,,
+Set Price – Regular,Regular,100,,,,,,
+Set Price – Season,Season,600,,,,,,
+End,,,,,,,,
