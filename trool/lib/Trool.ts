@@ -6,67 +6,107 @@
 
 import * as csvtojson from 'csvtojson';
 import { cinfo, cerr } from 'simple-color-print';
-import { FactsObject } from './types';
+import { FactsObject, Row } from './types';
+import DecisionTable from './DecisionTable';
 
 
 class Trool {
 
-    private readonly _FACT_FORMAT_ERR = 'End of fact reached without a start';
+    private readonly _TABLE_FORMAT_ERR = 'End of rule block reached without a start';
+    private readonly _IMPORT_ERR_1 = 'First cell of spreadsheet must be "Imports"';
+    private readonly _IMPORT_ERR_2 = 'Spreadsheet contains a greater number of imports than what' +
+        'was provided to the facts object.';
 
 
     public async applyRules(factsObject: FactsObject, filePath: string): Promise<FactsObject> {
 
-        let updatedFacts = {};
-
         try {
             const jsonArr = await csvtojson().fromFile(filePath);
-            const factArr = this._iterateArr(jsonArr);
-            return factArr as any;
+            const importsObj = this._setupImports(factsObject, jsonArr[0]);
+            const decisionTables = this._setupDecisionTables(jsonArr, factsObject, importsObj);
+            return this._updateFacts(decisionTables)
         } catch (err) {
             throw err;
         }
     }
 
+
+    private _setupImports(factsObject: FactsObject, importRow: Row): {} {
+
+        let { field0, field1 } = importRow;
+
+        // Spreadsheet's first row must be an
+        // 'Imports' row
+        if (field0 !== 'Imports') {
+            throw Error(this._IMPORT_ERR_1);
+        }
+
+        let importsObj = {} as any;
+        let importsArr = field1.split(',');
+
+        // Spreadsheet cannot specify more imports than what
+        // was provided
+        if (importsArr.length > factsObject.Imports.length) {
+            throw Error(this._IMPORT_ERR_2);
+        }
+
+        importsArr.forEach((importStr, i) => {
+            importsObj[importStr] = factsObject.Imports[i];
+        });
+
+        return importsObj;
+    }
+
+
     /**
-     * Group facts into an Array of Arrays.
+     * Get array of Decision Tables objects from spreadsheet data.
      */
-    private _iterateArr(jsonArr: Array<any>): Object[][] {
+    private _setupDecisionTables(jsonArr: Array<Row>, factsObject: FactsObject, importsObj: {}):
+        DecisionTable[] {
 
-        let factArr = [];
-
-        let factStart = -1;
-        let factEnd = -1;
+        let decisionTables = [];
+        let tableStart = -1;
+        let tableEnd = -1;
 
         for (let i = 0; i < jsonArr.length; i++) {
 
             const { field1 } = jsonArr[i];
 
+            // Get indexes for a table
             if (field1.includes('Start: ')) {
-                factStart = i;
+                tableStart = i;
             } else if (field1 === 'End') {
-                if (factStart === -1) {
-                    throw Error(this._FACT_FORMAT_ERR);
+                if (tableStart === -1) {
+                    throw Error(this._TABLE_FORMAT_ERR);
                 } else {
-                    factEnd = i;
+                    tableEnd = i;
                 }
             }
 
-            if (factStart !== -1 && factEnd !== -1) {
-                const fact = jsonArr.slice(factStart, factEnd);
-                factArr.push(fact);
-                factStart = -1;
-                factEnd = -1;
+            // Create new Decision Table
+            if (tableStart !== -1 && tableEnd !== -1) {
+                const table = jsonArr.slice(tableStart, tableEnd);
+                const decisionTable = new DecisionTable();
+                decisionTable.setupFormat(table, importsObj);
+                decisionTable.setData(factsObject);
+                decisionTables.push(decisionTable);
+                tableStart = -1;
+                tableEnd = -1;
             }
         }
 
-        return factArr;
+        return decisionTables;
     }
 
 
-    private _processFacts(factArr: Object[][]): FactsObject {
+    private _updateFacts(decisionTables: DecisionTable[]): FactsObject {
 
-        cinfo(factArr);
-        return {};
+        let updateFacts = {} as any;
+
+        // loop through array of decision tables
+        // updatesFacts[table.getFactName] = table.updateFacts()
+
+        return updateFacts;
     }
 }
 

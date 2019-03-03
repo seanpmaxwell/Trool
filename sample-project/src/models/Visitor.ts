@@ -7,13 +7,11 @@
 import Ticket from './Ticket';
 
 
-type VisitorTypes = 'Adult' | 'Senior' | 'Child' | null;
-
 class Visitor {
 
     private _age: number;
     private _discount: number;
-    private _visitorType: VisitorTypes;
+    private _visitorType: string | null;
     private _partySize: number;
 
 
@@ -25,7 +23,7 @@ class Visitor {
     }
 
 
-    set visitorType(visitorType: VisitorTypes) {
+    set visitorType(visitorType: string) {
         this._visitorType = visitorType;
     }
 
