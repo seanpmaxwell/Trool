@@ -37,7 +37,7 @@ class Trool {
 
         // Spreadsheet's first row must be an
         // 'Imports' row
-        if (field0 !== 'Imports') {
+        if (field0 !== 'Imports:') {
             throw Error(this._IMPORT_ERR_1);
         }
 

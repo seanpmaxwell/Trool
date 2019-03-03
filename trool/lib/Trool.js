@@ -33,7 +33,7 @@ var Trool = (function () {
     };
     Trool.prototype._setupImports = function (factsObject, importRow) {
         var field0 = importRow.field0, field1 = importRow.field1;
-        if (field0 !== 'Imports') {
+        if (field0 !== 'Imports:') {
             throw Error(this._IMPORT_ERR_1);
         }
         var importsObj = {};

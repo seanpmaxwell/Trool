@@ -21,6 +21,8 @@ class DecisionTable {
 
     public setupFormat(arrTable: Array<Row>, importsObj: {}): void {
 
+        // Create and operators class. Trool will first look if a condition is an operator in this
+        // class. If it is not, it will look for a method
     }
 
     // create a method called checkFormat here, check for errors

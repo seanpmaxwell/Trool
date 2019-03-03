@@ -2,7 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8f9b2c1e-37fa-418d-adda-b575ba9bad77" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/sample-project/src/start.ts" beforeDir="false" afterPath="$PROJECT_DIR$/sample-project/src/start.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sample-project/src/rule-files/.~lock.VisitorRules.ots#" beforeDir="false" afterPath="$PROJECT_DIR$/sample-project/src/rule-files/.~lock.VisitorRules.ots#" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sample-project/src/rule-files/VisitorRules.ots" beforeDir="false" afterPath="$PROJECT_DIR$/sample-project/src/rule-files/VisitorRules.ots" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trool/lib/DecisionTable.ts" beforeDir="false" afterPath="$PROJECT_DIR$/trool/lib/DecisionTable.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trool/lib/Trool.ts" beforeDir="false" afterPath="$PROJECT_DIR$/trool/lib/Trool.ts" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -33,7 +36,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/sample-project/src/start.ts">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="17">
@@ -48,8 +51,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/sample-project/src/PriceCalculator.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="318">
-              <caret line="46" column="92" selection-start-line="46" selection-start-column="81" selection-end-line="46" selection-end-column="92" />
+            <state relative-caret-position="-5">
+              <caret line="39" column="12" selection-start-line="39" selection-start-column="12" selection-end-line="39" selection-end-column="22" />
               <folding>
                 <element signature="e#147#176#0" expanded="true" />
               </folding>
@@ -97,19 +100,19 @@
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="FIRST">
-              <first_editor relative-caret-position="136">
-                <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
+              <first_editor relative-caret-position="187">
+                <caret line="11" column="102" selection-start-line="11" selection-start-column="102" selection-end-line="11" selection-end-column="102" />
               </first_editor>
               <second_editor />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/trool/lib/Trool.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="37" column="45" lean-forward="true" selection-start-line="37" selection-start-column="45" selection-end-line="37" selection-end-column="45" />
+            <state relative-caret-position="153">
+              <caret line="39" column="32" selection-start-line="39" selection-start-column="32" selection-end-line="39" selection-end-column="32" />
               <folding>
                 <element signature="e#73#112#0" expanded="true" />
               </folding>
@@ -120,8 +123,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/trool/lib/DecisionTable.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="12" column="30" lean-forward="true" selection-start-line="12" selection-start-column="30" selection-end-line="12" selection-end-column="30" />
+            <state relative-caret-position="255">
+              <caret line="24" column="57" selection-start-line="24" selection-start-column="57" selection-end-line="24" selection-end-column="57" />
             </state>
           </provider>
         </entry>
@@ -183,10 +186,10 @@
         <option value="$PROJECT_DIR$/sample-project/src/models/constants.ts" />
         <option value="$PROJECT_DIR$/sample-project/src/models/Visitor.ts" />
         <option value="$PROJECT_DIR$/trool/lib/types.ts" />
+        <option value="$PROJECT_DIR$/sample-project/src/start.ts" />
+        <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/trool/lib/DecisionTable.ts" />
         <option value="$PROJECT_DIR$/trool/lib/Trool.ts" />
-        <option value="$PROJECT_DIR$/README.md" />
-        <option value="$PROJECT_DIR$/sample-project/src/start.ts" />
       </list>
     </option>
   </component>
@@ -292,12 +295,12 @@
       <workItem from="1551549401856" duration="1925000" />
       <workItem from="1551551337869" duration="5176000" />
       <workItem from="1551556526404" duration="23754000" />
-      <workItem from="1551630302681" duration="10127000" />
+      <workItem from="1551630302681" duration="11549000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="42430000" />
+    <option name="totallyTimeSpent" value="43852000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1920" y="-1" width="1920" height="1158" extended-state="6" />
@@ -482,38 +485,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/sample-project/src/PriceCalculator.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="318">
-          <caret line="46" column="92" selection-start-line="46" selection-start-column="81" selection-end-line="46" selection-end-column="92" />
-          <folding>
-            <element signature="e#147#176#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/trool/lib/DecisionTable.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="12" column="30" lean-forward="true" selection-start-line="12" selection-start-column="30" selection-end-line="12" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/trool/lib/Trool.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="37" column="45" lean-forward="true" selection-start-line="37" selection-start-column="45" selection-end-line="37" selection-end-column="45" />
-          <folding>
-            <element signature="e#73#112#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="FIRST">
-          <first_editor relative-caret-position="136">
-            <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
+          <first_editor relative-caret-position="187">
+            <caret line="11" column="102" selection-start-line="11" selection-start-column="102" selection-end-line="11" selection-end-column="102" />
           </first_editor>
           <second_editor />
         </state>
@@ -525,6 +501,33 @@
           <caret line="1" column="47" selection-start-line="1" selection-start-column="47" selection-end-line="1" selection-end-column="47" />
           <folding>
             <element signature="e#91#140#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sample-project/src/PriceCalculator.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-5">
+          <caret line="39" column="12" selection-start-line="39" selection-start-column="12" selection-end-line="39" selection-end-column="22" />
+          <folding>
+            <element signature="e#147#176#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trool/lib/DecisionTable.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="24" column="57" selection-start-line="24" selection-start-column="57" selection-end-line="24" selection-end-column="57" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trool/lib/Trool.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="39" column="32" selection-start-line="39" selection-start-column="32" selection-end-line="39" selection-end-column="32" />
+          <folding>
+            <element signature="e#73#112#0" expanded="true" />
           </folding>
         </state>
       </provider>
