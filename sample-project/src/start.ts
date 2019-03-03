@@ -1,5 +1,5 @@
 /**
- * Sample project for the trool library
+ * Setup Visitor data for the Price Calculator.
  *
  * created by Sean Maxwell Mar 2, 2019
  */
