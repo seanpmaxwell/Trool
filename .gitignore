@@ -1,12 +1,6 @@
-# IntelliJ project files
-*.iml
-.idea/
-
-
 # Misc
 **/node_modules
 **/package-lock.json
-trool/test.js
 
 
 # Transpiled files
