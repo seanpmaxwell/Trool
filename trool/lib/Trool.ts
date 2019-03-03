@@ -11,20 +11,66 @@ import { FactsObject } from './types';
 
 class Trool {
 
+    private readonly _FACT_FORMAT_ERR = 'End of fact reached without a start';
+
 
     public async applyRules(factsObject: FactsObject, filePath: string): Promise<FactsObject | Error> {
 
+        let updatedFacts = {};
 
         try {
-
-            const jsonArray = await csvtojson().fromFile(filePath);
-            cinfo(jsonArray);
+            const jsonArr = await csvtojson().fromFile(filePath);
+            const factArr = this._iterateArr(jsonArr);
 
         } catch (err) {
             throw err;
         } finally {
-            return {};
+            return updatedFacts;
         }
+    }
+
+    /**
+     * Group facts into an Array of Arrays.
+     */
+    private _iterateArr(jsonArr: Array<any>): Object[][] {
+
+        let factArr = [];
+
+        let factStart = -1;
+        let factEnd = -1;
+
+        for (let i = 0; i < jsonArr.length; i++) {
+
+            const { field1 } = jsonArr[i];
+
+            if (field1.includes('Start: ')) {
+                factStart = i;
+            } else if (field1 === 'End') {
+                if (factStart === -1) {
+                    throw Error(this._FACT_FORMAT_ERR);
+                } else {
+                    factEnd = i;
+                }
+            }
+
+            if (factStart !== -1 && factEnd !== -1) {
+                const fact = jsonArr.slice(factStart, factEnd);
+                factArr.push(fact);
+                factStart = -1;
+                factEnd = -1;
+            }
+        }
+
+        return factArr;
+    }
+
+
+    private _processFacts(factArr: Object[][]): FactsObject {
+
+
+
+
+        return {};
     }
 }
 

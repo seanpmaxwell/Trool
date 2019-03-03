@@ -1,5 +1,4 @@
 ,,,,,
-,,,,,
 Start: Customer,Condition,Condition,Condition,Action,Action
 Name,inBetween(“age”),greaterThan(“age”),lessThan(“age”),setDiscount(param),setCustomerType(param)
 Set Discount Adult,"18, 64",,,0,Adult

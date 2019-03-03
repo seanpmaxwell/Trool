@@ -25,16 +25,17 @@ class CustomerProcessor {
 
     public async processCustomers(): Promise<void> {
 
-        let factsObj = this.setupFacts();
+        let updateFacts;
 
         try {
+            const factsObj = this.setupFacts();
             const csvFilePath = path.join(__dirname, this._CSV_FILE);
-            factsObj = await this._trool.applyRules(factsObj, csvFilePath);
+            updateFacts = await this._trool.applyRules(factsObj, csvFilePath);
 
         } catch (err) {
             cerr(err);
         } finally {
-            cinfo(factsObj);
+            cinfo(updateFacts);
         }
     }
 
