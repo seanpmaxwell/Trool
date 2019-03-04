@@ -23,8 +23,8 @@ class Trool {
         try {
             const jsonArr = await csvtojson().fromFile(filePath);
             const importsObj = this._setupImports(factsObject, jsonArr[0]);
-            const decisionTables = this._setupDecisionTables(jsonArr, factsObject, importsObj);
-            return this._updateFacts(decisionTables)
+            const decisionTables = this._setupDecisionTables(jsonArr, importsObj);
+            return this._updateFacts(decisionTables, factsObject);
         } catch (err) {
             throw err;
         }
@@ -59,9 +59,9 @@ class Trool {
 
 
     /**
-     * Get array of Decision Tables objects from spreadsheet data.
+     * Get array of DecisionTable objects from spreadsheet data.
      */
-    private _setupDecisionTables(jsonArr: Array<Row>, factsObject: FactsObject, importsObj: {}):
+    private _setupDecisionTables(jsonArr: Array<Row>, importsObj: {}):
         DecisionTable[] {
 
         let decisionTables = [];
@@ -87,24 +87,25 @@ class Trool {
             if (tableStart !== -1 && tableEnd !== -1) {
                 const table = jsonArr.slice(tableStart, tableEnd);
                 const decisionTable = new DecisionTable();
-                decisionTable.setupFormat(table, importsObj);
-                decisionTable.setData(factsObject);
+                decisionTable.initTable(table, importsObj);
                 decisionTables.push(decisionTable);
-                tableStart = -1;
-                tableEnd = -1;
+                tableStart = tableEnd = -1;
             }
         }
 
+        cinfo(decisionTables.length + ' decision table\\s found');
         return decisionTables;
     }
 
-
-    private _updateFacts(decisionTables: DecisionTable[]): FactsObject {
+    /**
+     * Update facts object, using the DecisionTable objects.
+     */
+    private _updateFacts(decisionTables: DecisionTable[], factsObject: FactsObject): FactsObject {
 
         let updateFacts = {} as any;
 
         // loop through array of decision tables
-        // updatesFacts[table.getFactName] = table.updateFacts()
+        // updatesFacts[table.getFactName] = table.updateFacts(factsObject)
 
         return updateFacts;
     }

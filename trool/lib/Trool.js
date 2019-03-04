@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = require("tslib");
 var csvtojson = require("csvtojson");
+var simple_color_print_1 = require("simple-color-print");
 var DecisionTable_1 = require("./DecisionTable");
 var Trool = (function () {
     function Trool() {
@@ -21,8 +22,8 @@ var Trool = (function () {
                     case 1:
                         jsonArr = _a.sent();
                         importsObj = this._setupImports(factsObject, jsonArr[0]);
-                        decisionTables = this._setupDecisionTables(jsonArr, factsObject, importsObj);
-                        return [2, this._updateFacts(decisionTables)];
+                        decisionTables = this._setupDecisionTables(jsonArr, importsObj);
+                        return [2, this._updateFacts(decisionTables, factsObject)];
                     case 2:
                         err_1 = _a.sent();
                         throw err_1;
@@ -46,7 +47,7 @@ var Trool = (function () {
         });
         return importsObj;
     };
-    Trool.prototype._setupDecisionTables = function (jsonArr, factsObject, importsObj) {
+    Trool.prototype._setupDecisionTables = function (jsonArr, importsObj) {
         var decisionTables = [];
         var tableStart = -1;
         var tableEnd = -1;
@@ -66,16 +67,15 @@ var Trool = (function () {
             if (tableStart !== -1 && tableEnd !== -1) {
                 var table = jsonArr.slice(tableStart, tableEnd);
                 var decisionTable = new DecisionTable_1.default();
-                decisionTable.setupFormat(table, importsObj);
-                decisionTable.setData(factsObject);
+                decisionTable.initTable(table, importsObj);
                 decisionTables.push(decisionTable);
-                tableStart = -1;
-                tableEnd = -1;
+                tableStart = tableEnd = -1;
             }
         }
+        simple_color_print_1.cinfo(decisionTables.length + ' decision table\\s found');
         return decisionTables;
     };
-    Trool.prototype._updateFacts = function (decisionTables) {
+    Trool.prototype._updateFacts = function (decisionTables, factsObject) {
         var updateFacts = {};
         return updateFacts;
     };
