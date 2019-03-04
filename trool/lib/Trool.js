@@ -22,8 +22,8 @@ var Trool = (function () {
                     case 1:
                         jsonArr = _a.sent();
                         importsObj = this._setupImports(factsObject, jsonArr[0]);
-                        decisionTables = this._setupDecisionTables(jsonArr, importsObj);
-                        return [2, this._updateFacts(decisionTables, factsObject)];
+                        decisionTables = this._setupDecisionTables(factsObject, jsonArr, importsObj);
+                        return [2, this._updateFacts(decisionTables)];
                     case 2:
                         err_1 = _a.sent();
                         throw err_1;
@@ -47,7 +47,7 @@ var Trool = (function () {
         });
         return importsObj;
     };
-    Trool.prototype._setupDecisionTables = function (jsonArr, importsObj) {
+    Trool.prototype._setupDecisionTables = function (factsObject, jsonArr, importsObj) {
         var decisionTables = [];
         var tableStart = -1;
         var tableEnd = -1;
@@ -67,6 +67,7 @@ var Trool = (function () {
             if (tableStart !== -1 && tableEnd !== -1) {
                 var table = jsonArr.slice(tableStart, tableEnd);
                 var decisionTable = new DecisionTable_1.default();
+                decisionTable.setFacts(factsObject);
                 decisionTable.initTable(table, importsObj);
                 decisionTables.push(decisionTable);
                 tableStart = tableEnd = -1;
@@ -75,7 +76,7 @@ var Trool = (function () {
         simple_color_print_1.cinfo(decisionTables.length + ' decision table\\s found');
         return decisionTables;
     };
-    Trool.prototype._updateFacts = function (decisionTables, factsObject) {
+    Trool.prototype._updateFacts = function (decisionTables) {
         var updateFacts = {};
         return updateFacts;
     };

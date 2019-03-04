@@ -2,13 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8f9b2c1e-37fa-418d-adda-b575ba9bad77" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sample-project/src/PriceCalculator.ts" beforeDir="false" afterPath="$PROJECT_DIR$/sample-project/src/PriceCalculator.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/trool/lib/DecisionTable.ts" beforeDir="false" afterPath="$PROJECT_DIR$/trool/lib/DecisionTable.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/trool/lib/Trool.js" beforeDir="false" afterPath="$PROJECT_DIR$/trool/lib/Trool.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/trool/lib/Trool.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/trool/lib/Trool.js.map" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/trool/lib/Trool.ts" beforeDir="false" afterPath="$PROJECT_DIR$/trool/lib/Trool.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trool/lib/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/trool/lib/types.ts" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -48,11 +46,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/sample-project/src/PriceCalculator.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="544">
-              <caret line="39" column="12" selection-start-line="39" selection-start-column="12" selection-end-line="39" selection-end-column="22" />
+            <state relative-caret-position="306">
+              <caret line="38" column="20" selection-start-line="38" selection-start-column="20" selection-end-line="38" selection-end-column="20" />
               <folding>
                 <element signature="e#147#176#0" expanded="true" />
               </folding>
@@ -111,8 +109,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/trool/lib/Trool.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="425">
-              <caret line="63" column="68" selection-start-line="63" selection-start-column="54" selection-end-line="63" selection-end-column="68" />
+            <state relative-caret-position="-396">
+              <caret line="26" column="51" selection-start-line="26" selection-start-column="51" selection-end-line="26" selection-end-column="51" />
               <folding>
                 <element signature="e#73#112#0" expanded="true" />
               </folding>
@@ -120,11 +118,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/trool/lib/DecisionTable.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="72" column="137" selection-start-line="72" selection-start-column="137" selection-end-line="72" selection-end-column="137" />
+            <state relative-caret-position="191">
+              <caret line="28" column="28" selection-start-line="28" selection-start-column="28" selection-end-line="28" selection-end-column="28" />
             </state>
           </provider>
         </entry>
@@ -152,6 +150,7 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>customer</find>
+      <find>_importsObj</find>
     </findStrings>
     <replaceStrings>
       <replace>visitor</replace>
@@ -182,14 +181,14 @@
         <option value="$PROJECT_DIR$/sample-project/src/Visitor.ts" />
         <option value="$PROJECT_DIR$/sample-project/src/Ticket.ts" />
         <option value="$PROJECT_DIR$/.gitignore" />
-        <option value="$PROJECT_DIR$/sample-project/src/PriceCalculator.ts" />
         <option value="$PROJECT_DIR$/sample-project/src/models/constants.ts" />
         <option value="$PROJECT_DIR$/sample-project/src/models/Visitor.ts" />
         <option value="$PROJECT_DIR$/sample-project/src/start.ts" />
-        <option value="$PROJECT_DIR$/trool/lib/Trool.ts" />
         <option value="$PROJECT_DIR$/trool/lib/types.ts" />
         <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/trool/lib/DecisionTable.ts" />
+        <option value="$PROJECT_DIR$/trool/lib/Trool.ts" />
+        <option value="$PROJECT_DIR$/sample-project/src/PriceCalculator.ts" />
       </list>
     </option>
   </component>
@@ -296,12 +295,12 @@
       <workItem from="1551551337869" duration="5176000" />
       <workItem from="1551556526404" duration="23754000" />
       <workItem from="1551630302681" duration="11595000" />
-      <workItem from="1551657377887" duration="8097000" />
+      <workItem from="1551657377887" duration="9740000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="51995000" />
+    <option name="totallyTimeSpent" value="53638000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1920" y="-1" width="1920" height="1158" extended-state="6" />
@@ -458,30 +457,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/sample-project/src/PriceCalculator.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="544">
-          <caret line="39" column="12" selection-start-line="39" selection-start-column="12" selection-end-line="39" selection-end-column="22" />
-          <folding>
-            <element signature="e#147#176#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sample-project/src/models/Visitor.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="30" selection-start-line="6" selection-start-column="30" selection-end-line="6" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sample-project/src/models/constants.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="1" selection-start-line="7" selection-start-column="1" selection-end-line="7" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/trool/tsconfig.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="544">
@@ -503,16 +478,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/trool/lib/Trool.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="425">
-          <caret line="63" column="68" selection-start-line="63" selection-start-column="54" selection-end-line="63" selection-end-column="68" />
-          <folding>
-            <element signature="e#73#112#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="FIRST">
@@ -523,10 +488,44 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/trool/lib/Trool.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-396">
+          <caret line="26" column="51" selection-start-line="26" selection-start-column="51" selection-end-line="26" selection-end-column="51" />
+          <folding>
+            <element signature="e#73#112#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/trool/lib/DecisionTable.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="72" column="137" selection-start-line="72" selection-start-column="137" selection-end-line="72" selection-end-column="137" />
+        <state relative-caret-position="191">
+          <caret line="28" column="28" selection-start-line="28" selection-start-column="28" selection-end-line="28" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sample-project/src/models/constants.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" column="1" selection-start-line="7" selection-start-column="1" selection-end-line="7" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sample-project/src/models/Visitor.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="6" column="30" selection-start-line="6" selection-start-column="30" selection-end-line="6" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sample-project/src/PriceCalculator.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="38" column="20" selection-start-line="38" selection-start-column="20" selection-end-line="38" selection-end-column="20" />
+          <folding>
+            <element signature="e#147#176#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

@@ -23,8 +23,8 @@ class Trool {
         try {
             const jsonArr = await csvtojson().fromFile(filePath);
             const importsObj = this._setupImports(factsObject, jsonArr[0]);
-            const decisionTables = this._setupDecisionTables(jsonArr, importsObj);
-            return this._updateFacts(decisionTables, factsObject);
+            const decisionTables = this._setupDecisionTables(factsObject, jsonArr, importsObj);
+            return this._updateFacts(decisionTables);
         } catch (err) {
             throw err;
         }
@@ -61,7 +61,7 @@ class Trool {
     /**
      * Get array of DecisionTable objects from spreadsheet data.
      */
-    private _setupDecisionTables(jsonArr: Array<Row>, importsObj: {}):
+    private _setupDecisionTables(factsObject: FactsObject, jsonArr: Array<Row>, importsObj: {}):
         DecisionTable[] {
 
         let decisionTables = [];
@@ -87,6 +87,7 @@ class Trool {
             if (tableStart !== -1 && tableEnd !== -1) {
                 const table = jsonArr.slice(tableStart, tableEnd);
                 const decisionTable = new DecisionTable();
+                decisionTable.setFacts(factsObject);
                 decisionTable.initTable(table, importsObj);
                 decisionTables.push(decisionTable);
                 tableStart = tableEnd = -1;
@@ -100,12 +101,12 @@ class Trool {
     /**
      * Update facts object, using the DecisionTable objects.
      */
-    private _updateFacts(decisionTables: DecisionTable[], factsObject: FactsObject): FactsObject {
+    private _updateFacts(decisionTables: DecisionTable[]): FactsObject {
 
         let updateFacts = {} as any;
 
         // loop through array of decision tables
-        // updatesFacts[table.getFactName] = table.updateFacts(factsObject)
+        // updatesFacts[table.getFactName] = table.updateFacts()
 
         return updateFacts;
     }

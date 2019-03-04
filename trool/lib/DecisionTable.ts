@@ -18,17 +18,22 @@ class DecisionTable {
         '"Condition" or "Action"';
     private readonly _COL_HEADER_ARGMT_ERR = 'All conditions must specified before all actions';
 
+    private _factsObj: FactsObject | null;
     private _factName: string;
-    private _importsObj: {};
     private _conditionsArr: Condition[];
     private _actionsArr: Action[];
 
 
     constructor() {
+        this._factsObj = null;
         this._factName = '';
-        this._importsObj = {};
         this._conditionsArr = [];
         this._actionsArr = [];
+    }
+
+
+    public setFacts(factsObject: FactsObject): void {
+        this._factsObj = factsObject;
     }
 
 
@@ -53,6 +58,10 @@ class DecisionTable {
         if (startCellArr.length !== 2) {
             throw Error(this._START_CELL_ERR);
         }
+
+        this.factName = startCellArr[1];
+        // pick up here, make sure second value is a fact that has been passed in
+        // if not throw error
 
         const firstRowArr = Object.values(firstRow);
 
@@ -106,15 +115,6 @@ class DecisionTable {
 
     set factName(factName: string) {
         this._factName = factName;
-    }
-
-
-    public setData(factsObj: FactsObject): void {
-
-        // set fact name here
-        // set imports here
-        // setup conditions and actions
-
     }
 
 

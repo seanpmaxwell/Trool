@@ -34,6 +34,9 @@ class PriceCalculator {
         try {
             const factsObj = this.setupFacts(visitors, ticketOption);
             const csvFilePath = path.join(__dirname, this._CSV_FILE);
+
+            // pick up here, add another param for imports. Have imports be an
+            // array
             const updatedFacts = await this._trool.applyRules(factsObj, csvFilePath);
             totalPrice = this._calcTotalPrice(updatedFacts);
         } catch (err) {
