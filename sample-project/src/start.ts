@@ -31,7 +31,7 @@ async function printTotalPrice(vistors: Visitor | Visitor[], ticketOption: Ticke
 
 
 /*=================================================================================
-                  Calculate Some Prices for Various Part Sizes
+                  Calculate Some Prices for Various Party Sizes
  ================================================================================*/
 
 
