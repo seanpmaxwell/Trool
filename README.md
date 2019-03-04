@@ -11,4 +11,5 @@ https://github.com/CacheControl/json-rules-engine
 // mention that it's not a good practice to set strings in directly to the spreadsheet and should
 // use a constants class. This prevents Product Owners from inputing bad values into the spreadsheet. 
 
-// Class.method() to not use a built in operator in condition. Class must be a fact or must be imported. 
+// Update code based on changes to spreadsheet
+// check for this error. Object passed for fact "fact name" does not have the attribute or method "attribute or method" name
