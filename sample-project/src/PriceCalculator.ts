@@ -37,7 +37,8 @@ class PriceCalculator {
 
             // pick up here, add another param for imports. Have imports be an
             // array that is passed in and not part of the facts object
-            const updatedFacts = await this._trool.applyRules(factsObj, csvFilePath);
+            const importsArr = [VisitorTypes, TicketTypes];
+            const updatedFacts = await this._trool.applyRules(factsObj, importsArr, csvFilePath);
             totalPrice = this._calcTotalPrice(updatedFacts);
         } catch (err) {
             cerr(err);
@@ -61,7 +62,6 @@ class PriceCalculator {
         }
 
         return {
-            Imports: [VisitorTypes, TicketTypes],
             Visitors: visitors,
             Tickets: tickets
         }

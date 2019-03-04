@@ -21,7 +21,7 @@ var Trool = (function () {
                         return [4, csvtojson().fromFile(filePath)];
                     case 1:
                         jsonArr = _a.sent();
-                        importsObj = this._setupImports(factsObject, jsonArr[0]);
+                        importsObj = this._setupImportsObj(factsObject, jsonArr[0]);
                         decisionTables = this._setupDecisionTables(factsObject, jsonArr, importsObj);
                         return [2, this._updateFacts(decisionTables)];
                     case 2:
@@ -32,7 +32,7 @@ var Trool = (function () {
             });
         });
     };
-    Trool.prototype._setupImports = function (factsObject, importRow) {
+    Trool.prototype._setupImportsObj = function (factsObject, importRow) {
         var field0 = importRow.field0, field1 = importRow.field1;
         if (field0 !== 'Imports:') {
             throw Error(this._IMPORT_ERR_1);
@@ -43,7 +43,8 @@ var Trool = (function () {
             throw Error(this._IMPORT_ERR_2);
         }
         importsArr.forEach(function (importStr, i) {
-            importsObj[importStr] = factsObject.Imports[i];
+            importsObj[importStr] =
+            ;
         });
         return importsObj;
     };
@@ -66,9 +67,9 @@ var Trool = (function () {
             }
             if (tableStart !== -1 && tableEnd !== -1) {
                 var table = jsonArr.slice(tableStart, tableEnd);
-                var decisionTable = new DecisionTable_1.default();
-                decisionTable.setFacts(factsObject);
-                decisionTable.initTable(table, importsObj);
+                var decisionTable = new DecisionTable_1.default(i + 1);
+                decisionTable.setFactsAndImports(factsObject, importsObj);
+                decisionTable.initTable(table);
                 decisionTables.push(decisionTable);
                 tableStart = tableEnd = -1;
             }

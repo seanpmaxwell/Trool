@@ -22,7 +22,7 @@ class Trool {
 
         try {
             const jsonArr = await csvtojson().fromFile(filePath);
-            const importsObj = this._setupImports(factsObject, jsonArr[0]);
+            const importsObj = this._setupImportsObj(factsObject, jsonArr[0]);
             const decisionTables = this._setupDecisionTables(factsObject, jsonArr, importsObj);
             return this._updateFacts(decisionTables);
         } catch (err) {
@@ -31,12 +31,13 @@ class Trool {
     }
 
 
-    private _setupImports(factsObject: FactsObject, importRow: Row): {} {
+    private _setupImportsObj(factsObject: FactsObject, importRow: Row): {} {
 
         let { field0, field1 } = importRow;
 
         // Spreadsheet's first row must be an
-        // 'Imports' row
+        // 'Imports' row, even if there are no
+        // imports
         if (field0 !== 'Imports:') {
             throw Error(this._IMPORT_ERR_1);
         }
@@ -51,7 +52,7 @@ class Trool {
         }
 
         importsArr.forEach((importStr, i) => {
-            importsObj[importStr] = factsObject.Imports[i];
+            importsObj[importStr] = // factsObject.Imports[i];
         });
 
         return importsObj;
@@ -86,9 +87,9 @@ class Trool {
             // Create new Decision Table
             if (tableStart !== -1 && tableEnd !== -1) {
                 const table = jsonArr.slice(tableStart, tableEnd);
-                const decisionTable = new DecisionTable();
-                decisionTable.setFacts(factsObject);
-                decisionTable.initTable(table, importsObj);
+                const decisionTable = new DecisionTable(i+1);
+                decisionTable.setFactsAndImports(factsObject, importsObj);
+                decisionTable.initTable(table);
                 decisionTables.push(decisionTable);
                 tableStart = tableEnd = -1;
             }
