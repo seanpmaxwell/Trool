@@ -7,10 +7,9 @@
 
 import * as path from 'path';
 import { cinfo, cerr } from 'simple-color-print';
-
 import { VisitorTypes, TicketTypes } from './models/constants';
 
-import Trool, { FactsObject } from 'trool';
+import Trool, { FactsObj } from 'trool';
 import Ticket, { TicketOpts } from './models/Ticket';
 import Visitor from './models/Visitor';
 
@@ -32,13 +31,10 @@ class PriceCalculator {
         let totalPrice = -1;
 
         try {
-            const factsObj = this.setupFacts(visitors, ticketOption);
+            const factsObj = this.setupFactsObj(visitors, ticketOption);
             const csvFilePath = path.join(__dirname, this._CSV_FILE);
-
-            // pick up here, add another param for imports. Have imports be an
-            // array that is passed in and not part of the facts object
-            const importsArr = [VisitorTypes, TicketTypes];
-            const updatedFacts = await this._trool.applyRules(factsObj, importsArr, csvFilePath);
+            const importsObj = {VisitorTypes, TicketTypes};
+            const updatedFacts = await this._trool.applyRules(factsObj, importsObj, csvFilePath);
             totalPrice = this._calcTotalPrice(updatedFacts);
         } catch (err) {
             cerr(err);
@@ -48,7 +44,7 @@ class PriceCalculator {
     }
 
 
-    private setupFacts(visitors: Visitor | Visitor[], ticketOption: TicketOpts): FactsObject {
+    private setupFactsObj(visitors: Visitor | Visitor[], ticketOption: TicketOpts): FactsObj {
 
         const tickets = [];
 
@@ -68,7 +64,7 @@ class PriceCalculator {
     }
 
 
-    private _calcTotalPrice(factsObj: FactsObject): number {
+    private _calcTotalPrice(factsObj: FactsObj): number {
 
         const visitors = factsObj['Visitors'] as Visitor | Visitor[];
         let totalPrice = 0;

@@ -6,7 +6,7 @@
 
 import * as csvtojson from 'csvtojson';
 import { cinfo, cerr } from 'simple-color-print';
-import { FactsObject, Row } from './types';
+import { FactsObj, ImportsObj, Row } from './types';
 import DecisionTable from './DecisionTable';
 
 
@@ -14,16 +14,14 @@ class Trool {
 
     private readonly _TABLE_FORMAT_ERR = 'End of rule block reached without a start';
     private readonly _IMPORT_ERR_1 = 'First cell of spreadsheet must be "Imports"';
-    private readonly _IMPORT_ERR_2 = 'Spreadsheet contains a greater number of imports than what' +
-        'was provided to the facts object.';
 
 
-    public async applyRules(factsObject: FactsObject, filePath: string): Promise<FactsObject> {
+    public async applyRules(factsObject: FactsObj, importsObj: ImportsObj, filePath: string):
+        Promise<FactsObj> {
 
         try {
             const jsonArr = await csvtojson().fromFile(filePath);
-            const importsObj = this._setupImportsObj(factsObject, jsonArr[0]);
-            const decisionTables = this._setupDecisionTables(factsObject, jsonArr, importsObj);
+            const decisionTables = this._setupDecisionTables(factsObject, importsObj, jsonArr);
             return this._updateFacts(decisionTables);
         } catch (err) {
             throw err;
@@ -31,38 +29,10 @@ class Trool {
     }
 
 
-    private _setupImportsObj(factsObject: FactsObject, importRow: Row): {} {
-
-        let { field0, field1 } = importRow;
-
-        // Spreadsheet's first row must be an
-        // 'Imports' row, even if there are no
-        // imports
-        if (field0 !== 'Imports:') {
-            throw Error(this._IMPORT_ERR_1);
-        }
-
-        let importsObj = {} as any;
-        let importsArr = field1.split(',');
-
-        // Spreadsheet cannot specify more imports than what
-        // was provided
-        if (importsArr.length > factsObject.Imports.length) {
-            throw Error(this._IMPORT_ERR_2);
-        }
-
-        importsArr.forEach((importStr, i) => {
-            importsObj[importStr] = // factsObject.Imports[i];
-        });
-
-        return importsObj;
-    }
-
-
     /**
      * Get array of DecisionTable objects from spreadsheet data.
      */
-    private _setupDecisionTables(factsObject: FactsObject, jsonArr: Array<Row>, importsObj: {}):
+    private _setupDecisionTables(factsObject: FactsObj, importsObj: ImportsObj, jsonArr: Array<Row>):
         DecisionTable[] {
 
         let decisionTables = [];
@@ -88,8 +58,7 @@ class Trool {
             if (tableStart !== -1 && tableEnd !== -1) {
                 const table = jsonArr.slice(tableStart, tableEnd);
                 const decisionTable = new DecisionTable(i+1);
-                decisionTable.setFactsAndImports(factsObject, importsObj);
-                decisionTable.initTable(table);
+                decisionTable.initTable(table, factsObject, importsObj);
                 decisionTables.push(decisionTable);
                 tableStart = tableEnd = -1;
             }
@@ -102,7 +71,7 @@ class Trool {
     /**
      * Update facts object, using the DecisionTable objects.
      */
-    private _updateFacts(decisionTables: DecisionTable[]): FactsObject {
+    private _updateFacts(decisionTables: DecisionTable[]): FactsObj {
 
         let updateFacts = {} as any;
 

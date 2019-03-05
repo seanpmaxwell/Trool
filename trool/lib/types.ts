@@ -1,6 +1,10 @@
 
-export interface FactsObject {
-    [key: string]: Array<Object> | Object;
+export interface FactsObj {
+    [key: string]: Object | Object[];
+}
+
+export interface ImportsObj {
+    [key: string]: Object;
 }
 
 export interface Row {

@@ -13,5 +13,7 @@ https://github.com/CacheControl/json-rules-engine
 
 // Update code based on changes to spreadsheet
 // check for this error. Object passed for fact "fact name" does not have the attribute or method "attribute or method" name
-// iterate through each cell in Rule row, check the value in that cell using the condition at that index
+// iterate through each cell in Rule row, check the value in that cell using the condition at that index. 
+// Set value at that cell to true and false. Break if hits false
 // empty cell will just be set to true
+// dont execute Action where blank
