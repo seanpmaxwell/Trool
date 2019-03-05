@@ -10,13 +10,3 @@ export interface ImportsObj {
 export interface Row {
     [key: string]: string
 }
-
-export interface Condition {
-    index: number;
-    operation?: Function;
-}
-
-export interface Action {
-    index: number;
-    operation?: Function;
-}

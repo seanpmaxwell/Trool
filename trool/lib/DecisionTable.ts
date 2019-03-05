@@ -5,7 +5,7 @@
  * created by Sean Maxwell Mar 3, 2019
  */
 
-import { FactsObj, ImportsObj, Row, Condition, Action } from './types';
+import { FactsObj, ImportsObj, Row } from './types';
 
 
 class DecisionTable {
@@ -26,15 +26,15 @@ class DecisionTable {
     // Setup class variables
     private readonly _id: string;
     private _importsObj: ImportsObj | null;
-    private _factArr: Object[];
-    private _conditionsArr: Condition[];
-    private _actionsArr: Action[];
+    private _factArr: Object[] | null;
+    private _conditionsArr: Function[];
+    private _actionsArr: Function[];
 
 
     constructor(id: number) {
         this._id = 'DecisionTable ' + id + ': ';
         this._importsObj = null;
-        this._factArr = [];
+        this._factArr = null;
         this._conditionsArr = [];
         this._actionsArr = [];
     }
@@ -46,33 +46,12 @@ class DecisionTable {
         
         const colHeaderArr = Object.values(arrTable[0]);
         const operationsArr = Object.values(arrTable[1]);
-        const startCellArr = colHeaderArr[0].split(' ');
+
+        // Check for format errors and set facts
+        const factName = this._checkFormatAndGetFactName(colHeaderArr, operationsArr);
+        this._factArr = this._setupFactArr(factsObj[factName]);
 
 
-        // Check table for format errors
-        if (startCellArr.length !== 2) {
-            throw Error(this._id + this._START_CELL_ERR);
-        } else if (startCellArr[0] !== 'Start:') {
-            throw Error(this._id + this._START_CELL_ERR_2);
-        } else if (colHeaderArr[1] !== 'Condition') {
-            throw Error(this._id + this._COND_RULE_ERR);
-        } else if (colHeaderArr[colHeaderArr.length - 1] !== 'Action') {
-            throw Error(this._id + this._ACTION_RULE_ERR);
-        } else if (colHeaderArr.length !== operationsArr.length) {
-            throw Error(this._id + this._LENGTH_ERR);
-        }
-
-
-        // Set facts array from fact name and facts object
-        const factName = startCellArr[1];
-        if (factsObj[factName] instanceof Array) {
-            this._factArr = factsObj[factName] as Object[];
-        } else {
-            this._factArr = [factsObj[factName]];
-        }
-
-
-        // Set Condition and Action Operations
         let conditionsDone = false;
 
         for (let i = 1; i < colHeaderArr.length; i++) {
@@ -80,10 +59,9 @@ class DecisionTable {
             if (colHeaderArr[i] === 'Condition') {
 
                 if (!conditionsDone) {
-                    this._conditionsArr.push({
-                        index: i,
-                        operation: this._getCondOperation(operationsArr[i])
-                    });
+                    const opStr = operationsArr[i];
+                    const opFunc = this._getConditionOp(opStr);
+                    this._conditionsArr.push(opFunc);
                 } else {
                     throw Error(this._id + this._COL_HEADER_ARGMT_ERR);
                 }
@@ -95,7 +73,7 @@ class DecisionTable {
             } else if (colHeaderArr[i] === 'Action') {
 
                 if (conditionsDone) {
-                    this._actionsArr.push({index: i});
+                    this._actionsArr.push(new Function());
                     // pick up here, maybe add operation as well
                 } else {
                     throw Error(this._id + this._COL_HEADER_ARGMT_ERR);
@@ -108,15 +86,52 @@ class DecisionTable {
     }
 
 
-    private _getCondOperation(operation: string): Function {
+    private _checkFormatAndGetFactName(colHeaderArr: string[], operationsArr: string[]): string {
 
-        const opArr = operation.split(operation);
+        const startCellArr = colHeaderArr[0].split(' ');
 
+        if (startCellArr.length !== 2) {
+            throw Error(this._id + this._START_CELL_ERR);
+        } else if (startCellArr[0] !== 'Start:') {
+            throw Error(this._id + this._START_CELL_ERR_2);
+        } else if (colHeaderArr[1] !== 'Condition') {
+            throw Error(this._id + this._COND_RULE_ERR);
+        } else if (colHeaderArr[colHeaderArr.length - 1] !== 'Action') {
+            throw Error(this._id + this._ACTION_RULE_ERR);
+        } else if (colHeaderArr.length !== operationsArr.length) {
+            throw Error(this._id + this._LENGTH_ERR);
+        }
 
-        
-
-        return new Function();
+        return startCellArr[1];
     }
+
+
+    private _setupFactArr(facts: Object | Object[]): Object[] {
+
+        if (facts instanceof Array) {
+            return facts;
+        } else {
+            return [facts];
+        }
+    }
+
+    // later, when looping through rules, we want to fetch the operation at that index
+    private _getConditionOp(opStr: string): Function {
+        return (fact: Object, value: any) => {
+
+            let arr = opStr.split(' ');
+            let attr = arr[0];
+
+
+            // throw error if attribute from operation string is not present on fact
+            //
+            // return boolean
+        }
+    }
+
+
+    // loop through rule, pass value from rule to condition, in this method, determine if value
+    // is from an import
 
 
     public updateFacts(): any {
