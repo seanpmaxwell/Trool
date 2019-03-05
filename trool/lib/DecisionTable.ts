@@ -34,7 +34,7 @@ class DecisionTable {
         this._importsObj = importsObj;
 
         // Get action/condition column header and operation string values
-        const colHeaderArr = Object.values(arrTable[0]).map(header => header.trim());
+        const colHeaderArr = Object.values(arrTable[0]).map(header => header.trim().toLowerCase());
         const opsStrArr = Object.values(arrTable[1]).map(op => op.trim());
 
         // Check for format errors and set facts
@@ -86,11 +86,11 @@ class DecisionTable {
 
         if (startCellArr.length !== 2) {
             throw Error(this.tableErrs.startCell);
-        } else if (startCellArr[0] !== 'Start:') {
+        } else if (startCellArr[0] !== 'start:') {
             throw Error(this.tableErrs.startCell2);
-        } else if (colHeaderArr[1] !== 'Condition') {
+        } else if (colHeaderArr[1] !== 'condition') {
             throw Error(this.tableErrs.condRule);
-        } else if (colHeaderArr[colHeaderArr.length - 1] !== 'Action') {
+        } else if (colHeaderArr[numOfOps - 1] !== 'action') {
             throw Error(this.tableErrs.actionColRule);
         } else if (colHeaderArr.length !== numOfOps) {
             throw Error(this.tableErrs.colLenth);
@@ -124,24 +124,20 @@ class DecisionTable {
     }
 
 
-    private _checkCondOpFormat(arr: string[], fact: Object): void {
+    private _checkCondOpFormat(arr: string[], fact: any): void {
 
-        let attr = arr[0];
+        const attrStr = arr[0];
 
-        if (attr === '') {
-            throw Error(this._id + 'Condition operation cannot be blank.'); // pick up here tomorrow
-            // pick up here, create a table errors class
+        if (attrStr === '') {
+            throw Error(this.tableErrs.condBlank);
+        } else if (arr.length !== 1 && arr.length !== 3) {
+            throw Error(this.tableErrs.opFormatErr);
+        } else if (fact[attrStr] === undefined) {
+            throw Error(this.tableErrs.attrUndef());
         }
 
-        // make sure attr exists on fact // pick up here
+        else if (arr.length === 1) {
 
-        if (arr.length === 1) {
-
-        } else if (arr.length === 3) {
-            // pick up here, do logic for boolean operations
-        } else {
-            throw Error(this._id + 'Condition operation must call Fact method (don\'t put spaces between params) ' +
-                'or perform boolean operations against a Fact\'s attribute')
         }
     }
 

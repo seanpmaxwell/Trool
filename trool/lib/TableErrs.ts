@@ -22,6 +22,11 @@ class TableErrs {
 
     private readonly COND_BLANK = 'Condition cannot be blank';
 
+    private readonly OP_FORMAT_ERR = 'Condition operation must call Fact\'s method (don\'t ' +
+        'put spaces between params) or perform boolean operations against a Fact\'s attribute';
+
+    private readonly ATTR_UNDEF = 'Attribute does not not exist on the fact for condition: ';
+
     private readonly _id: string;
 
 
@@ -56,6 +61,18 @@ class TableErrs {
 
     get colLenth(): string {
         return this._id + this.COL_LENGTH;
+    }
+
+    get condBlank(): string {
+        return this._id + this.COND_BLANK;
+    }
+
+    get opFormatErr(): string {
+        return this._id + this.OP_FORMAT_ERR;
+    }
+
+    public attrUndef(opStr: string): string {
+        return this._id + this.ATTR_UNDEF + opStr;
     }
 }
 
