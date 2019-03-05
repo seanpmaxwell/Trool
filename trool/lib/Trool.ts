@@ -16,12 +16,14 @@ class Trool {
     private readonly _IMPORT_ERR_1 = 'First cell of spreadsheet must be "Imports"';
 
 
-    public async applyRules(factsObject: FactsObj, importsObj: ImportsObj, filePath: string):
+    public async applyRules(filePath: string, factsObject: FactsObj, importsObj?: ImportsObj):
         Promise<FactsObj> {
+
+        importsObj = importsObj || {};
 
         try {
             const jsonArr = await csvtojson().fromFile(filePath);
-            const decisionTables = this._setupDecisionTables(factsObject, importsObj, jsonArr);
+            const decisionTables = this._setupDecisionTables(jsonArr, factsObject, importsObj);
             return this._updateFacts(decisionTables);
         } catch (err) {
             throw err;
@@ -32,13 +34,14 @@ class Trool {
     /**
      * Get array of DecisionTable objects from spreadsheet data.
      */
-    private _setupDecisionTables(factsObject: FactsObj, importsObj: ImportsObj, jsonArr: Array<Row>):
-        DecisionTable[] {
+    private _setupDecisionTables( jsonArr: Array<Row>, factsObject: FactsObj, importsObj:
+        ImportsObj): DecisionTable[] {
 
         let decisionTables = [];
         let tableStart = -1;
         let tableEnd = -1;
 
+        // Iterate entire spreadsheet
         for (let i = 0; i < jsonArr.length; i++) {
 
             const { field1 } = jsonArr[i];

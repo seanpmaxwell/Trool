@@ -26,7 +26,8 @@ class PriceCalculator {
     }
 
 
-    public async calcTotalPrice(visitors: Visitor | Visitor[], ticketOption: TicketOpts): Promise<number> {
+    public async calcTotalPrice(visitors: Visitor | Visitor[], ticketOption: TicketOpts):
+        Promise<string> {
 
         let totalPrice = -1;
 
@@ -34,12 +35,12 @@ class PriceCalculator {
             const factsObj = this.setupFactsObj(visitors, ticketOption);
             const csvFilePath = path.join(__dirname, this._CSV_FILE);
             const importsObj = {VisitorTypes, TicketTypes};
-            const updatedFacts = await this._trool.applyRules(factsObj, importsObj, csvFilePath);
+            const updatedFacts = await this._trool.applyRules(csvFilePath, factsObj, importsObj);
             totalPrice = this._calcTotalPrice(updatedFacts);
         } catch (err) {
             cerr(err);
         } finally {
-            return totalPrice;
+            return '$' + totalPrice.toFixed(2);
         }
     }
 

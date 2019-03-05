@@ -9,27 +9,30 @@ var Trool = (function () {
         this._TABLE_FORMAT_ERR = 'End of rule block reached without a start';
         this._IMPORT_ERR_1 = 'First cell of spreadsheet must be "Imports"';
     }
-    Trool.prototype.applyRules = function (factsObject, importsObj, filePath) {
+    Trool.prototype.applyRules = function (filePath, factsObject, importsObj) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
             var jsonArr, decisionTables, err_1;
             return tslib_1.__generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4, csvtojson().fromFile(filePath)];
+                        importsObj = importsObj || {};
+                        _a.label = 1;
                     case 1:
-                        jsonArr = _a.sent();
-                        decisionTables = this._setupDecisionTables(factsObject, importsObj, jsonArr);
-                        return [2, this._updateFacts(decisionTables)];
+                        _a.trys.push([1, 3, , 4]);
+                        return [4, csvtojson().fromFile(filePath)];
                     case 2:
+                        jsonArr = _a.sent();
+                        decisionTables = this._setupDecisionTables(jsonArr, factsObject, importsObj);
+                        return [2, this._updateFacts(decisionTables)];
+                    case 3:
                         err_1 = _a.sent();
                         throw err_1;
-                    case 3: return [2];
+                    case 4: return [2];
                 }
             });
         });
     };
-    Trool.prototype._setupDecisionTables = function (factsObject, importsObj, jsonArr) {
+    Trool.prototype._setupDecisionTables = function (jsonArr, factsObject, importsObj) {
         var decisionTables = [];
         var tableStart = -1;
         var tableEnd = -1;

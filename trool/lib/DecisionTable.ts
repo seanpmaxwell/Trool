@@ -1,69 +1,61 @@
 /**
- * Decision Table class. Execute a group of rules
- * on a table.
+ * Decision Table class. Execute a group of rules on a table. There are two categories of
+ * operations: Condition operations and Action operations.
  *
  * created by Sean Maxwell Mar 3, 2019
  */
 
 import { FactsObj, ImportsObj, Row } from './types';
+import TableErrs from './TableErrs';
 
 
 class DecisionTable {
 
-    // Setup Errors
-    private readonly _START_CELL_ERR = 'Start cell must contain "Start:" and specify 1 and only ' +
-        '1 fact.';
-    private readonly _START_CELL_ERR_2 = 'Start cell must begin with "Start: "';
-    private readonly _COND_RULE_ERR = 'Action/Condition column headers must start off with ' +
-        'conditions and contain at least one condition.';
-    private readonly _ACTION_RULE_ERR = 'Action/Condition column headers must end with an action.';
-    private readonly _COL_HEADER_ERR = 'Action/Condition column headers can only be "Condition" ' +
-        'or "Action"';
-    private readonly _COL_HEADER_ARGMT_ERR = 'All conditions must specified before all actions';
-    private readonly _LENGTH_ERR = 'The number of Action/Condition column headers must match ' +
-        'and line up with the number of operations';
+    private readonly tableErrs: TableErrs;
 
     // Setup class variables
-    private readonly _id: string;
     private _importsObj: ImportsObj | null;
     private _factArr: Object[] | null;
-    private _conditionsArr: Function[];
-    private _actionsArr: Function[];
+    private _condOpsArr: Function[] | null;
+    private _actionOpsArr: Function[] | null;
 
 
     constructor(id: number) {
-        this._id = 'DecisionTable ' + id + ': ';
+        this.tableErrs = new TableErrs(id);
         this._importsObj = null;
         this._factArr = null;
-        this._conditionsArr = [];
-        this._actionsArr = [];
+        this._condOpsArr = null;
+        this._actionOpsArr = null;
     }
 
 
     public initTable(arrTable: Array<Row>, factsObj: FactsObj, importsObj: ImportsObj): void {
 
         this._importsObj = importsObj;
-        
-        const colHeaderArr = Object.values(arrTable[0]);
-        const operationsArr = Object.values(arrTable[1]);
+
+        // Get action/condition column header and operation string values
+        const colHeaderArr = Object.values(arrTable[0]).map(header => header.trim());
+        const opsStrArr = Object.values(arrTable[1]).map(op => op.trim());
 
         // Check for format errors and set facts
-        const factName = this._checkFormatAndGetFactName(colHeaderArr, operationsArr);
-        this._factArr = this._setupFactArr(factsObj[factName]);
+        this._setFactArr(colHeaderArr, factsObj, opsStrArr.length);
 
-
+        // Init array vars
         let conditionsDone = false;
+        this._condOpsArr = [];
+        this._actionOpsArr = [];
 
+        // Iterate through column headers and operations row
         for (let i = 1; i < colHeaderArr.length; i++) {
 
             if (colHeaderArr[i] === 'Condition') {
 
                 if (!conditionsDone) {
-                    const opStr = operationsArr[i];
-                    const opFunc = this._getConditionOp(opStr);
-                    this._conditionsArr.push(opFunc);
+                    const opStr = opsStrArr[i];
+                    const opFunc = this._getCondOp(opStr);
+                    this._condOpsArr.push(opFunc);
                 } else {
-                    throw Error(this._id + this._COL_HEADER_ARGMT_ERR);
+                    throw Error(this.tableErrs.colHeaderArgmt);
                 }
 
                 if (colHeaderArr[i + 1] === 'Action') {
@@ -73,54 +65,56 @@ class DecisionTable {
             } else if (colHeaderArr[i] === 'Action') {
 
                 if (conditionsDone) {
-                    this._actionsArr.push(new Function());
+                    this._actionOpsArr.push(new Function());
                     // pick up here, maybe add operation as well
                 } else {
-                    throw Error(this._id + this._COL_HEADER_ARGMT_ERR);
+                    throw Error(this.tableErrs.colHeaderArgmt);
                 }
 
             } else {
-                throw Error(this._id + this._COL_HEADER_ERR);
+                throw Error(this.tableErrs.colHeader);
             }
         }
     }
 
-
-    private _checkFormatAndGetFactName(colHeaderArr: string[], operationsArr: string[]): string {
+    /**
+     * Do some initial checking of the Condition/Action columns and set the Fact array.
+     */
+    private _setFactArr(colHeaderArr: string[], factsObj: FactsObj, numOfOps: number): void {
 
         const startCellArr = colHeaderArr[0].split(' ');
 
         if (startCellArr.length !== 2) {
-            throw Error(this._id + this._START_CELL_ERR);
+            throw Error(this.tableErrs.startCell);
         } else if (startCellArr[0] !== 'Start:') {
-            throw Error(this._id + this._START_CELL_ERR_2);
+            throw Error(this.tableErrs.startCell2);
         } else if (colHeaderArr[1] !== 'Condition') {
-            throw Error(this._id + this._COND_RULE_ERR);
+            throw Error(this.tableErrs.condRule);
         } else if (colHeaderArr[colHeaderArr.length - 1] !== 'Action') {
-            throw Error(this._id + this._ACTION_RULE_ERR);
-        } else if (colHeaderArr.length !== operationsArr.length) {
-            throw Error(this._id + this._LENGTH_ERR);
+            throw Error(this.tableErrs.actionColRule);
+        } else if (colHeaderArr.length !== numOfOps) {
+            throw Error(this.tableErrs.colLenth);
         }
 
-        return startCellArr[1];
-    }
-
-
-    private _setupFactArr(facts: Object | Object[]): Object[] {
+        const factName = startCellArr[1];
+        const facts = factsObj[factName];
 
         if (facts instanceof Array) {
-            return facts;
+            this._factArr = facts;
         } else {
-            return [facts];
+            this._factArr = [facts];
         }
     }
 
+
     // later, when looping through rules, we want to fetch the operation at that index
-    private _getConditionOp(opStr: string): Function {
+    private _getCondOp(opStr: string): Function {
+
         return (fact: Object, value: any) => {
 
             let arr = opStr.split(' ');
-            let attr = arr[0];
+
+            this._checkCondOpFormat(arr, fact)
 
 
             // throw error if attribute from operation string is not present on fact
@@ -130,10 +124,35 @@ class DecisionTable {
     }
 
 
+    private _checkCondOpFormat(arr: string[], fact: Object): void {
+
+        let attr = arr[0];
+
+        if (attr === '') {
+            throw Error(this._id + 'Condition operation cannot be blank.'); // pick up here tomorrow
+            // pick up here, create a table errors class
+        }
+
+        // make sure attr exists on fact // pick up here
+
+        if (arr.length === 1) {
+
+        } else if (arr.length === 3) {
+            // pick up here, do logic for boolean operations
+        } else {
+            throw Error(this._id + 'Condition operation must call Fact method (don\'t put spaces between params) ' +
+                'or perform boolean operations against a Fact\'s attribute')
+        }
+    }
+
+
     // loop through rule, pass value from rule to condition, in this method, determine if value
     // is from an import
 
 
+    // loop through rows here, this method will use imports object, if attribute doesn
+    // not exist on import throw error
+    // return array of updated facts
     public updateFacts(): any {
         // loops through array of facts for that factName
 
