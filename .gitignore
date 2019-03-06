@@ -2,8 +2,7 @@
 **/node_modules
 **/package-lock.json
 
-
 # Transpiled files
-**/**/*.js
-**/**/*.js.map
-**/**/*.d.ts
+trool/**/*.js
+trool/**/*.js.map
+trool/**/*.d.ts

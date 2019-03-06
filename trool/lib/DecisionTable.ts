@@ -112,9 +112,9 @@ class DecisionTable {
 
         return (fact: Object, value: any) => {
 
-            let arr = opStr.split(' ');
 
-            this._checkCondOpFormat(arr, fact)
+
+            this._checkCondOpFormat(opStr, fact)
 
 
             // throw error if attribute from operation string is not present on fact
@@ -124,8 +124,9 @@ class DecisionTable {
     }
 
 
-    private _checkCondOpFormat(arr: string[], fact: any): void {
+    private _checkCondOpFormat(opStr: string, fact: any): void {
 
+        const arr = opStr.split(' ');
         const attrStr = arr[0];
 
         if (attrStr === '') {
@@ -133,9 +134,8 @@ class DecisionTable {
         } else if (arr.length !== 1 && arr.length !== 3) {
             throw Error(this.tableErrs.opFormatErr);
         } else if (fact[attrStr] === undefined) {
-            throw Error(this.tableErrs.attrUndef());
+            throw Error(this.tableErrs.attrUndef(opStr));
         }
-
         else if (arr.length === 1) {
 
         }
