@@ -29,6 +29,10 @@ class TableErrs {
 
     private readonly MUST_END_WITH_PARAM = 'Condition operation must end with "$param"';
 
+    private readonly PARAM_COUNT = 'Number of params for Action operation must match';
+
+    private readonly ACTION_FORMAT = 'Action operation cannot be blank';
+
     private readonly _id: string;
 
 
@@ -79,6 +83,14 @@ class TableErrs {
 
     public attrUndef(opStr: string): string {
         return this._id + this.ATTR_UNDEF + opStr;
+    }
+
+    get paramCount(): string {
+        return this._id + this.PARAM_COUNT;
+    }
+
+    get actionOpEmpty(): string {
+        return this._id + this.ACTION_FORMAT;
     }
 }
 

@@ -48,25 +48,22 @@ class DecisionTable {
         // Iterate through column headers and operations row
         for (let i = 1; i < colHeaderArr.length; i++) {
 
-            if (colHeaderArr[i] === 'Condition') {
+            if (colHeaderArr[i] === 'condition') {
 
                 if (!conditionsDone) {
-                    const opStr = opsStrArr[i];
-                    const opFunc = this._getCondOps(opStr);
+                    const opFunc = this._getCondOps(opsStrArr[i]);
                     this._condOpsArr.push(opFunc);
                 } else {
                     throw Error(this.tableErrs.colHeaderArgmt);
                 }
 
-                if (colHeaderArr[i + 1] === 'Action') {
-                    conditionsDone = true;
-                }
+                conditionsDone = (colHeaderArr[i + 1] === 'action');
 
-            } else if (colHeaderArr[i] === 'Action') {
+            } else if (colHeaderArr[i] === 'action') {
 
                 if (conditionsDone) {
-                    this._actionOpsArr.push(new Function());
-                    // pick up here, maybe add operation as well
+                    const actionFunc = this._getActionOps(opsStrArr[i]);
+                    this._actionOpsArr.push(actionFunc);
                 } else {
                     throw Error(this.tableErrs.colHeaderArgmt);
                 }
@@ -115,7 +112,7 @@ class DecisionTable {
             const arr = opStr.split(' ');
             const attributeStr = arr[0];
 
-            if (opStr === '') {
+            if (!opStr) {
                 throw Error(this.tableErrs.condBlank);
             } else if (arr.length !== 3) {
                 throw Error(this.tableErrs.opFormat);
@@ -134,14 +131,18 @@ class DecisionTable {
 
         return (fact: any, ...params: any[]): void => {
 
-            // make sure $params, matches number of params passed
+            const argLength = actionStr.split('$param').length - 1;
 
-            const arr = opStr.split(' ');
-            const attributeStr = arr[0];
+            if (!actionStr) {
+                throw Error(this.tableErrs.actionOpEmpty)
+            } else if (argLength !== params.length) {
+                throw Error(this.tableErrs.paramCount)
+            }
 
+            const n = actionStr.lastIndexOf('(');
+            const attrStr = actionStr.substring(0, n);
 
-
-            fact[attributeStr](params);
+            fact[attrStr](...params);
         }
     }
 
