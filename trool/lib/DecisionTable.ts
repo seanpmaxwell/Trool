@@ -5,6 +5,7 @@
  * created by Sean Maxwell Mar 3, 2019
  */
 
+import * as math from 'mathjs';
 import { FactsObj, ImportsObj, Row } from './types';
 import TableErrs from './TableErrs';
 
@@ -13,7 +14,6 @@ class DecisionTable {
 
     private readonly tableErrs: TableErrs;
 
-    // Setup class variables
     private _importsObj: ImportsObj | null;
     private _factArr: Object[] | null;
     private _condOpsArr: Function[] | null;
@@ -34,19 +34,23 @@ class DecisionTable {
         this._importsObj = importsObj;
 
         // Get action/condition column header and operation string values
-        const colHeaderArr = Object.values(arrTable[0]).map(header => header.trim().toLowerCase());
+        const colHeaderArr = Object.values(arrTable[0]).map(header => header.trim());
         const opsStrArr = Object.values(arrTable[1]).map(op => op.trim());
 
-        // Check for format errors and set facts
-        this._setFactArr(colHeaderArr, factsObj, opsStrArr.length);
+        if (colHeaderArr.length !== opsStrArr.length) {
+            throw Error(this.tableErrs.colLenth);
+        }
 
-        // Init array vars
+        this._setFactArr(colHeaderArr[0], factsObj);
+
         let conditionsDone = false;
         this._condOpsArr = [];
         this._actionOpsArr = [];
 
         // Iterate through column headers and operations row
         for (let i = 1; i < colHeaderArr.length; i++) {
+
+            colHeaderArr[i] = colHeaderArr[i].toLowerCase();
 
             if (colHeaderArr[i] === 'condition') {
 
@@ -76,26 +80,25 @@ class DecisionTable {
 
 
     /**
-     * Do some initial checking of the Condition/Action columns and set the Fact array.
+     * Do some initial checking of the Condition/Action columns and
+     * set the Fact array.
      */
-    private _setFactArr(colHeaderArr: string[], factsObj: FactsObj, numOfOps: number): void {
+    private _setFactArr(startCell: string, factsObj: FactsObj): void {
 
-        const startCellArr = colHeaderArr[0].split(' ');
+        const startCellArr = startCell.split(' ');
 
         if (startCellArr.length !== 2) {
             throw Error(this.tableErrs.startCell);
-        } else if (startCellArr[0] !== 'start:') {
+        } else if (startCellArr[0] !== 'Start:') {
             throw Error(this.tableErrs.startCell2);
-        } else if (colHeaderArr[1] !== 'condition') {
-            throw Error(this.tableErrs.condRule);
-        } else if (colHeaderArr[numOfOps - 1] !== 'action') {
-            throw Error(this.tableErrs.actionColRule);
-        } else if (colHeaderArr.length !== numOfOps) {
-            throw Error(this.tableErrs.colLenth);
         }
 
         const factName = startCellArr[1];
         const facts = factsObj[factName];
+
+        if (!factsObj[factName]) {
+            throw Error(this.tableErrs.factFalsey);
+        }
 
         if (facts instanceof Array) {
             this._factArr = facts;
@@ -116,13 +119,20 @@ class DecisionTable {
                 throw Error(this.tableErrs.condBlank);
             } else if (arr.length !== 3) {
                 throw Error(this.tableErrs.opFormat);
-            } else if (fact[attributeStr] === undefined) {
+            } else if (!fact[attributeStr]) {
                 throw Error(this.tableErrs.attrUndef(opStr));
             } else if (arr[2] !== '$param') {
                 throw Error(this.tableErrs.mustEndWithParam);
             }
 
-            return eval(`${fact[attributeStr]} ${arr[1]} ${value}`);
+            const attrVal = fact[attributeStr](); // pick up here
+
+            const scope = {
+                a: 3,
+                b: value
+            };
+
+            return math.eval('a ' + arr[1] + ' b', scope);
         }
     }
 

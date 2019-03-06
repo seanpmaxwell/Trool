@@ -7,11 +7,6 @@ class TableErrs {
 
     private readonly START_CELL_2 = 'Start cell must begin with "Start: "';
 
-    private readonly COND_RULE = 'Action/Condition column headers must start off with ' +
-        'conditions and contain at least one condition.';
-
-    private readonly ACTION_COL_RULE = 'Action/Condition column headers must end with an action.';
-
     private readonly COL_HEADER = 'Action/Condition column headers can only be "Condition" ' +
         'or "Action"';
 
@@ -33,6 +28,10 @@ class TableErrs {
 
     private readonly ACTION_FORMAT = 'Action operation cannot be blank';
 
+    private readonly FACT_FALSEY = 'The fact specified in the Start cell was not present or is ' +
+        'null. Please use and instance-object or an array of instances-objects as a fact value.';
+
+
     private readonly _id: string;
 
 
@@ -47,14 +46,6 @@ class TableErrs {
 
     get startCell2(): string {
         return this._id + this.START_CELL_2
-    }
-
-    get condRule(): string {
-        return this._id + this.COND_RULE;
-    }
-
-    get actionColRule(): string {
-        return this._id + this.ACTION_COL_RULE;
     }
 
     get colHeader(): string {
@@ -91,6 +82,10 @@ class TableErrs {
 
     get actionOpEmpty(): string {
         return this._id + this.ACTION_FORMAT;
+    }
+
+    get factFalsey(): string {
+        return this._id + this.FACT_FALSEY
     }
 }
 

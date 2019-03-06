@@ -3,8 +3,11 @@
   <component name="ChangeListManager">
     <list default="true" id="8f9b2c1e-37fa-418d-adda-b575ba9bad77" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sample-project/src/rule-files/VisitorRules.ots" beforeDir="false" afterPath="$PROJECT_DIR$/sample-project/src/rule-files/VisitorRules.ots" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/trool/lib/DecisionTable.ts" beforeDir="false" afterPath="$PROJECT_DIR$/trool/lib/DecisionTable.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/trool/lib/TableErrs.ts" beforeDir="false" afterPath="$PROJECT_DIR$/trool/lib/TableErrs.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trool/lib/Trool.ts" beforeDir="false" afterPath="$PROJECT_DIR$/trool/lib/Trool.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trool/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/trool/package.json" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -107,8 +110,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/trool/lib/Trool.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1428">
-              <caret line="87" column="21" selection-start-line="87" selection-start-column="21" selection-end-line="87" selection-end-column="21" />
+            <state relative-caret-position="816">
+              <caret line="48" column="37" selection-start-line="48" selection-start-column="37" selection-end-line="48" selection-end-column="37" />
               <folding>
                 <element signature="e#73#112#0" expanded="true" />
               </folding>
@@ -119,10 +122,10 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/trool/lib/DecisionTable.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="607">
-              <caret line="63" column="45" selection-start-line="63" selection-start-column="45" selection-end-line="63" selection-end-column="45" />
+            <state relative-caret-position="629">
+              <caret line="131" column="24" lean-forward="true" selection-start-line="131" selection-start-column="24" selection-end-line="131" selection-end-column="24" />
               <folding>
-                <element signature="e#200#252#0" expanded="true" />
+                <element signature="e#200#208#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -132,7 +135,7 @@
         <entry file="file://$PROJECT_DIR$/trool/lib/TableErrs.ts">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="590">
-              <caret line="92" column="45" selection-start-line="92" selection-start-column="45" selection-end-line="92" selection-end-column="45" />
+              <caret line="87" column="42" selection-start-line="87" selection-start-column="42" selection-end-line="87" selection-end-column="42" />
             </state>
           </provider>
         </entry>
@@ -212,8 +215,8 @@
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="1920" />
-    <option name="width" value="1920" />
-    <option name="height" value="1152" />
+    <option name="width" value="1910" />
+    <option name="height" value="867" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -221,6 +224,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -243,7 +247,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -303,12 +306,14 @@
       <workItem from="1551684391986" duration="50000" />
       <workItem from="1551715082269" duration="18945000" />
       <workItem from="1551802588738" duration="4418000" />
-      <workItem from="1551847817382" duration="3662000" />
+      <workItem from="1551847817382" duration="4254000" />
+      <workItem from="1551856319502" duration="150000" />
+      <workItem from="1551885933708" duration="3011000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="80829000" />
+    <option name="totallyTimeSpent" value="84582000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1920" y="-1" width="1920" height="1158" extended-state="6" />
@@ -331,7 +336,7 @@
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" content_ui="combo" id="Project" order="3" visible="true" weight="0.27263045" />
+      <window_info anchor="right" content_ui="combo" id="Project" order="3" visible="true" weight="0.17518637" />
     </layout>
     <layout-to-restore>
       <window_info id="Favorites" order="0" side_tool="true" />
@@ -419,12 +424,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/sample-project/src/rule-files/VisitorRules.csv">
       <provider selected="true" editor-type-id="csv-text-editor" />
-      <provider editor-type-id="text-editor" />
       <provider editor-type-id="csv-table-editor">
         <state showInfoPanel="true" fixedHeaders="false" rowLines="1">
           <column index="0" width="100" />
         </state>
       </provider>
+      <provider editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/trool/node_modules/csvtojson/src/Converter.ts">
       <provider selected="true" editor-type-id="text-editor">
@@ -519,16 +524,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/trool/lib/Trool.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1428">
-          <caret line="87" column="21" selection-start-line="87" selection-start-column="21" selection-end-line="87" selection-end-column="21" />
-          <folding>
-            <element signature="e#73#112#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/trool/lib/types.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="187">
@@ -536,19 +531,29 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/trool/lib/Trool.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="816">
+          <caret line="48" column="37" selection-start-line="48" selection-start-column="37" selection-end-line="48" selection-end-column="37" />
+          <folding>
+            <element signature="e#73#112#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/trool/lib/TableErrs.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="590">
-          <caret line="92" column="45" selection-start-line="92" selection-start-column="45" selection-end-line="92" selection-end-column="45" />
+          <caret line="87" column="42" selection-start-line="87" selection-start-column="42" selection-end-line="87" selection-end-column="42" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/trool/lib/DecisionTable.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="607">
-          <caret line="63" column="45" selection-start-line="63" selection-start-column="45" selection-end-line="63" selection-end-column="45" />
+        <state relative-caret-position="629">
+          <caret line="131" column="24" lean-forward="true" selection-start-line="131" selection-start-column="24" selection-end-line="131" selection-end-column="24" />
           <folding>
-            <element signature="e#200#252#0" expanded="true" />
+            <element signature="e#200#208#0" expanded="true" />
           </folding>
         </state>
       </provider>

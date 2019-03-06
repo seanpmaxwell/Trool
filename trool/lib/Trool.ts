@@ -46,7 +46,7 @@ class Trool {
 
             const { field1 } = jsonArr[i];
 
-            // Get indexes for a table
+            // Get start and end rows for a table
             if (field1.includes('Start: ')) {
                 tableStart = i;
             } else if (field1 === 'End') {
