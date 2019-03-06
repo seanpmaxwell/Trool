@@ -22,10 +22,12 @@ class TableErrs {
 
     private readonly COND_BLANK = 'Condition cannot be blank';
 
-    private readonly OP_FORMAT_ERR = 'Condition operation must call Fact\'s method (don\'t ' +
-        'put spaces between params) or perform boolean operations against a Fact\'s attribute';
+    private readonly OP_FORMAT = 'The operation must began with the Fact\'s attribute, contain ' +
+        'one operators, and end with "$param"';
 
     private readonly ATTR_UNDEF = 'Attribute does not not exist on the fact for condition: ';
+
+    private readonly MUST_END_WITH_PARAM = 'Condition operation must end with "$param"';
 
     private readonly _id: string;
 
@@ -67,8 +69,12 @@ class TableErrs {
         return this._id + this.COND_BLANK;
     }
 
-    get opFormatErr(): string {
-        return this._id + this.OP_FORMAT_ERR;
+    get opFormat(): string {
+        return this._id + this.OP_FORMAT;
+    }
+
+    get mustEndWithParam(): string {
+        return this._id + this.MUST_END_WITH_PARAM;
     }
 
     public attrUndef(opStr: string): string {

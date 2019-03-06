@@ -52,7 +52,7 @@ class DecisionTable {
 
                 if (!conditionsDone) {
                     const opStr = opsStrArr[i];
-                    const opFunc = this._getCondOp(opStr);
+                    const opFunc = this._getCondOps(opStr);
                     this._condOpsArr.push(opFunc);
                 } else {
                     throw Error(this.tableErrs.colHeaderArgmt);
@@ -76,6 +76,7 @@ class DecisionTable {
             }
         }
     }
+
 
     /**
      * Do some initial checking of the Condition/Action columns and set the Fact array.
@@ -107,43 +108,42 @@ class DecisionTable {
     }
 
 
-    // later, when looping through rules, we want to fetch the operation at that index
-    private _getCondOp(opStr: string): Function {
+    private _getCondOps(opStr: string): Function {
 
-        return (fact: Object, value: any) => {
+        return (fact: any, value: any): boolean => {
 
+            const arr = opStr.split(' ');
+            const attributeStr = arr[0];
 
+            if (opStr === '') {
+                throw Error(this.tableErrs.condBlank);
+            } else if (arr.length !== 3) {
+                throw Error(this.tableErrs.opFormat);
+            } else if (fact[attributeStr] === undefined) {
+                throw Error(this.tableErrs.attrUndef(opStr));
+            } else if (arr[2] !== '$param') {
+                throw Error(this.tableErrs.mustEndWithParam);
+            }
 
-            this._checkCondOpFormat(opStr, fact)
-
-
-            // throw error if attribute from operation string is not present on fact
-            //
-            // return boolean
+            return eval(`${fact[attributeStr]} ${arr[1]} ${value}`);
         }
     }
 
 
-    private _checkCondOpFormat(opStr: string, fact: any): void {
+    private _getActionOps(actionStr: string): Function {
 
-        const arr = opStr.split(' ');
-        const attrStr = arr[0];
+        return (fact: any, ...params: any[]): void => {
 
-        if (attrStr === '') {
-            throw Error(this.tableErrs.condBlank);
-        } else if (arr.length !== 1 && arr.length !== 3) {
-            throw Error(this.tableErrs.opFormatErr);
-        } else if (fact[attrStr] === undefined) {
-            throw Error(this.tableErrs.attrUndef(opStr));
-        }
-        else if (arr.length === 1) {
+            // make sure $params, matches number of params passed
 
+            const arr = opStr.split(' ');
+            const attributeStr = arr[0];
+
+
+
+            fact[attributeStr](params);
         }
     }
-
-
-    // loop through rule, pass value from rule to condition, in this method, determine if value
-    // is from an import
 
 
     // loop through rows here, this method will use imports object, if attribute doesn
