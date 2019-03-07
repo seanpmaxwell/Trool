@@ -5,7 +5,6 @@
  * created by Sean Maxwell Mar 3, 2019
  */
 
-import * as math from 'mathjs';
 import { FactsObj, ImportsObj, Row } from './types';
 import TableErrs from './TableErrs';
 
