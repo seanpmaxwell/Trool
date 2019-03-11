@@ -1,3 +1,6 @@
+# IntelliJ
+.idea
+
 # Misc
 **/node_modules
 **/package-lock.json
