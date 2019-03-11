@@ -7,11 +7,27 @@
 
 class Operators {
 
-    public static eval(operator: string, val1: any, val2: any) {
+    public static compare(operator: string, val1: any, val2: any): boolean {
 
-        if (operator === '')
-
+        if (operator === '==') {
+            return val1 == val2;
+        } else if (operator === '===') {
+            return val1 === val2;
+        } else if (operator === '!=') {
+            return val1 != val2;
+        } else if (operator === '!==') {
+            return val1 !== val2;
+        } else if (operator === '>') {
+            return val1 > val2;
+        } else if (operator === '>=') {
+            return val1 >= val2;
+        } else if (operator === '<') {
+            return val1 < val2;
+        } else if (operator === '<=') {
+            return val1 <= val2;
+        } else {
+            throw Error('Operator not found');
+        }
     }
-
 }
 

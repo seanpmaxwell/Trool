@@ -7,6 +7,7 @@
 
 import { FactsObj, ImportsObj, Row } from './types';
 import TableErrs from './TableErrs';
+import Operators from './Operators';
 
 
 class DecisionTable {
@@ -126,12 +127,7 @@ class DecisionTable {
 
             const attrVal = fact[attributeStr](); // pick up here
 
-            const scope = {
-                a: 3,
-                b: value
-            };
-
-            return math.eval('a ' + arr[1] + ' b', scope);
+            return Operators.compare(arr[1], attrVal, value);
         }
     }
 
