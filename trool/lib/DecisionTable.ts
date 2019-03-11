@@ -7,7 +7,6 @@
 
 import { FactsObj, ImportsObj, Row } from './types';
 import TableErrs from './TableErrs';
-import Operators from './Operators';
 
 
 class DecisionTable {
@@ -113,21 +112,27 @@ class DecisionTable {
         return (fact: any, value: any): boolean => {
 
             const arr = opStr.split(' ');
-            const attributeStr = arr[0];
+            const attrStr = arr[0];
 
             if (!opStr) {
                 throw Error(this.tableErrs.condBlank);
             } else if (arr.length !== 3) {
                 throw Error(this.tableErrs.opFormat);
-            } else if (!fact[attributeStr]) {
+            } else if (!fact[attrStr]) {
                 throw Error(this.tableErrs.attrUndef(opStr));
             } else if (arr[2] !== '$param') {
                 throw Error(this.tableErrs.mustEndWithParam);
             }
 
-            const attrVal = fact[attributeStr](); // pick up here
+            let attrVal;
 
-            return Operators.compare(arr[1], attrVal, value);
+            if (typeof fact[attrStr] === 'function') {
+                attrVal = fact[attrStr]();
+            }
+
+            const attrVal = ; // pick up here
+
+            return this._compare(arr[1], attrVal, value);
         }
     }
 
@@ -160,6 +165,30 @@ class DecisionTable {
 
         // if cell string value is not a number first check to see if it's an import, if not
         // Trool will take it as just a regular string value
+    }
+
+
+    private _compare(operator: string, val1: any, val2: any): boolean {
+
+        if (operator === '==') {
+            return val1 == val2;
+        } else if (operator === '===') {
+            return val1 === val2;
+        } else if (operator === '!=') {
+            return val1 != val2;
+        } else if (operator === '!==') {
+            return val1 !== val2;
+        } else if (operator === '>') {
+            return val1 > val2;
+        } else if (operator === '>=') {
+            return val1 >= val2;
+        } else if (operator === '<') {
+            return val1 < val2;
+        } else if (operator === '<=') {
+            return val1 <= val2;
+        } else {
+            throw Error('Operator not found');
+        }
     }
 }
 
