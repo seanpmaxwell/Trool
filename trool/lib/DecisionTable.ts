@@ -13,6 +13,7 @@ class DecisionTable {
 
     private readonly tableErrs: TableErrs;
 
+    private _arrTable: Array<Row> | null;
     private _importsObj: ImportsObj | null;
     private _factArr: Object[] | null;
     private _condOpsArr: Function[] | null;
@@ -20,7 +21,10 @@ class DecisionTable {
 
 
     constructor(id: number) {
+
         this.tableErrs = new TableErrs(id);
+
+        this._arrTable = null;
         this._importsObj = null;
         this._factArr = null;
         this._condOpsArr = null;
@@ -30,6 +34,7 @@ class DecisionTable {
 
     public initTable(arrTable: Array<Row>, factsObj: FactsObj, importsObj: ImportsObj): void {
 
+        this._arrTable = arrTable;
         this._importsObj = importsObj;
 
         // Get action/condition column header and operation string values
@@ -124,13 +129,15 @@ class DecisionTable {
                 throw Error(this.tableErrs.mustEndWithParam);
             }
 
-            let attrVal;
+            let attrVal = null;
 
             if (typeof fact[attrStr] === 'function') {
                 attrVal = fact[attrStr]();
+            } else if (typeof fact[attrStr].get === 'function') {
+                attrVal = fact[attrStr].get();
+            } else {
+                throw Error(this.tableErrs.notFuncOrGetter)
             }
-
-            const attrVal = ; // pick up here
 
             return this._compare(arr[1], attrVal, value);
         }
@@ -161,12 +168,18 @@ class DecisionTable {
     // not exist on import throw error
     // return array of updated facts
     public updateFacts(): any {
+
         // loops through array of facts for that factName
+        this._arrTable
 
         // if cell string value is not a number first check to see if it's an import, if not
         // Trool will take it as just a regular string value
     }
 
+
+    /********************************************************************************
+                                        Helpers
+    ********************************************************************************/
 
     private _compare(operator: string, val1: any, val2: any): boolean {
 

@@ -8,17 +8,17 @@ class TableErrs {
     private readonly START_CELL_2 = 'Start cell must begin with "Start: "';
 
     private readonly COL_HEADER = 'Action/Condition column headers can only be "Condition" ' +
-        'or "Action"';
+        'or "Action".';
 
     private readonly COL_HEADER_ARGMT = 'All conditions must specified before all actions';
 
     private readonly COL_LENGTH = 'The number of Action/Condition column headers must match ' +
-        'and line up with the number of operations';
+        'and line up with the number of operations.';
 
     private readonly COND_BLANK = 'Condition cannot be blank';
 
     private readonly OP_FORMAT = 'The operation must began with the Fact\'s attribute, contain ' +
-        'one operators, and end with "$param"';
+        'one operators, and end with "$param".';
 
     private readonly ATTR_UNDEF = 'Attribute does not not exist on the fact for condition: ';
 
@@ -30,6 +30,9 @@ class TableErrs {
 
     private readonly FACT_FALSEY = 'The fact specified in the Start cell was not present or is ' +
         'null. Please use and instance-object or an array of instances-objects as a fact value.';
+
+    private readonly NOT_FUNC_OR_GETTER = 'The supplied attribute must be a function or a getter ' +
+        'method.';
 
 
     private readonly _id: string;
@@ -85,7 +88,11 @@ class TableErrs {
     }
 
     get factFalsey(): string {
-        return this._id + this.FACT_FALSEY
+        return this._id + this.FACT_FALSEY;
+    }
+
+    get notFuncOrGetter(): string {
+        return this._id + this.NOT_FUNC_OR_GETTER;
     }
 }
 
