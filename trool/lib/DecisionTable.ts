@@ -13,7 +13,7 @@ class DecisionTable {
 
     private readonly tableErrs: TableErrs;
 
-    private _arrTable: Array<Row> | null;
+    private _arrTable: Array<Row>;
     private _importsObj: ImportsObj | null;
     private _factArr: Object[] | null;
     private _condOpsArr: Function[] | null;
@@ -24,7 +24,7 @@ class DecisionTable {
 
         this.tableErrs = new TableErrs(id);
 
-        this._arrTable = null;
+        this._arrTable = [];
         this._importsObj = null;
         this._factArr = null;
         this._condOpsArr = null;
@@ -169,8 +169,13 @@ class DecisionTable {
     // return array of updated facts
     public updateFacts(): any {
 
-        // loops through array of facts for that factName
-        this._arrTable
+        let applyActions = false;
+        let numOfRows = this._arrTable.length;
+
+        for (let i = 2, ) { // pick up here
+
+
+        }
 
         // if cell string value is not a number first check to see if it's an import, if not
         // Trool will take it as just a regular string value
