@@ -16,8 +16,8 @@ class DecisionTable {
     private _arrTable: Array<Row>;
     private _importsObj: ImportsObj | null;
     private _factArr: Object[] | null;
-    private _condOpsArr: Function[] | null;
-    private _actionOpsArr: Function[] | null;
+    private _condOpsArr: Function[];
+    private _actionOpsArr: Function[];
 
 
     constructor(id: number) {
@@ -27,8 +27,8 @@ class DecisionTable {
         this._arrTable = [];
         this._importsObj = null;
         this._factArr = null;
-        this._condOpsArr = null;
-        this._actionOpsArr = null;
+        this._condOpsArr = [];
+        this._actionOpsArr = [];
     }
 
 
@@ -117,7 +117,7 @@ class DecisionTable {
         return (fact: any, value: any): boolean => {
 
             const arr = opStr.split(' ');
-            const attrStr = arr[0];
+            const attrStr = arr[0].replace('()', '');
 
             if (!opStr) {
                 throw Error(this.tableErrs.condBlank);
@@ -136,11 +136,11 @@ class DecisionTable {
             } else if (typeof fact[attrStr].get === 'function') {
                 attrVal = fact[attrStr].get();
             } else {
-                throw Error(this.tableErrs.notFuncOrGetter)
+                throw Error(this.tableErrs.notFuncOrGetter);
             }
 
             return this._compare(arr[1], attrVal, value);
-        }
+        };
     }
 
 
@@ -151,30 +151,47 @@ class DecisionTable {
             const argLength = actionStr.split('$param').length - 1;
 
             if (!actionStr) {
-                throw Error(this.tableErrs.actionOpEmpty)
+                throw Error(this.tableErrs.actionOpEmpty);
             } else if (argLength !== params.length) {
-                throw Error(this.tableErrs.paramCount)
+                throw Error(this.tableErrs.paramCount);
             }
 
             const n = actionStr.lastIndexOf('(');
             const attrStr = actionStr.substring(0, n);
 
             fact[attrStr](...params);
-        }
+        };
     }
 
 
-    // loop through rows here, this method will use imports object, if attribute doesn
-    // not exist on import throw error
-    // return array of updated facts
     public updateFacts(): any {
 
-        let applyActions = false;
-        let numOfRows = this._arrTable.length;
 
-        for (let i = 2, ) { // pick up here
+        // pick up here, all this needs to be looped inside facts array
 
 
+        for (let i = 2; i < this._arrTable.length - 1; i++) {
+
+            const ruleArr = Object.values(this._arrTable[i]).map(cell => cell.trim());
+            const ruleName = ruleArr[0];
+
+            if (ruleName === '') {
+                throw Error(this.tableErrs.ruleNameEmpty);
+            }
+
+            let applyActions = false;
+
+            // iterate conditions
+            for (let j = 1; j < this._condOpsArr.length; j++) {
+                const cellVal = this._arrTable[i][j];
+                this._condOpsArr[j](cellVal, cellVal);
+            }
+
+            // iterate actions
+            for (let k = 1; k < this._actionOpsArr.length; k++) {
+
+                this._actionOpsArr[k]();
+            }
         }
 
         // if cell string value is not a number first check to see if it's an import, if not
@@ -189,11 +206,13 @@ class DecisionTable {
     private _compare(operator: string, val1: any, val2: any): boolean {
 
         if (operator === '==') {
-            return val1 == val2;
-        } else if (operator === '===') {
             return val1 === val2;
+        } else if (operator === '===') {
+            /* tslint:disable */
+            return val1 == val2;
+            /* tslint:enable */
         } else if (operator === '!=') {
-            return val1 != val2;
+            return val1 !== val2;
         } else if (operator === '!==') {
             return val1 !== val2;
         } else if (operator === '>') {

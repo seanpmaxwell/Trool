@@ -8,5 +8,5 @@ export interface ImportsObj {
 }
 
 export interface Row {
-    [key: string]: string
+    [key: string]: string;
 }

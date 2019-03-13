@@ -34,6 +34,9 @@ class TableErrs {
     private readonly NOT_FUNC_OR_GETTER = 'The supplied attribute must be a function or a getter ' +
         'method.';
 
+    private readonly RULE_NAME_EMPTY = 'The rule name (first cell for a rule row for a decision ' +
+        'table) cannot be empty.';
+
 
     private readonly _id: string;
 
@@ -43,12 +46,17 @@ class TableErrs {
     }
 
 
+    public attrUndef(opStr: string): string {
+        return this._id + this.ATTR_UNDEF + opStr;
+    }
+
+
     get startCell(): string {
         return this._id + this.START_CELL;
     }
 
     get startCell2(): string {
-        return this._id + this.START_CELL_2
+        return this._id + this.START_CELL_2;
     }
 
     get colHeader(): string {
@@ -75,10 +83,6 @@ class TableErrs {
         return this._id + this.MUST_END_WITH_PARAM;
     }
 
-    public attrUndef(opStr: string): string {
-        return this._id + this.ATTR_UNDEF + opStr;
-    }
-
     get paramCount(): string {
         return this._id + this.PARAM_COUNT;
     }
@@ -93,6 +97,10 @@ class TableErrs {
 
     get notFuncOrGetter(): string {
         return this._id + this.NOT_FUNC_OR_GETTER;
+    }
+
+    get ruleNameEmpty(): string {
+        return this._id + this.RULE_NAME_EMPTY;
     }
 }
 

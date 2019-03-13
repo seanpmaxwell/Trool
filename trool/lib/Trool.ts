@@ -37,7 +37,7 @@ class Trool {
     private _setupDecisionTables( jsonArr: Array<Row>, factsObject: FactsObj, importsObj:
         ImportsObj): DecisionTable[] {
 
-        let decisionTables = [];
+        const decisionTables = [];
         let tableStart = -1;
         let tableEnd = -1;
 
@@ -60,7 +60,7 @@ class Trool {
             // Create new Decision Table
             if (tableStart !== -1 && tableEnd !== -1) {
                 const table = jsonArr.slice(tableStart, tableEnd);
-                const decisionTable = new DecisionTable(i+1);
+                const decisionTable = new DecisionTable(i + 1);
                 decisionTable.initTable(table, factsObject, importsObj);
                 decisionTables.push(decisionTable);
                 tableStart = tableEnd = -1;
@@ -71,12 +71,13 @@ class Trool {
         return decisionTables;
     }
 
+
     /**
      * Update facts object, using the DecisionTable objects.
      */
     private _updateFacts(decisionTables: DecisionTable[]): FactsObj {
 
-        let updateFacts = {} as any;
+        const updateFacts = {} as any;
 
         // loop through array of decision tables
         // updatesFacts[table.getFactName] = table.updateFacts()
