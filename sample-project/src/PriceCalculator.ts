@@ -22,7 +22,7 @@ class PriceCalculator {
 
 
     constructor() {
-        this._trool = new Trool();
+        this._trool = new Trool(true);
     }
 
 
@@ -61,13 +61,13 @@ class PriceCalculator {
         return {
             Visitors: visitors,
             Tickets: tickets
-        }
+        };
     }
 
 
     private _calcTotalPrice(factsObj: FactsObj): number {
 
-        const visitors = factsObj['Visitors'] as Visitor | Visitor[];
+        const visitors = factsObj.Visitors as Visitor | Visitor[];
         let totalPrice = 0;
 
         if (visitors instanceof Array) {

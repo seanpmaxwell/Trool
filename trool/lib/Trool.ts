@@ -12,8 +12,15 @@ import DecisionTable from './DecisionTable';
 
 class Trool {
 
+    private readonly _showLogs: boolean | undefined;
+
     private readonly _TABLE_FORMAT_ERR = 'End of rule block reached without a start';
     private readonly _IMPORT_ERR_1 = 'First cell of spreadsheet must be "Imports"';
+
+
+    constructor(showLogs?: boolean) {
+        this._showLogs = showLogs;
+    }
 
 
     public async applyRules(filePath: string, factsObject: FactsObj, importsObj?: ImportsObj):
@@ -60,7 +67,7 @@ class Trool {
             // Create new Decision Table
             if (tableStart !== -1 && tableEnd !== -1) {
                 const table = jsonArr.slice(tableStart, tableEnd);
-                const decisionTable = new DecisionTable(i + 1);
+                const decisionTable = new DecisionTable(i + 1, );
                 decisionTable.initTable(table, factsObject, importsObj);
                 decisionTables.push(decisionTable);
                 tableStart = tableEnd = -1;

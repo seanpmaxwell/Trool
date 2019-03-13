@@ -11,22 +11,26 @@ import TableErrs from './TableErrs';
 
 class DecisionTable {
 
+    private readonly _id: number;
+    private readonly _showLogs: boolean | undefined;
     private readonly tableErrs: TableErrs;
 
     private _arrTable: Array<Row>;
     private _importsObj: ImportsObj | null;
-    private _factArr: Object[] | null;
+    private _factArr: Object[];
     private _condOpsArr: Function[];
     private _actionOpsArr: Function[];
 
 
-    constructor(id: number) {
+    constructor(id: number, showLogs?: boolean) {
 
+        this._id = id;
+        this._showLogs = showLogs;
         this.tableErrs = new TableErrs(id);
 
         this._arrTable = [];
         this._importsObj = null;
-        this._factArr = null;
+        this._factArr = [];
         this._condOpsArr = [];
         this._actionOpsArr = [];
     }
@@ -166,34 +170,34 @@ class DecisionTable {
 
     public updateFacts(): any {
 
+        for (let h = 0; h < this._factArr.length; h++) {
 
-        // pick up here, all this needs to be looped inside facts array
+            const fact = this._factArr[h];
 
+            for (let i = 2; i < this._arrTable.length - 1; i++) {
 
-        for (let i = 2; i < this._arrTable.length - 1; i++) {
+                const ruleArr = Object.values(this._arrTable[i]).map(cell => cell.trim());
+                const ruleName = ruleArr[0];
 
-            const ruleArr = Object.values(this._arrTable[i]).map(cell => cell.trim());
-            const ruleName = ruleArr[0];
+                if (ruleName === '') {
+                    throw Error(this.tableErrs.ruleNameEmpty);
+                }
 
-            if (ruleName === '') {
-                throw Error(this.tableErrs.ruleNameEmpty);
-            }
+                let applyActions = false;
 
-            let applyActions = false;
+                // iterate conditions
+                for (let j = 1; j < this._condOpsArr.length; j++) {
+                    const cellVal = this._arrTable[i][j];
+                    this._condOpsArr[j](cellVal, cellVal);
+                }
 
-            // iterate conditions
-            for (let j = 1; j < this._condOpsArr.length; j++) {
-                const cellVal = this._arrTable[i][j];
-                this._condOpsArr[j](cellVal, cellVal);
-            }
+                // iterate actions
+                for (let k = 1; k < this._actionOpsArr.length; k++) {
 
-            // iterate actions
-            for (let k = 1; k < this._actionOpsArr.length; k++) {
-
-                this._actionOpsArr[k]();
+                    this._actionOpsArr[k]();
+                }
             }
         }
-
         // if cell string value is not a number first check to see if it's an import, if not
         // Trool will take it as just a regular string value
     }
