@@ -73,7 +73,7 @@ class Trool {
                 tableStart = tableEnd = -1;
 
             } else if (field1 === 'ImportStart') {
-                // create a new class called parse. Share it here and with
+                // create a new class called parser. Share it here and with
                 // decision table class. Use it to grab values (string boolean int) from imports
                 // or rules
                 // put some more logic here to check if its an imports block
