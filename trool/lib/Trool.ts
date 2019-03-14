@@ -5,9 +5,12 @@
  */
 
 import * as csvtojson from 'csvtojson';
+
 import { cinfo, cerr } from 'simple-color-print';
 import { FactsObj, ImportsObj, Row } from './types';
+
 import DecisionTable from './DecisionTable';
+import Parser from './Parser';
 
 
 class Trool {
@@ -29,7 +32,8 @@ class Trool {
 
         try {
             const jsonArr = await csvtojson().fromFile(filePath);
-            const decisionTables = this._setupDecisionTables(jsonArr, factsObject, importsObj);
+            importsObj = this._setupImports(jsonArr, importsObj);
+            const decisionTables = this._getTables(jsonArr, factsObject, importsObj);
             return this._updateFacts(decisionTables);
         } catch (err) {
             throw err;
@@ -38,60 +42,79 @@ class Trool {
 
 
     /**
-     * Get array of DecisionTable objects from spreadsheet data.
+     * If there are any imports in the spreadsheet, import them from there
      */
-    private _setupDecisionTables(jsonArr: Array<Row>, factsObject: FactsObj, importsObj:
-        ImportsObj): DecisionTable[] {
+    private _setupImports(jsonArr: Array<Row>, importsObj: ImportsObj): ImportsObj {
 
-        const decisionTables = [];
-        let tableStart = -1;
-        let tableEnd = -1;
         let importStart = -1;
-        let importEnd = -1;
 
-        // Iterate entire spreadsheet
         for (let i = 0; i < jsonArr.length; i++) {
 
-            const { field1 } = jsonArr[i];
-
-            // Get start and end rows for a table
-            if (field1.includes('TableStart: ')) {
-                tableStart = i;
-            } else if (field1 === 'TableEnd') {
-
-                // pick up here, put all this in a setupDecisionTable method
-                if (tableStart === -1 && importStart !== -1 && importEnd !== -1) {
-                    throw Error(this._TABLE_FORMAT_ERR);
-                } else {
-                    tableEnd = i;
-                }
-
-                const table = jsonArr.slice(tableStart, tableEnd);
-                const decisionTable = new DecisionTable(i + 1, this._showLogs);
-                decisionTable.initTable(table, factsObject, importsObj);
-                decisionTables.push(decisionTable);
-                tableStart = tableEnd = -1;
-
-            } else if (field1 === 'ImportStart') {
+            if (field1 === 'ImportStart') {
                 // create a new class called parser. Share it here and with
                 // decision table class. Use it to grab values (string boolean int) from imports
                 // or rules
                 // put some more logic here to check if its an imports block
             }
         }
-
-        cinfo(decisionTables.length + ' decision table\\s found');
-        return decisionTables;
     }
 
 
     /**
-     * If there are any imports in the spreadsheet, import them from there
+     * Get array of DecisionTable objects from spreadsheet.
      */
-    private _setupImports(): void {
+    private _getTables(jsonArr: Array<Row>, factsObject: FactsObj, importsObj: ImportsObj):
+        DecisionTable[] {
+
+        const decisionTables = [];
+        let tableStart = -1;
+
+        for (let i = 0; i < jsonArr.length; i++) {
+
+            const firstCellStr = jsonArr[i].field1;
+            let startCellArr = [];
+
+            if (firstCellStr.includes('TableStart: ')) {
+                tableStart = i;
+                startCellArr = firstCellStr.split(' ');
+            } else if (firstCellStr === 'TableEnd') {
+
+                if (tableStart === -1) {
+                    throw Error(this._TABLE_FORMAT_ERR);
+                }
+
+                const table = jsonArr.slice(tableStart, i);
+                const decisionTable = new DecisionTable(i + 1, this._showLogs);
+                // pick here, pass fact array not whole factsObject
+                const factArr = this._getFactArr(colHeaderArr[0], factsObj);
+                decisionTable.initTable(table, factArr, importsObj);
+                decisionTables.push(decisionTable);
+                tableStart = -1;
+            }
+        }
+
+        return decisionTables;
+    }
 
 
+    private _getFactArr(startCell: string, factsObj: FactsObj): Object[] {
 
+        const startCellArr = startCell.split(' ');
+
+        if (startCellArr.length !== 2) {
+            throw Error(this.tableErrs.startCell);
+        } else if (startCellArr[0] !== 'TableStart:') {
+            throw Error(this.tableErrs.startCell2);
+        }
+
+        const factName = startCellArr[1];
+        const facts = factsObj[factName];
+
+        if (!factsObj[factName]) {
+            throw Error(this.tableErrs.factFalsey);
+        }
+
+        return facts instanceof Array ? facts : [facts];
     }
 
 
@@ -102,6 +125,11 @@ class Trool {
 
         const updateFacts = {} as any;
 
+        if (decisionTables.length === 0) {
+            cinfo('No decision tables found');
+        } else {
+            cinfo(decisionTables.length + ' DecisionTables found. Applying table logic to facts.');
+        }
         // loop through array of decision tables
         // updatesFacts[table.getFactName] = table.updateFacts()
 

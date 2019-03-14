@@ -7,6 +7,7 @@
 
 import { FactsObj, ImportsObj, Row } from './types';
 import TableErrs from './TableErrs';
+import Parser from './Parser';
 
 
 class DecisionTable {
@@ -49,7 +50,7 @@ class DecisionTable {
             throw Error(this.tableErrs.colLenth);
         }
 
-        this._setFactArr(colHeaderArr[0], factsObj);
+        // this._setFactArr(colHeaderArr[0], factsObj);
 
         let conditionsDone = false;
         this._condOpsArr = [];
@@ -83,35 +84,6 @@ class DecisionTable {
             } else {
                 throw Error(this.tableErrs.colHeader);
             }
-        }
-    }
-
-
-    /**
-     * Do some initial checking of the Condition/Action columns and
-     * set the Fact array.
-     */
-    private _setFactArr(startCell: string, factsObj: FactsObj): void {
-
-        const startCellArr = startCell.split(' ');
-
-        if (startCellArr.length !== 2) {
-            throw Error(this.tableErrs.startCell);
-        } else if (startCellArr[0] !== 'TableStart:') {
-            throw Error(this.tableErrs.startCell2);
-        }
-
-        const factName = startCellArr[1];
-        const facts = factsObj[factName];
-
-        if (!factsObj[factName]) {
-            throw Error(this.tableErrs.factFalsey);
-        }
-
-        if (facts instanceof Array) {
-            this._factArr = facts;
-        } else {
-            this._factArr = [facts];
         }
     }
 
@@ -208,17 +180,9 @@ class DecisionTable {
 
     private _callCondOp(factInt: number, condInt: number, cellVal: string): boolean {
 
-        let cellValAlt: boolean | number | undefined;
+        let cellValAlt = Parser.eval(cellVal);
 
-        if (!isNaN(Number(cellVal))) {
-            cellValAlt = Number(cellVal);
-        } else if (cellVal === 'true') {
-            cellValAlt = true;
-        } else if (cellVal === 'false') {
-            cellValAlt = false;
-        } else if (cellVal.startsWith('"')  && cellVal.endsWith('"')) {
-            cellVal = cellVal.substring(1, cellVal.length - 1);
-        } else  {
+        if (cellValAlt === null) {
 
             // do some more error checking here
             const importedObjStrArr = cellVal.split('.');
@@ -230,9 +194,9 @@ class DecisionTable {
             } else {
 
             }
-
-            // throw error if not boolean number or imported object
         }
+
+        // throw error if not boolean number or imported object
 
         const val = cellValAlt !== undefined ? cellValAlt : cellVal;
 
