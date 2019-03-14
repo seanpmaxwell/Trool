@@ -15,7 +15,6 @@ class Trool {
     private readonly _showLogs: boolean | undefined;
 
     private readonly _TABLE_FORMAT_ERR = 'End of rule block reached without a start';
-    private readonly _IMPORT_ERR_1 = 'First cell of spreadsheet must be "Imports"';
 
 
     constructor(showLogs?: boolean) {
@@ -41,12 +40,14 @@ class Trool {
     /**
      * Get array of DecisionTable objects from spreadsheet data.
      */
-    private _setupDecisionTables( jsonArr: Array<Row>, factsObject: FactsObj, importsObj:
+    private _setupDecisionTables(jsonArr: Array<Row>, factsObject: FactsObj, importsObj:
         ImportsObj): DecisionTable[] {
 
         const decisionTables = [];
         let tableStart = -1;
         let tableEnd = -1;
+        let importStart = -1;
+        let importEnd = -1;
 
         // Iterate entire spreadsheet
         for (let i = 0; i < jsonArr.length; i++) {
@@ -54,28 +55,40 @@ class Trool {
             const { field1 } = jsonArr[i];
 
             // Get start and end rows for a table
-            if (field1.includes('Start: ')) {
+            if (field1.includes('TableStart: ')) {
                 tableStart = i;
-            } else if (field1 === 'End') {
-                if (tableStart === -1) {
+            } else if (field1 === 'TableEnd') {
+
+                // pick up here, put all this in a setupDecisionTable method
+                if (tableStart === -1 && importStart !== -1 && importEnd !== -1) {
                     throw Error(this._TABLE_FORMAT_ERR);
                 } else {
                     tableEnd = i;
                 }
-            }
 
-            // Create new Decision Table
-            if (tableStart !== -1 && tableEnd !== -1) {
                 const table = jsonArr.slice(tableStart, tableEnd);
-                const decisionTable = new DecisionTable(i + 1, );
+                const decisionTable = new DecisionTable(i + 1, this._showLogs);
                 decisionTable.initTable(table, factsObject, importsObj);
                 decisionTables.push(decisionTable);
                 tableStart = tableEnd = -1;
+
+            } else if (field1 === 'ImportStart') {
+                // put some more logic here to check if its an imports block
             }
         }
 
         cinfo(decisionTables.length + ' decision table\\s found');
         return decisionTables;
+    }
+
+
+    /**
+     * If there are any imports in the spreadsheet, import them from there
+     */
+    private _setupImports(): void {
+
+
+
     }
 
 

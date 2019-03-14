@@ -97,7 +97,7 @@ class DecisionTable {
 
         if (startCellArr.length !== 2) {
             throw Error(this.tableErrs.startCell);
-        } else if (startCellArr[0] !== 'Start:') {
+        } else if (startCellArr[0] !== 'TableStart:') {
             throw Error(this.tableErrs.startCell2);
         }
 
