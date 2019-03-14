@@ -16,7 +16,7 @@ class DecisionTable {
     private readonly tableErrs: TableErrs;
 
     private _arrTable: Array<Row>;
-    private _importsObj: ImportsObj | null;
+    private _importsObj: ImportsObj;
     private _factArr: Object[];
     private _condOpsArr: Function[];
     private _actionOpsArr: Function[];
@@ -29,7 +29,7 @@ class DecisionTable {
         this.tableErrs = new TableErrs(id);
 
         this._arrTable = [];
-        this._importsObj = null;
+        this._importsObj = {};
         this._factArr = [];
         this._condOpsArr = [];
         this._actionOpsArr = [];
@@ -123,6 +123,7 @@ class DecisionTable {
             const arr = opStr.split(' ');
             const attrStr = arr[0].replace('()', '');
 
+            // Check condition format
             if (!opStr) {
                 throw Error(this.tableErrs.condBlank);
             } else if (arr.length !== 3) {
@@ -133,6 +134,7 @@ class DecisionTable {
                 throw Error(this.tableErrs.mustEndWithParam);
             }
 
+            // Call fact function or getter
             let attrVal = null;
 
             if (typeof fact[attrStr] === 'function') {
@@ -168,11 +170,12 @@ class DecisionTable {
     }
 
 
+    /**
+     * Apply decision to each fact that it references
+    */
     public updateFacts(): any {
 
         for (let h = 0; h < this._factArr.length; h++) {
-
-            const fact = this._factArr[h];
 
             for (let i = 2; i < this._arrTable.length - 1; i++) {
 
@@ -186,13 +189,13 @@ class DecisionTable {
                 let applyActions = false;
 
                 // iterate conditions
-                for (let j = 1; j < this._condOpsArr.length; j++) {
-                    const cellVal = this._arrTable[i][j];
-                    this._condOpsArr[j](cellVal, cellVal);
+                for (let j = 0; j < this._condOpsArr.length; j++) {
+                    const cellVal = this._arrTable[i][j].trim();
+                    applyActions = this._callCondOp(h, j, cellVal);
                 }
 
                 // iterate actions
-                for (let k = 1; k < this._actionOpsArr.length; k++) {
+                for (let k = 0; k < this._actionOpsArr.length; k++) {
 
                     this._actionOpsArr[k]();
                 }
@@ -200,6 +203,40 @@ class DecisionTable {
         }
         // if cell string value is not a number first check to see if it's an import, if not
         // Trool will take it as just a regular string value
+    }
+
+
+    private _callCondOp(factInt: number, condInt: number, cellVal: string): boolean {
+
+        let cellValAlt: boolean | number | undefined;
+
+        if (!isNaN(Number(cellVal))) {
+            cellValAlt = Number(cellVal);
+        } else if (cellVal === 'true') {
+            cellValAlt = true;
+        } else if (cellVal === 'false') {
+            cellValAlt = false;
+        } else if (cellVal.startsWith('"')  && cellVal.endsWith('"')) {
+            cellVal = cellVal.substring(1, cellVal.length - 1);
+        } else  {
+
+            // do some more error checking here
+            const importedObjStrArr = cellVal.split('.');
+            const name = importedObjStrArr[0];
+            const
+
+            if (this._importsObj.hasOwnProperty(name)) {
+                cellVal = this._importsObj[name]
+            } else {
+
+            }
+
+            // throw error if not boolean number or imported object
+        }
+
+        const val = cellValAlt !== undefined ? cellValAlt : cellVal;
+
+        return this._condOpsArr[condInt](this._factArr[factInt], val);
     }
 
 
