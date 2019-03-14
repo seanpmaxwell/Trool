@@ -186,23 +186,23 @@ class DecisionTable {
                     throw Error(this.tableErrs.ruleNameEmpty);
                 }
 
-                let applyActions = false;
+                let conditionsPassed = false;
 
                 // iterate conditions
                 for (let j = 0; j < this._condOpsArr.length; j++) {
                     const cellVal = this._arrTable[i][j].trim();
-                    applyActions = this._callCondOp(h, j, cellVal);
+                    conditionsPassed = this._callCondOp(h, j, cellVal);
                 }
 
                 // iterate actions
-                for (let k = 0; k < this._actionOpsArr.length; k++) {
+                if (conditionsPassed) {
+                    for (let k = 0; k < this._actionOpsArr.length; k++) {
 
-                    this._actionOpsArr[k]();
+                        this._actionOpsArr[k]();
+                    }
                 }
             }
         }
-        // if cell string value is not a number first check to see if it's an import, if not
-        // Trool will take it as just a regular string value
     }
 
 
