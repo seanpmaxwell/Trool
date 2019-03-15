@@ -50,8 +50,8 @@ class PriceCalculator {
         const tickets = [];
 
         if (visitors instanceof Array) {
-            visitors.forEach(vistor => {
-                vistor.partySize = visitors.length;
+            visitors.forEach(visitor => {
+                visitor.partySize = visitors.length;
                 tickets.push(new Ticket(ticketOption));
             });
         } else {

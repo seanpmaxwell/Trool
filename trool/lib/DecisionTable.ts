@@ -37,9 +37,10 @@ class DecisionTable {
     }
 
 
-    public initTable(arrTable: Array<Row>, factsObj: FactsObj, importsObj: ImportsObj): void {
+    public initTable(arrTable: Array<Row>, factsArr: Object[], importsObj: ImportsObj): void {
 
         this._arrTable = arrTable;
+        this._factArr = factsArr;
         this._importsObj = importsObj;
 
         // Get action/condition column header and operation string values
@@ -49,8 +50,6 @@ class DecisionTable {
         if (colHeaderArr.length !== opsStrArr.length) {
             throw Error(this.tableErrs.colLenth);
         }
-
-        // this._setFactArr(colHeaderArr[0], factsObj);
 
         let conditionsDone = false;
         this._condOpsArr = [];

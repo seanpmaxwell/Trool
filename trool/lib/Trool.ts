@@ -11,13 +11,15 @@ import { FactsObj, ImportsObj, Row } from './types';
 
 import DecisionTable from './DecisionTable';
 import Parser from './Parser';
+import TableErrs from './TableErrs';
 
 
 class Trool {
 
     private readonly _showLogs: boolean | undefined;
 
-    private readonly _TABLE_FORMAT_ERR = 'End of rule block reached without a start';
+    private readonly _IMPORT_ERR = 'End of Import Block reached without a start';
+    private readonly _TABLE_FORMAT_ERR = 'End of DecisionTable reached without a start';
 
 
     constructor(showLogs?: boolean) {
@@ -28,12 +30,11 @@ class Trool {
     public async applyRules(filePath: string, factsObject: FactsObj, importsObj?: ImportsObj):
         Promise<FactsObj> {
 
-        importsObj = importsObj || {};
-
         try {
             const jsonArr = await csvtojson().fromFile(filePath);
-            importsObj = this._setupImports(jsonArr, importsObj);
-            const decisionTables = this._getTables(jsonArr, factsObject, importsObj);
+            const imports = this._setupImports(jsonArr, importsObj);
+            const decisionTables = this._getTables(jsonArr, factsObject, imports);
+
             return this._updateFacts(decisionTables);
         } catch (err) {
             throw err;
@@ -44,26 +45,41 @@ class Trool {
     /**
      * If there are any imports in the spreadsheet, import them from there
      */
-    private _setupImports(jsonArr: Array<Row>, importsObj: ImportsObj): ImportsObj {
+    private _setupImports(jsonArr: Array<Row>, importsObj: ImportsObj | undefined): ImportsObj {
+
+        importsObj = importsObj || {};
 
         let importStart = -1;
 
         for (let i = 0; i < jsonArr.length; i++) {
 
-            if (field1 === 'ImportStart') {
+            const firstCellStr = jsonArr[i].field1.trim();
+
+            if (firstCellStr === 'ImportStart') {
+                importStart = i;
+            } else if (firstCellStr === 'ImportEnd') {
+
+                if (importStart === -1) {
+                    throw Error(this._IMPORT_ERR);
+                }
+
+                const importBlock = jsonArr.slice(importStart, i);
+
+                // loop here again
                 // create a new class called parser. Share it here and with
                 // decision table class. Use it to grab values (string boolean int) from imports
                 // or rules
-                // put some more logic here to check if its an imports block
             }
         }
+
+        return importsObj;
     }
 
 
     /**
      * Get array of DecisionTable objects from spreadsheet.
      */
-    private _getTables(jsonArr: Array<Row>, factsObject: FactsObj, importsObj: ImportsObj):
+    private _getTables(jsonArr: Array<Row>, factsObj: FactsObj, importsObj: ImportsObj):
         DecisionTable[] {
 
         const decisionTables = [];
@@ -71,10 +87,10 @@ class Trool {
 
         for (let i = 0; i < jsonArr.length; i++) {
 
-            const firstCellStr = jsonArr[i].field1;
-            let startCellArr = [];
+            const firstCellStr = jsonArr[i].field1.trim();
+            let startCellArr: string[] = [];
 
-            if (firstCellStr.includes('TableStart: ')) {
+            if (firstCellStr.includes('TableStart:')) {
                 tableStart = i;
                 startCellArr = firstCellStr.split(' ');
             } else if (firstCellStr === 'TableEnd') {
@@ -85,8 +101,8 @@ class Trool {
 
                 const table = jsonArr.slice(tableStart, i);
                 const decisionTable = new DecisionTable(i + 1, this._showLogs);
-                // pick here, pass fact array not whole factsObject
-                const factArr = this._getFactArr(colHeaderArr[0], factsObj);
+                const factArr = this._getFactArr(startCellArr, i + 1, factsObj);
+
                 decisionTable.initTable(table, factArr, importsObj);
                 decisionTables.push(decisionTable);
                 tableStart = -1;
@@ -97,24 +113,24 @@ class Trool {
     }
 
 
-    private _getFactArr(startCell: string, factsObj: FactsObj): Object[] {
+    /**
+     * Extract the array of facts from the facts array object provided by the user based
+     * on the start cell of the Decision Table.
+     */
+    private _getFactArr(startCellArr: string[], id: number, factsObj: FactsObj): Object[] {
 
-        const startCellArr = startCell.split(' ');
-
+        // Check for format errors
         if (startCellArr.length !== 2) {
-            throw Error(this.tableErrs.startCell);
+            throw Error(TableErrs.getStartCellErr(id));
         } else if (startCellArr[0] !== 'TableStart:') {
-            throw Error(this.tableErrs.startCell2);
+            throw Error(TableErrs.getStartCellErr2(id));
+        } else if (!factsObj[startCellArr[1]]) {
+            throw Error(TableErrs.getFactFalseyErr(id));
         }
 
-        const factName = startCellArr[1];
-        const facts = factsObj[factName];
+        const facts = factsObj[startCellArr[1]];
 
-        if (!factsObj[factName]) {
-            throw Error(this.tableErrs.factFalsey);
-        }
-
-        return facts instanceof Array ? facts : [facts];
+        return (facts instanceof Array) ? facts : [facts];
     }
 
 

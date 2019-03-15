@@ -2,11 +2,6 @@
 
 class TableErrs {
 
-    private readonly START_CELL = 'Start cell must contain "Start:" and specify 1 and only ' +
-        '1 fact.';
-
-    private readonly START_CELL_2 = 'Start cell must begin with "Start: "';
-
     private readonly COL_HEADER = 'Action/Condition column headers can only be "Condition" ' +
         'or "Action".';
 
@@ -28,9 +23,6 @@ class TableErrs {
 
     private readonly ACTION_FORMAT = 'Action operation cannot be blank';
 
-    private readonly FACT_FALSEY = 'The fact specified in the Start cell was not present or is ' +
-        'null. Please use and instance-object or an array of instances-objects as a fact value.';
-
     private readonly NOT_FUNC_OR_GETTER = 'The supplied attribute must be a function or a getter ' +
         'method.';
 
@@ -51,13 +43,23 @@ class TableErrs {
     }
 
 
-    get startCell(): string {
-        return this._id + this.START_CELL;
+    public static getStartCellErr(id: number): string {
+        return `Decision Table ${id} start cell must contain "Start:" and specify 1 and ` +
+            'only 1 fact.';
     }
 
-    get startCell2(): string {
-        return this._id + this.START_CELL_2;
+
+    public static getStartCellErr2(id: number): string {
+        return `Decision Table ${id} start cell must begin with "Start: " `;
     }
+
+
+    public static getFactFalseyErr(id: number): string {
+        return `The fact specified in the start cell for Decision Table ${id} was not present ` +
+            'or is null. Please use and instance-object or an array of instances-objects as ' +
+            'a fact value.';
+    }
+
 
     get colHeader(): string {
         return this._id + this.COL_HEADER;
@@ -89,10 +91,6 @@ class TableErrs {
 
     get actionOpEmpty(): string {
         return this._id + this.ACTION_FORMAT;
-    }
-
-    get factFalsey(): string {
-        return this._id + this.FACT_FALSEY;
     }
 
     get notFuncOrGetter(): string {
