@@ -37,6 +37,10 @@ class DecisionTable {
     }
 
 
+    /*********************************************************************************************
+     *                                  Initialize Table
+     ********************************************************************************************/
+
     public initTable(arrTable: Array<Row>, factsArr: Object[], importsObj: ImportsObj): void {
 
         this._arrTable = arrTable;
@@ -165,9 +169,10 @@ class DecisionTable {
     }
 
 
-    /**
-     * Apply decision to each fact that it references
-    */
+    /*********************************************************************************************
+     *                                  Update Facts
+     ********************************************************************************************/
+
     public updateFacts(): any {
 
         for (let h = 0; h < this._factArr.length; h++) {
