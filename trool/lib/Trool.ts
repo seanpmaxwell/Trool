@@ -8,9 +8,9 @@ import * as csvtojson from 'csvtojson';
 
 import { cinfo, cerr } from 'simple-color-print';
 import { FactsObj, ImportsObj, Row } from './types';
+import { parseCell } from './shared';
 
 import DecisionTable from './DecisionTable';
-import Parser from './Parser';
 import TableErrs from './TableErrs';
 
 
@@ -42,8 +42,12 @@ class Trool {
     }
 
 
+    /*********************************************************************************************
+     *                                     Setup Imports
+     ********************************************************************************************/
+
     /**
-     * If there are any imports in the spreadsheet, import them from there
+     * If there are any imports in the spreadsheet, import them from there.
      */
     private _setupImports(jsonArr: Array<Row>, importsObj: ImportsObj | undefined): ImportsObj {
 
@@ -51,6 +55,7 @@ class Trool {
 
         let importStart = -1;
 
+        // Find import blocks
         for (let i = 0; i < jsonArr.length; i++) {
 
             const firstCellStr = jsonArr[i].field1.trim();
@@ -63,18 +68,60 @@ class Trool {
                     throw Error(this._IMPORT_ERR);
                 }
 
+                // Add imports from import block to main Imports Object
                 const importBlock = jsonArr.slice(importStart, i);
-
-                // loop here again
-                // create a new class called parser. Share it here and with
-                // decision table class. Use it to grab values (string boolean int) from imports
-                // or rules
+                const spreadSheetImports = this._processImportBlock(importBlock);
+                importsObj = {...importsObj, ...spreadSheetImports};
             }
         }
 
         return importsObj;
     }
 
+
+    /**
+     * Extract objects from import block
+     */
+    private _processImportBlock(importBlock: Array<Row>): {} {
+
+        const imports: any = {};
+        let objName = null;
+        let newObj: any = null;
+
+        // Process import block
+        for (let i = 0; i < importBlock.length; i++) {
+
+            const firstCell = importBlock[i].field1.trim();
+
+            // New object start
+            if (!objName && firstCell.startsWith('Object: ')) {
+
+                const arr = firstCell.split(' ');
+
+                objName = arr[1];
+                newObj = {};
+                continue;
+            }
+
+            // Add new property
+            if (firstCell && objName) {
+                const val = importBlock[i].field2.trim();
+                newObj[firstCell] = parseCell(val);
+            }
+
+            // Append imported object to the "imports object"
+            if (objName && (firstCell === '' || firstCell.includes('Object:'))) {
+                imports[objName] = newObj;
+            }
+        }
+
+        return imports;
+    }
+
+
+    /*********************************************************************************************
+     *                                Setup Decision Tables
+     ********************************************************************************************/
 
     /**
      * Get array of DecisionTable objects from spreadsheet.
@@ -90,7 +137,7 @@ class Trool {
             const firstCellStr = jsonArr[i].field1.trim();
             let startCellArr: string[] = [];
 
-            if (firstCellStr.includes('TableStart:')) {
+            if (firstCellStr.startsWith('TableStart: ')) {
                 tableStart = i;
                 startCellArr = firstCellStr.split(' ');
             } else if (firstCellStr === 'TableEnd') {
@@ -133,6 +180,10 @@ class Trool {
         return (facts instanceof Array) ? facts : [facts];
     }
 
+
+    /*********************************************************************************************
+     *                                    Update Facts
+     ********************************************************************************************/
 
     /**
      * Update facts object, using the DecisionTable objects.

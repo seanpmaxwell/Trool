@@ -7,7 +7,7 @@
 
 import { FactsObj, ImportsObj, Row } from './types';
 import TableErrs from './TableErrs';
-import Parser from './Parser';
+import { parseCell } from './shared';
 
 
 class DecisionTable {
@@ -179,17 +179,16 @@ class DecisionTable {
 
     private _callCondOp(factInt: number, condInt: number, cellVal: string): boolean {
 
-        let cellValAlt = Parser.eval(cellVal);
+        const cellValAlt = parseCell(cellVal);
 
         if (cellValAlt === null) {
 
-            // do some more error checking here
             const importedObjStrArr = cellVal.split('.');
             const name = importedObjStrArr[0];
-            const
+            const ;
 
             if (this._importsObj.hasOwnProperty(name)) {
-                cellVal = this._importsObj[name]
+                cellVal = this._importsObj[name];
             } else {
 
             }
