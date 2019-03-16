@@ -49,11 +49,6 @@ class TableErrs {
     }
 
 
-    public static getStartCellErr2(id: number): string {
-        return `Decision Table ${id} start cell must begin with "Start: " `;
-    }
-
-
     public static getFactFalseyErr(id: number): string {
         return `The fact specified in the start cell for Decision Table ${id} was not present ` +
             'or is null. Please use and instance-object or an array of instances-objects as ' +

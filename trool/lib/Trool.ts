@@ -18,7 +18,6 @@ class Trool {
 
     private readonly _showLogs: boolean | undefined;
 
-    private readonly _IMPORT_ERR = 'End of Import Block reached without a start';
     private readonly _TABLE_FORMAT_ERR = 'End of DecisionTable reached without a start';
 
 
@@ -53,69 +52,38 @@ class Trool {
 
         importsObj = importsObj || {};
 
-        let importStart = -1;
+        let importName = '';
+        let newImportObj: any = {};
 
         // Find import blocks
         for (let i = 0; i < jsonArr.length; i++) {
 
             const firstCellStr = jsonArr[i].field1.trim();
 
-            if (firstCellStr === 'ImportStart') {
-                importStart = i;
-            } else if (firstCellStr === 'ImportEnd') {
+            if (firstCellStr.startsWith('ImportObject: ')) {
 
-                if (importStart === -1) {
-                    throw Error(this._IMPORT_ERR);
+                const firstCellArr = firstCellStr.split(' ');
+
+                if (firstCellArr.length !== 2) {
+                    throw Error(' ');
                 }
 
-                // Add imports from import block to main Imports Object
-                const importBlock = jsonArr.slice(importStart, i);
-                const spreadSheetImports = this._processImportBlock(importBlock);
-                importsObj = {...importsObj, ...spreadSheetImports};
+                importName = firstCellArr[1];
+                newImportObj = {};
+
+            } else if (importName) {
+
+                if (jsonArr[i] || jsonArr[i].field1.trim()) {
+                    newImportObj[firstCellStr] = parseCell(jsonArr[i].field2);
+                } else {
+                    importsObj[importName] = newImportObj;
+                    importName = '';
+                    newImportObj = {};
+                }
             }
         }
 
         return importsObj;
-    }
-
-
-    /**
-     * Extract objects from import block
-     */
-    private _processImportBlock(importBlock: Array<Row>): {} {
-
-        const imports: any = {};
-        let objName = null;
-        let newObj: any = null;
-
-        // Process import block
-        for (let i = 0; i < importBlock.length; i++) {
-
-            const firstCell = importBlock[i].field1.trim();
-
-            // New object start
-            if (!objName && firstCell.startsWith('Object: ')) {
-
-                const arr = firstCell.split(' ');
-
-                objName = arr[1];
-                newObj = {};
-                continue;
-            }
-
-            // Add new property
-            if (firstCell && objName) {
-                const val = importBlock[i].field2.trim();
-                newObj[firstCell] = parseCell(val);
-            }
-
-            // Append imported object to the "imports object"
-            if (objName && (firstCell === '' || firstCell.includes('Object:'))) {
-                imports[objName] = newObj;
-            }
-        }
-
-        return imports;
     }
 
 
@@ -169,8 +137,6 @@ class Trool {
         // Check for format errors
         if (startCellArr.length !== 2) {
             throw Error(TableErrs.getStartCellErr(id));
-        } else if (startCellArr[0] !== 'TableStart:') {
-            throw Error(TableErrs.getStartCellErr2(id));
         } else if (!factsObj[startCellArr[1]]) {
             throw Error(TableErrs.getFactFalseyErr(id));
         }
