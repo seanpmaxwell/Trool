@@ -116,8 +116,32 @@ class DecisionTable {
                 throw Error(this.tableErrs.notFuncOrGetter);
             }
 
-            return this._compare(arr[1], attrVal, value);
+            return this._determineOp(arr[1], attrVal, value);
         };
+    }
+
+
+    private _determineOp(operator: string, val1: any, val2: any): boolean {
+
+        if (operator === '===') {
+            return val1 === val2;
+        } else if (operator === '==') {
+            return val1 === val2;
+        } else if (operator === '!=') {
+            return val1 !== val2;
+        } else if (operator === '!==') {
+            return val1 !== val2;
+        } else if (operator === '>') {
+            return val1 > val2;
+        } else if (operator === '>=') {
+            return val1 >= val2;
+        } else if (operator === '<') {
+            return val1 < val2;
+        } else if (operator === '<=') {
+            return val1 <= val2;
+        } else {
+            throw Error('Operator not found');
+        }
     }
 
 
@@ -177,20 +201,21 @@ class DecisionTable {
     }
 
 
-    private _callCondOp(factInt: number, condInt: number, cellVal: string): boolean {
+    private _callCondOp(factInt: number, condInt: number, cellValStr: string): boolean {
 
-        const cellValAlt = parseCell(cellVal);
+        const cellValParsed = parseCell(cellValStr);
 
-        if (cellValAlt === null) {
+        // If null check to see if Import Object, // pick up here put this in parseCell
+        if (cellValParsed === null) {
 
-            const importedObjStrArr = cellVal.split('.');
+            const importedObjStrArr = cellValStr.split('.');
             const name = importedObjStrArr[0];
-            const ;
+            let cellVal;
 
             if (this._importsObj.hasOwnProperty(name)) {
                 cellVal = this._importsObj[name];
             } else {
-
+                throw Error('Value ' + cellValStr + ' provided in table ' + this._id + ' provided was not a null, boolean, number, string, or import');
             }
         }
 
@@ -199,36 +224,6 @@ class DecisionTable {
         const val = cellValAlt !== undefined ? cellValAlt : cellVal;
 
         return this._condOpsArr[condInt](this._factArr[factInt], val);
-    }
-
-
-    /********************************************************************************
-                                        Helpers
-    ********************************************************************************/
-
-    private _compare(operator: string, val1: any, val2: any): boolean {
-
-        if (operator === '==') {
-            return val1 === val2;
-        } else if (operator === '===') {
-            /* tslint:disable */
-            return val1 == val2;
-            /* tslint:enable */
-        } else if (operator === '!=') {
-            return val1 !== val2;
-        } else if (operator === '!==') {
-            return val1 !== val2;
-        } else if (operator === '>') {
-            return val1 > val2;
-        } else if (operator === '>=') {
-            return val1 >= val2;
-        } else if (operator === '<') {
-            return val1 < val2;
-        } else if (operator === '<=') {
-            return val1 <= val2;
-        } else {
-            throw Error('Operator not found');
-        }
     }
 }
 

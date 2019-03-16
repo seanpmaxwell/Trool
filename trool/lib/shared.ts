@@ -13,8 +13,6 @@ export function parseCell(cellVal: string): null | boolean | number | string {
         return false;
     } else if (cellVal.startsWith('"')  && cellVal.endsWith('"')) {
         return cellVal.substring(1, cellVal.length - 1);
-    } else if (cellVal === 'null') {
-        return null;
     } else {
         return null;
     }
