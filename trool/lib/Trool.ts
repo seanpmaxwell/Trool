@@ -55,11 +55,12 @@ class Trool {
         let importName = '';
         let newImportObj: any = {};
 
-        // Find import blocks
+        // Find spreadsheet imports
         for (let i = 0; i < jsonArr.length; i++) {
 
             const firstCellStr = jsonArr[i].field1.trim();
 
+            // Setup spreadsheet import
             if (firstCellStr.startsWith('ImportObject: ')) {
 
                 const firstCellArr = firstCellStr.split(' ');

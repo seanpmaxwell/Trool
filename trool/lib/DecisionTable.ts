@@ -191,7 +191,7 @@ class DecisionTable {
                 // iterate conditions
                 for (let j = 0; j < this._condOpsArr.length; j++) {
                     const cellVal = this._arrTable[i][j];
-                    conditionsPassed = this._callCondOp(h, j, cellVal);
+                    conditionsPassed = this._callCondOp(h, j, cellVal); // pick up here
                 }
 
                 // iterate actions

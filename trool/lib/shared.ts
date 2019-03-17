@@ -10,12 +10,6 @@ export function parseCell(cellVal: string, importsObj: ImportsObj): any {
 
     cellVal = cellVal.trim();
 
-    let importPropKey = '';
-
-    if (cellVal.includes('.')) {
-        importPropKey = cellVal.split('.')[0];
-    }
-
     if (!isNaN(Number(cellVal))) {
         return Number(cellVal);
     } else if (cellVal === 'true') {
@@ -26,12 +20,24 @@ export function parseCell(cellVal: string, importsObj: ImportsObj): any {
         return cellVal.substring(1, cellVal.length - 1);
     } else  {
 
-        if (importsObj.hasOwnProperty(importPropKey)) {
-            return importsObj[importPropKey];
-        } else if (importsObj.hasOwnProperty(cellVal)) {
-            return importsObj[name];
-        } else {
-            return null;
+        let importKey = cellVal;
+        let importVal;
+
+        if (cellVal.includes('.')) {
+            const arr = cellVal.split('.');
+            importKey = arr[0];
+            importVal = arr[1];
+        }
+
+        if (importsObj.hasOwnProperty(importKey)) {
+
+            if (importVal) {
+                return importsObj[importKey][importVal];
+            } else {
+                return importsObj[importKey];
+            }
         }
     }
+
+    return null;
 }

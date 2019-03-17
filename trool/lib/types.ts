@@ -4,7 +4,7 @@ export interface FactsObj {
 }
 
 export interface ImportsObj {
-    [key: string]: Object;
+    [key: string]: any;
 }
 
 export interface Row {
