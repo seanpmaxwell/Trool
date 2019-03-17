@@ -220,7 +220,7 @@ class DecisionTable {
             if (this._importsObj.hasOwnProperty(name)) {
                 cellVal = this._importsObj[name];
             } else {
-                throw Error('Value ' + cellValStr + ' provided in table ' + this._id + ' provided was not a null, boolean, number, string, or import');
+                throw Error(this.tableErrs.invalidVal(this._id, cellValStr));
             }
         }
 

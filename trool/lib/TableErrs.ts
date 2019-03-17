@@ -56,6 +56,12 @@ class TableErrs {
     }
 
 
+    public invalidVal(id: number, cellVal: string) {
+        return 'Value ' + cellVal + ' provided in table ' + id + ' provided was not a ' +
+            'null, boolean, number, string, or import';
+    }
+
+
     get colHeader(): string {
         return this._id + this.COL_HEADER;
     }
