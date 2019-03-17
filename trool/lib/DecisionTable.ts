@@ -190,7 +190,7 @@ class DecisionTable {
 
                 // iterate conditions
                 for (let j = 0; j < this._condOpsArr.length; j++) {
-                    const cellVal = this._arrTable[i][j].trim();
+                    const cellVal = this._arrTable[i][j];
                     conditionsPassed = this._callCondOp(h, j, cellVal);
                 }
 
@@ -208,20 +208,10 @@ class DecisionTable {
 
     private _callCondOp(factInt: number, condInt: number, cellValStr: string): boolean {
 
-        const cellValParsed = parseCell(cellValStr);
+        const cellValParsed = parseCell(cellValStr, this._importsObj);
 
-        // If null check to see if Import Object, // pick up here put this in parseCell
         if (cellValParsed === null) {
-
-            const importedObjStrArr = cellValStr.split('.');
-            const name = importedObjStrArr[0];
-            let cellVal;
-
-            if (this._importsObj.hasOwnProperty(name)) {
-                cellVal = this._importsObj[name];
-            } else {
-                throw Error(this.tableErrs.invalidVal(this._id, cellValStr));
-            }
+            throw Error(this.tableErrs.invalidVal(this._id, cellValStr));
         }
 
         // throw error if not boolean number or imported object

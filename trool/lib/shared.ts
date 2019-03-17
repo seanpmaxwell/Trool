@@ -3,7 +3,18 @@
  * created by Sean Maxwell Mar 14, 2019
  */
 
-export function parseCell(cellVal: string): null | boolean | number | string {
+import { ImportsObj } from './types';
+
+
+export function parseCell(cellVal: string, importsObj: ImportsObj): any {
+
+    cellVal = cellVal.trim();
+
+    let importPropKey = '';
+
+    if (cellVal.includes('.')) {
+        importPropKey = cellVal.split('.')[0];
+    }
 
     if (!isNaN(Number(cellVal))) {
         return Number(cellVal);
@@ -13,7 +24,14 @@ export function parseCell(cellVal: string): null | boolean | number | string {
         return false;
     } else if (cellVal.startsWith('"')  && cellVal.endsWith('"')) {
         return cellVal.substring(1, cellVal.length - 1);
-    } else {
-        return null;
+    } else  {
+
+        if (importsObj.hasOwnProperty(importPropKey)) {
+            return importsObj[importPropKey];
+        } else if (importsObj.hasOwnProperty(cellVal)) {
+            return importsObj[name];
+        } else {
+            return null;
+        }
     }
 }
