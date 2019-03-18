@@ -74,7 +74,7 @@ class Trool {
 
             } else if (importName) {
 
-                if (jsonArr[i] || jsonArr[i].field1.trim()) {
+                if (jsonArr[i] && jsonArr[i].field1.trim()) {
                     newImportObj[firstCellStr] = parseCell(jsonArr[i].field2, importsObj);
                 } else {
                     importsObj[importName] = newImportObj;

@@ -6,36 +6,38 @@
 import { ImportsObj } from './types';
 
 
-export function parseCell(cellVal: string, importsObj: ImportsObj): any {
+export function parseCell(cellValStr: string, importsObj: ImportsObj): any {
 
-    cellVal = cellVal.trim();
+    cellValStr = cellValStr.trim();
 
-    if (!isNaN(Number(cellVal))) {
-        return Number(cellVal);
-    } else if (cellVal === 'true') {
+    // Value is primitive
+    if (!isNaN(Number(cellValStr))) {
+        return Number(cellValStr);
+    } else if (cellValStr === 'true') {
         return true;
-    } else if (cellVal === 'false') {
+    } else if (cellValStr === 'false') {
         return false;
-    } else if (cellVal.startsWith('"')  && cellVal.endsWith('"')) {
-        return cellVal.substring(1, cellVal.length - 1);
-    } else  {
+    } else if (cellValStr.startsWith('"')  && cellValStr.endsWith('"')) {
+        return cellValStr.substring(1, cellValStr.length - 1);
+    }
 
-        let importKey = cellVal;
-        let importVal;
+    // Value is from an import
 
-        if (cellVal.includes('.')) {
-            const arr = cellVal.split('.');
-            importKey = arr[0];
-            importVal = arr[1];
-        }
+    let importKey = cellValStr;
+    let importVal;
 
-        if (importsObj.hasOwnProperty(importKey)) {
+    if (cellValStr.includes('.')) {
+        const arr = cellValStr.split('.');
+        importKey = arr[0];
+        importVal = arr[1];
+    }
 
-            if (importVal) {
-                return importsObj[importKey][importVal];
-            } else {
-                return importsObj[importKey];
-            }
+    if (importsObj.hasOwnProperty(importKey)) {
+
+        if (importVal) {
+            return importsObj[importKey][importVal];
+        } else {
+            return importsObj[importKey];
         }
     }
 

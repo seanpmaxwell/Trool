@@ -103,7 +103,7 @@ class DecisionTable {
                 throw Error(this.tableErrs.condBlank);
             } else if (arr.length !== 3) {
                 throw Error(this.tableErrs.opFormat);
-            } else if (!fact[attrStr]) {
+            } else if (fact[attrStr] === undefined) {
                 throw Error(this.tableErrs.attrUndef(opStr));
             } else if (arr[2] !== '$param') {
                 throw Error(this.tableErrs.mustEndWithParam);
@@ -151,7 +151,7 @@ class DecisionTable {
 
     private _getActionOps(actionStr: string): Function {
 
-        return (fact: any, ...params: any[]): void => {
+        return (factIdx: number, ...params: any[]): void => {
 
             const argLength = actionStr.split('$param').length - 1;
 
@@ -162,9 +162,9 @@ class DecisionTable {
             }
 
             const n = actionStr.lastIndexOf('(');
-            const attrStr = actionStr.substring(0, n);
+            const methodName = actionStr.substring(0, n);
 
-            fact[attrStr](...params);
+            (this._factArr[factIdx] as any)[methodName](...params);
         };
     }
 
@@ -173,52 +173,70 @@ class DecisionTable {
      *                                  Update Facts
      ********************************************************************************************/
 
-    public updateFacts(): any {
+    public updateFacts(): Object[] {
 
+        // Iterate facts
         for (let h = 0; h < this._factArr.length; h++) {
 
+            // Iterate rows
             for (let i = 2; i < this._arrTable.length - 1; i++) {
 
                 const ruleArr = Object.values(this._arrTable[i]).map(cell => cell.trim());
-                const ruleName = ruleArr[0];
 
-                if (ruleName === '') {
+                if (ruleArr[0] === '') {
                     throw Error(this.tableErrs.ruleNameEmpty);
                 }
 
-                let conditionsPassed = false;
+                let j;
 
                 // iterate conditions
-                for (let j = 0; j < this._condOpsArr.length; j++) {
-                    const cellVal = this._arrTable[i][j];
-                    conditionsPassed = this._callCondOp(h, j, cellVal); // pick up here
+                for (j = 1; j < this._condOpsArr.length; j++) {
+                    const condParamVal = this._arrTable[i][j];
+                    const condPassed = this._callCondOp(h, j - 1, condParamVal);
+                    if (!condPassed) { return; }
                 }
 
                 // iterate actions
-                if (conditionsPassed) {
-                    for (let k = 0; k < this._actionOpsArr.length; k++) {
-
-                        this._actionOpsArr[k]();
-                    }
+                for (; j < this._actionOpsArr.length; j++) {
+                    const cellValStr = this._arrTable[i][j];
+                    const actionIdx = j - this._actionOpsArr.length;
+                    this._callCondOp(h, actionIdx, cellValStr);
                 }
             }
         }
+
+        return this._factArr;
     }
 
 
-    private _callCondOp(factInt: number, condInt: number, cellValStr: string): boolean {
+    private _callCondOp(factIdx: number, condIdx: number, cellValStr: string): boolean {
 
-        const cellValParsed = parseCell(cellValStr, this._importsObj);
+        // Don't check condition if cell is empty
+        if (cellValStr === '') {
+            return true;
+        }
 
-        if (cellValParsed === null) {
+        const retVal = parseCell(cellValStr, this._importsObj);
+
+        if (retVal === null) {
             throw Error(this.tableErrs.invalidVal(this._id, cellValStr));
         }
 
-        // throw error if not boolean number or imported object
+        return this._condOpsArr[condIdx](this._factArr[factIdx], retVal);
+    }
 
-        const val = cellValAlt !== undefined ? cellValAlt : cellVal;
 
-        return this._condOpsArr[condInt](this._factArr[factInt], val);
+    private _callActionOp(factIdx: number, actionIdx: number, cellValStr: string): void {
+
+        // Don't call action if cell is empty
+        if (cellValStr === '') {
+            return;
+        }
+
+        // need to parse multiple values here, split by comma then do parse cell
+
+
+        this._actionOpsArr[actionIdx].apply(factIdx, cellValues);
     }
 }
 
