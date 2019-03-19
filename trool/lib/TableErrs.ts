@@ -30,16 +30,16 @@ class TableErrs {
         'table) cannot be empty.';
 
 
-    private readonly _id: string;
+    private readonly id: string;
 
 
     constructor(id: number) {
-        this._id = 'Error on DecisionTable ' + id + ': ';
+        this.id = 'Error on DecisionTable ' + id + ': ';
     }
 
 
     public attrUndef(opStr: string): string {
-        return this._id + this.ATTR_UNDEF + opStr;
+        return this.id + this.ATTR_UNDEF + opStr;
     }
 
 
@@ -63,43 +63,43 @@ class TableErrs {
 
 
     get colHeader(): string {
-        return this._id + this.COL_HEADER;
+        return this.id + this.COL_HEADER;
     }
 
     get colHeaderArgmt(): string {
-        return this._id + this.COL_HEADER_ARGMT;
+        return this.id + this.COL_HEADER_ARGMT;
     }
 
     get colLenth(): string {
-        return this._id + this.COL_LENGTH;
+        return this.id + this.COL_LENGTH;
     }
 
     get condBlank(): string {
-        return this._id + this.COND_BLANK;
+        return this.id + this.COND_BLANK;
     }
 
     get opFormat(): string {
-        return this._id + this.OP_FORMAT;
+        return this.id + this.OP_FORMAT;
     }
 
     get mustEndWithParam(): string {
-        return this._id + this.MUST_END_WITH_PARAM;
+        return this.id + this.MUST_END_WITH_PARAM;
     }
 
     get paramCount(): string {
-        return this._id + this.PARAM_COUNT;
+        return this.id + this.PARAM_COUNT;
     }
 
     get actionOpEmpty(): string {
-        return this._id + this.ACTION_FORMAT;
+        return this.id + this.ACTION_FORMAT;
     }
 
     get notFuncOrGetter(): string {
-        return this._id + this.NOT_FUNC_OR_GETTER;
+        return this.id + this.NOT_FUNC_OR_GETTER;
     }
 
     get ruleNameEmpty(): string {
-        return this._id + this.RULE_NAME_EMPTY;
+        return this.id + this.RULE_NAME_EMPTY;
     }
 }
 

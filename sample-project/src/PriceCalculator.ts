@@ -17,28 +17,31 @@ import Visitor from './models/Visitor';
 
 class PriceCalculator {
 
-    private _trool: Trool;
-    private readonly _CSV_FILE = 'rule-files/VisitorRules.csv';
+    private trool: Trool;
+    private readonly CSV_FILE = 'rule-files/VisitorRules.csv';
 
 
     constructor() {
-        this._trool = new Trool(true);
+        this.trool = new Trool();
     }
 
 
     public async calcTotalPrice(visitors: Visitor | Visitor[], ticketOption: TicketOpts):
         Promise<string> {
 
-        let totalPrice = -1;
+        let totalPrice = 0;
+        const importsObj = {VisitorTypes, TicketTypes};
 
         try {
             const factsObj = this.setupFactsObj(visitors, ticketOption);
-            const csvFilePath = path.join(__dirname, this._CSV_FILE);
-            const importsObj = {VisitorTypes, TicketTypes};
-            const updatedFacts = await this._trool.applyRules(csvFilePath, factsObj, importsObj);
+            const csvFilePath = path.join(__dirname, this.CSV_FILE);
+            const updatedFacts = await this.trool.applyRules(csvFilePath, factsObj, importsObj,
+                true);
+
             totalPrice = this._calcTotalPrice(updatedFacts);
         } catch (err) {
             cerr(err);
+            totalPrice = -1;
         } finally {
             return '$' + totalPrice.toFixed(2);
         }

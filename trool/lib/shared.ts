@@ -3,7 +3,17 @@
  * created by Sean Maxwell Mar 14, 2019
  */
 
-import { ImportsObj } from './types';
+export interface FactsObj {
+    [key: string]: InstanceType<any> | InstanceType<any>[];
+}
+
+export interface ImportsObj {
+    [key: string]: any;
+}
+
+export interface Row {
+    [key: string]: string;
+}
 
 
 export function parseCell(cellValStr: string, importsObj: ImportsObj): any {

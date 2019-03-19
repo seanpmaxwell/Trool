@@ -7,8 +7,7 @@
 import * as csvtojson from 'csvtojson';
 
 import { cinfo, cerr } from 'simple-color-print';
-import { FactsObj, ImportsObj, Row } from './types';
-import { parseCell } from './shared';
+import { FactsObj, ImportsObj, Row, parseCell } from './shared';
 
 import DecisionTable from './DecisionTable';
 import TableErrs from './TableErrs';
@@ -16,25 +15,21 @@ import TableErrs from './TableErrs';
 
 class Trool {
 
-    private readonly _showLogs: boolean | undefined;
-
-    private readonly _TABLE_FORMAT_ERR = 'End of DecisionTable reached without a start';
+    private readonly TABLE_FORMAT_ERR = 'End of DecisionTable reached without a start';
 
 
-    constructor(showLogs?: boolean) {
-        this._showLogs = showLogs;
-    }
+    public async applyRules(filePath: string, factsObject: FactsObj, importsObj?: ImportsObj,
+                            showLogs?: boolean): Promise<FactsObj> {
 
-
-    public async applyRules(filePath: string, factsObject: FactsObj, importsObj?: ImportsObj):
-        Promise<FactsObj> {
+        importsObj = importsObj || {};
+        showLogs = showLogs || false;
 
         try {
             const jsonArr = await csvtojson().fromFile(filePath);
-            const imports = this._setupImports(jsonArr, importsObj);
-            const decisionTables = this._getTables(jsonArr, factsObject, imports);
+            const imports = this.setupImports(jsonArr, importsObj);
+            const decisionTables = this.getTables(jsonArr, factsObject, imports, showLogs);
 
-            return this._updateFacts(decisionTables);
+            return this.updateFacts(decisionTables);
         } catch (err) {
             throw err;
         }
@@ -42,13 +37,10 @@ class Trool {
 
 
     /*********************************************************************************************
-     *                                     Setup Imports
+     *                            Add Imports from Spreadsheet
      ********************************************************************************************/
 
-    /**
-     * If there are any imports in the spreadsheet, import them from there.
-     */
-    private _setupImports(jsonArr: Array<Row>, importsObj: ImportsObj | undefined): ImportsObj {
+    private setupImports(jsonArr: Array<Row>, importsObj: ImportsObj | undefined): ImportsObj {
 
         importsObj = importsObj || {};
 
@@ -95,8 +87,8 @@ class Trool {
     /**
      * Get array of DecisionTable objects from spreadsheet.
      */
-    private _getTables(jsonArr: Array<Row>, factsObj: FactsObj, importsObj: ImportsObj):
-        DecisionTable[] {
+    private getTables(jsonArr: Array<Row>, factsObj: FactsObj, importsObj: ImportsObj,
+                       showLogs: boolean): DecisionTable[] {
 
         const decisionTables = [];
         let tableStart = -1;
@@ -112,12 +104,12 @@ class Trool {
             } else if (firstCellStr === 'TableEnd') {
 
                 if (tableStart === -1) {
-                    throw Error(this._TABLE_FORMAT_ERR);
+                    throw Error(this.TABLE_FORMAT_ERR);
                 }
 
                 const table = jsonArr.slice(tableStart, i);
-                const decisionTable = new DecisionTable(i + 1, this._showLogs);
-                const factArr = this._getFactArr(startCellArr, i + 1, factsObj);
+                const factArr = this.getFactArr(startCellArr, i + 1, factsObj);
+                const decisionTable = new DecisionTable(i + 1, startCellArr[1], showLogs);
 
                 decisionTable.initTable(table, factArr, importsObj);
                 decisionTables.push(decisionTable);
@@ -133,7 +125,7 @@ class Trool {
      * Extract the array of facts from the facts array object provided by the user based
      * on the start cell of the Decision Table.
      */
-    private _getFactArr(startCellArr: string[], id: number, factsObj: FactsObj): Object[] {
+    private getFactArr(startCellArr: string[], id: number, factsObj: FactsObj): Object[] {
 
         // Check for format errors
         if (startCellArr.length !== 2) {
@@ -152,22 +144,23 @@ class Trool {
      *                                    Update Facts
      ********************************************************************************************/
 
-    /**
-     * Update facts object, using the DecisionTable objects.
-     */
-    private _updateFacts(decisionTables: DecisionTable[]): FactsObj {
+    private updateFacts(decisionTables: DecisionTable[]): FactsObj {
 
-        const updateFacts = {} as any;
+        const updatedFacts: FactsObj = {};
 
         if (decisionTables.length === 0) {
             cinfo('No decision tables found');
-        } else {
-            cinfo(decisionTables.length + ' DecisionTables found. Applying table logic to facts.');
+            return updatedFacts;
         }
-        // loop through array of decision tables
-        // updatesFacts[table.getFactName] = table.updateFacts()
 
-        return updateFacts;
+        cinfo(decisionTables.length + ' DecisionTables found. Applying table logic to facts.');
+
+        for (let i = 0; i < decisionTables.length; i++) {
+            const table = decisionTables[i];
+            updatedFacts[table.factName] = table.updateFacts();
+        }
+
+        return updatedFacts;
     }
 }
 
