@@ -6,7 +6,7 @@
  */
 
 import TableErrs from './TableErrs';
-import { FactsObj, ImportsObj, Row, parseCell } from './shared';
+import { ImportsObj, Row, parseCell } from './shared';
 
 
 class DecisionTable {

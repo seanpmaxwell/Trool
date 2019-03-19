@@ -6,7 +6,7 @@
 
 import * as csvtojson from 'csvtojson';
 
-import { cinfo, cerr } from 'simple-color-print';
+import { cinfo } from 'simple-color-print';
 import { FactsObj, ImportsObj, Row, parseCell } from './shared';
 
 import DecisionTable from './DecisionTable';

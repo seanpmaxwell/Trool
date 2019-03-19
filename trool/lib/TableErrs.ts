@@ -1,4 +1,8 @@
-
+/**
+ *
+ *
+ * created by Sean Maxwell Mar 18, 2019
+ */
 
 class TableErrs {
 

@@ -6,7 +6,7 @@
  */
 
 import * as path from 'path';
-import { cinfo, cerr } from 'simple-color-print';
+import { cerr } from 'simple-color-print';
 import { VisitorTypes, TicketTypes } from './models/constants';
 
 import Trool, { FactsObj } from 'trool';
