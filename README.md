@@ -15,6 +15,7 @@ the code import
 // use a constants class. This prevents Product Owners from inputing bad values into the spreadsheet.
 // a fact must have a getter and a setter to be modified
 // mention that double periods don't work like obj.key.key on single ones
+// Tell users to only use letters and numbers when setting up imports
 
 // Object passed for fact "fact name" does not have the attribute or method "attribute or method" name
 // iterate through each cell in Rule row, check the value in that cell using the condition at that index. 

@@ -15,14 +15,16 @@ import TableErrs from './TableErrs';
 
 class Trool {
 
-    private readonly TABLE_FORMAT_ERR = 'End of DecisionTable reached without a start';
+    private readonly IMPORT_START_ERR = 'Import start format error for ';
+    private readonly IMPORT_PROP_ERR = 'Import property must only be alpha-numeric ';
+    private readonly TABLE_FORMAT_ERR = 'End of DecisionTable reached without a start at row ';
+    private readonly alphaNumReg = /^[0-9a-zA-Z]+$/;
 
 
     public async applyRules(filePath: string, factsObject: FactsObj, importsObj?: ImportsObj,
                             showLogs?: boolean): Promise<FactsObj> {
 
-        // importsObj = importsObj || {};
-        importsObj = {};
+        importsObj = importsObj || {};
         showLogs = showLogs || false;
 
         try {
@@ -41,7 +43,7 @@ class Trool {
      *                            Add Imports from Spreadsheet
      ********************************************************************************************/
 
-    private setupImports(jsonArr: Array<Row>, importsObj: ImportsObj | undefined): ImportsObj {
+    private setupImports(jsonArr: Array<Row>, importsObj: ImportsObj): ImportsObj {
 
         importsObj = importsObj || {};
 
@@ -51,15 +53,15 @@ class Trool {
         // Find spreadsheet imports
         for (let i = 0; i < jsonArr.length; i++) {
 
-            const firstCellStr = jsonArr[i].field1.trim();
+            const firstCell = jsonArr[i].field1.trim();
 
-            // Setup spreadsheet import
-            if (firstCellStr.startsWith('ImportObject: ')) {
+            // Start new spreadsheet import
+            if (firstCell.startsWith('ImportObject: ')) {
 
-                const firstCellArr = firstCellStr.split(' ');
+                const firstCellArr = firstCell.split(' ');
 
                 if (firstCellArr.length !== 2) {
-                    throw Error(' ');
+                    throw Error(this.IMPORT_START_ERR + firstCell);
                 }
 
                 importName = firstCellArr[1];
@@ -67,10 +69,19 @@ class Trool {
 
             } else if (importName) {
 
-                if (jsonArr[i] && jsonArr[i].field1.trim()) {
-                    newImportObj[firstCellStr] = parseCell(jsonArr[i].field2, importsObj); // pick up here, this isn't working
+                if (!this.alphaNumReg.test(firstCell)) {
+                    throw Error(this.IMPORT_PROP_ERR + firstCell);
+                }
 
-                } else {
+                // Add property
+                newImportObj[firstCell] = parseCell(jsonArr[i].field2, importsObj);
+
+                // Append new object to imports object if end reached
+                const nextCell = jsonArr[i + 1] ? jsonArr[i + 1].field1.trim() : '';
+                const endReached = !nextCell || nextCell.startsWith('TableStart:') ||
+                    nextCell.startsWith('ImportStart:');
+
+                if (endReached) {
                     importsObj[importName] = newImportObj;
                     importName = '';
                     newImportObj = {};
@@ -106,7 +117,7 @@ class Trool {
             } else if (firstCellStr === 'TableEnd') {
 
                 if (tableStart === -1) {
-                    throw Error(this.TABLE_FORMAT_ERR);
+                    throw Error(this.TABLE_FORMAT_ERR + i);
                 }
 
                 const table = jsonArr.slice(tableStart, i);

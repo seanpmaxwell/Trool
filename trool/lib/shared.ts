@@ -29,6 +29,8 @@ export function parseCell(cellValStr: string, importsObj: ImportsObj): any {
         return false;
     } else if (cellValStr.startsWith('"')  && cellValStr.endsWith('"')) {
         return cellValStr.substring(1, cellValStr.length - 1);
+    } else if (cellValStr.startsWith('“')  && cellValStr.endsWith('”')) {
+        return cellValStr.substring(1, cellValStr.length - 1);
     }
 
     // Value is from an import
