@@ -21,7 +21,8 @@ class Trool {
     public async applyRules(filePath: string, factsObject: FactsObj, importsObj?: ImportsObj,
                             showLogs?: boolean): Promise<FactsObj> {
 
-        importsObj = importsObj || {};
+        // importsObj = importsObj || {};
+        importsObj = {};
         showLogs = showLogs || false;
 
         try {
@@ -67,7 +68,8 @@ class Trool {
             } else if (importName) {
 
                 if (jsonArr[i] && jsonArr[i].field1.trim()) {
-                    newImportObj[firstCellStr] = parseCell(jsonArr[i].field2, importsObj);
+                    newImportObj[firstCellStr] = parseCell(jsonArr[i].field2, importsObj); // pick up here, this isn't working
+
                 } else {
                     importsObj[importName] = newImportObj;
                     importName = '';
