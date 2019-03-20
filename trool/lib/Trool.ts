@@ -29,8 +29,8 @@ class Trool {
 
         try {
             const jsonArr = await csvtojson().fromFile(filePath);
-            const imports = this.setupImports(jsonArr, importsObj);
-            const decisionTables = this.getTables(jsonArr, factsObject, imports, showLogs);
+            const allImports = this.setupImports(jsonArr, importsObj);
+            const decisionTables = this.getTables(jsonArr, factsObject, allImports, showLogs);
 
             return this.updateFacts(decisionTables);
         } catch (err) {
@@ -104,12 +104,12 @@ class Trool {
                        showLogs: boolean): DecisionTable[] {
 
         const decisionTables = [];
+        let startCellArr: string[] = [];
         let tableStart = -1;
 
         for (let i = 0; i < jsonArr.length; i++) {
 
             const firstCellStr = jsonArr[i].field1.trim();
-            let startCellArr: string[] = [];
 
             if (firstCellStr.startsWith('TableStart: ')) {
                 tableStart = i;
@@ -120,13 +120,16 @@ class Trool {
                     throw Error(this.TABLE_FORMAT_ERR + i);
                 }
 
+                const id: number = decisionTables.length + 1;
                 const table = jsonArr.slice(tableStart, i);
-                const factArr = this.getFactArr(startCellArr, i + 1, factsObj);
-                const decisionTable = new DecisionTable(i + 1, startCellArr[1], showLogs);
+                const factArr = this.getFactArr(startCellArr, id, factsObj);
+                const decisionTable = new DecisionTable(id, startCellArr[1], showLogs);
 
-                decisionTable.initTable(table, factArr, importsObj);
+                decisionTable.initTable(table, factArr, importsObj); // pick up here, make sure table passed is setup correctly
                 decisionTables.push(decisionTable);
+
                 tableStart = -1;
+                startCellArr = [];
             }
         }
 

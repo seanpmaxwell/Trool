@@ -57,7 +57,7 @@ class DecisionTable {
         this.importsObj = importsObj;
 
         // Get action/condition column header and operation string values
-        const colHeaderArr = Object.values(arrTable[0]).map(header => header.trim());
+        const colHeaderArr = Object.values(arrTable[0]).map(header => header.trim().toLowerCase());
         const opsStrArr = Object.values(arrTable[1]).map(op => op.trim());
 
         if (colHeaderArr.length !== opsStrArr.length) {
@@ -70,8 +70,6 @@ class DecisionTable {
 
         // Iterate through column headers and operations row
         for (let i = 1; i < colHeaderArr.length; i++) {
-
-            colHeaderArr[i] = colHeaderArr[i].toLowerCase();
 
             if (colHeaderArr[i] === 'condition') {
 
