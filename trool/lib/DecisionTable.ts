@@ -65,31 +65,32 @@ class DecisionTable {
         }
 
         let conditionsDone = false;
+        let actionsDone = false;
         this.conditions = [];
         this.actions = [];
 
         // Iterate through column headers and operations row
-        for (let i = 1; i < colHeaderArr.length; i++) {
+        for (let i = 1; i < colHeaderArr.length && !actionsDone; i++) {
 
             if (colHeaderArr[i] === 'condition') {
 
-                if (!conditionsDone) {
-                    const opFunc = this.getCondOps(opsStrArr[i]);
-                    this.conditions.push(opFunc);
-                } else {
+                if (conditionsDone) {
                     throw Error(this.tableErrs.colHeaderArgmt);
                 }
 
+                const opFunc = this.getCondOps(opsStrArr[i]);
+                this.conditions.push(opFunc);
                 conditionsDone = (colHeaderArr[i + 1] === 'action');
 
             } else if (colHeaderArr[i] === 'action') {
 
-                if (conditionsDone) {
-                    const actionFunc = this.getActionOps(opsStrArr[i]);
-                    this.actions.push(actionFunc);
-                } else {
+                if (!conditionsDone) {
                     throw Error(this.tableErrs.colHeaderArgmt);
                 }
+
+                const actionFunc = this.getActionOps(opsStrArr[i]);
+                this.actions.push(actionFunc);
+                actionsDone = !colHeaderArr[i + 1];
 
             } else {
                 throw Error(this.tableErrs.colHeader);
@@ -199,16 +200,14 @@ class DecisionTable {
 
                 // iterate conditions
                 for (j = 1; j < this.conditions.length; j++) {
-                    const condParamVal = this.arrTable[i][j];
-                    const condPassed = this.callCondOp(h, j - 1, condParamVal);
+                    const condPassed = this.callCondOp(h, j - 1, ruleArr[j]); // pick up here
                     if (!condPassed) { return this.facts; }
                 }
 
                 // iterate actions
                 for (; j < this.actions.length; j++) {
-                    const cellValStr = this.arrTable[i][j];
                     const actionIdx = j - this.actions.length;
-                    this.callActionOp(h, actionIdx, cellValStr);
+                    this.callActionOp(h, actionIdx, ruleArr[j]);
                 }
             }
         }

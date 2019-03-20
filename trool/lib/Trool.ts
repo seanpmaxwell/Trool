@@ -18,6 +18,7 @@ class Trool {
     private readonly IMPORT_START_ERR = 'Import start format error for ';
     private readonly IMPORT_PROP_ERR = 'Import property must only be alpha-numeric ';
     private readonly TABLE_FORMAT_ERR = 'End of DecisionTable reached without a start at row ';
+    private readonly UPDATE_START_MSG = ' DecisionTables found. Applying table logic to facts.';
     private readonly alphaNumReg = /^[0-9a-zA-Z]+$/;
 
 
@@ -97,9 +98,6 @@ class Trool {
      *                                Setup Decision Tables
      ********************************************************************************************/
 
-    /**
-     * Get array of DecisionTable objects from spreadsheet.
-     */
     private getTables(jsonArr: Array<Row>, factsObj: FactsObj, importsObj: ImportsObj,
                        showLogs: boolean): DecisionTable[] {
 
@@ -125,7 +123,7 @@ class Trool {
                 const factArr = this.getFactArr(startCellArr, id, factsObj);
                 const decisionTable = new DecisionTable(id, startCellArr[1], showLogs);
 
-                decisionTable.initTable(table, factArr, importsObj); // pick up here, make sure table passed is setup correctly
+                decisionTable.initTable(table, factArr, importsObj);
                 decisionTables.push(decisionTable);
 
                 tableStart = -1;
@@ -137,13 +135,8 @@ class Trool {
     }
 
 
-    /**
-     * Extract the array of facts from the facts array object provided by the user based
-     * on the start cell of the Decision Table.
-     */
     private getFactArr(startCellArr: string[], id: number, factsObj: FactsObj): Object[] {
 
-        // Check for format errors
         if (startCellArr.length !== 2) {
             throw Error(TableErrs.getStartCellErr(id));
         } else if (!factsObj[startCellArr[1]]) {
@@ -151,7 +144,6 @@ class Trool {
         }
 
         const facts = factsObj[startCellArr[1]];
-
         return (facts instanceof Array) ? facts : [facts];
     }
 
@@ -162,14 +154,16 @@ class Trool {
 
     private updateFacts(decisionTables: DecisionTable[]): FactsObj {
 
-        const updatedFacts: FactsObj = {};
+        const tableCount = decisionTables.length;
 
-        if (decisionTables.length === 0) {
+        if (tableCount === 0) {
             cinfo('No decision tables found');
-            return updatedFacts;
+            return {};
+        } else {
+            cinfo(tableCount + this.UPDATE_START_MSG);
         }
 
-        cinfo(decisionTables.length + ' DecisionTables found. Applying table logic to facts.');
+        const updatedFacts: FactsObj = {};
 
         for (let i = 0; i < decisionTables.length; i++) {
             const table = decisionTables[i];
