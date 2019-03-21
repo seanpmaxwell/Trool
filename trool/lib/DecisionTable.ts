@@ -111,7 +111,7 @@ class DecisionTable {
                 throw Error(this.tableErrs.condBlank);
             } else if (arr.length !== 3) {
                 throw Error(this.tableErrs.opFormat);
-            } else if (fact[methodName] === undefined) { // pick up here this is undefined
+            } else if (fact[methodName] === undefined) {
                 throw Error(this.tableErrs.attrUndef(opStr));
             } else if (arr[2] !== '$param') {
                 throw Error(this.tableErrs.mustEndWithParam);
@@ -122,10 +122,8 @@ class DecisionTable {
 
             if (typeof fact[methodName] === 'function') {
                 attrVal = fact[methodName]();
-            } else if (typeof fact[methodName].get === 'function') {
-                attrVal = fact[methodName].get();
-            } else {
-                throw Error(this.tableErrs.notFuncOrGetter);
+            } else  {
+                attrVal = fact[methodName];
             }
 
             return this.compareVals(arr[1], attrVal, paramVal);

@@ -27,9 +27,6 @@ class TableErrs {
 
     private readonly ACTION_FORMAT = 'Action operation cannot be blank';
 
-    private readonly NOT_FUNC_OR_GETTER = 'The supplied attribute must be a function or a getter ' +
-        'method.';
-
     private readonly RULE_NAME_EMPTY = 'The rule name (first cell for a rule row for a decision ' +
         'table) cannot be empty.';
 
@@ -96,10 +93,6 @@ class TableErrs {
 
     get actionOpEmpty(): string {
         return this.id + this.ACTION_FORMAT;
-    }
-
-    get notFuncOrGetter(): string {
-        return this.id + this.NOT_FUNC_OR_GETTER;
     }
 
     get ruleNameEmpty(): string {
