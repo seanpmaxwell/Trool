@@ -193,18 +193,17 @@ class DecisionTable {
                     throw Error(this.tableErrs.ruleNameEmpty);
                 }
 
-                let j;
+                let idx = 1;
 
                 // iterate conditions
-                for (j = 1; j < this.conditions.length; j++) {
-                    const condPassed = this.callCondOp(h, j - 1, ruleArr[j]);
+                for (let j = 0; j < this.conditions.length; j++) {
+                    const condPassed = this.callCondOp(h, j, ruleArr[idx++]); // pick up here
                     if (!condPassed) { return this.facts; }
                 }
 
                 // iterate actions
-                for (; j < this.actions.length; j++) {
-                    const actionIdx = j - this.actions.length;
-                    this.callActionOp(h, actionIdx, ruleArr[j]);
+                for (let j = 0; j < this.actions.length; j++) {
+                    this.callActionOp(h, j, ruleArr[idx]);
                 }
             }
         }
