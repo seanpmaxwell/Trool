@@ -65,12 +65,11 @@ class DecisionTable {
         }
 
         let conditionsDone = false;
-        let actionsDone = false;
         this.conditions = [];
         this.actions = [];
 
         // Iterate through column headers and operations row
-        for (let i = 1; i < colHeaderArr.length && !actionsDone; i++) {
+        for (let i = 1; i < colHeaderArr.length; i++) {
 
             if (colHeaderArr[i] === 'condition') {
 
@@ -90,7 +89,7 @@ class DecisionTable {
 
                 const actionFunc = this.getActionOps(opsStrArr[i]);
                 this.actions.push(actionFunc);
-                actionsDone = !colHeaderArr[i + 1];
+                if (!colHeaderArr[i + 1]) { break; }
 
             } else {
                 throw Error(this.tableErrs.colHeader);
@@ -112,7 +111,7 @@ class DecisionTable {
                 throw Error(this.tableErrs.condBlank);
             } else if (arr.length !== 3) {
                 throw Error(this.tableErrs.opFormat);
-            } else if (fact[methodName] === undefined) {
+            } else if (fact[methodName] === undefined) { // pick up here this is undefined
                 throw Error(this.tableErrs.attrUndef(opStr));
             } else if (arr[2] !== '$param') {
                 throw Error(this.tableErrs.mustEndWithParam);
@@ -200,7 +199,7 @@ class DecisionTable {
 
                 // iterate conditions
                 for (j = 1; j < this.conditions.length; j++) {
-                    const condPassed = this.callCondOp(h, j - 1, ruleArr[j]); // pick up here
+                    const condPassed = this.callCondOp(h, j - 1, ruleArr[j]);
                     if (!condPassed) { return this.facts; }
                 }
 
@@ -223,7 +222,7 @@ class DecisionTable {
             return true;
         }
 
-        const retVal = parseCell(cellValStr, this.importsObj);
+        const retVal = parseCell(cellValStr, this.importsObj); // pick up here
 
         if (retVal === null) {
             throw Error(this.tableErrs.invalidVal(this.id, cellValStr));
