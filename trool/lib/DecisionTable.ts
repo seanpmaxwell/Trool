@@ -157,20 +157,20 @@ class DecisionTable {
 
     private getActionOps(actionStr: string): Function {
 
-        return (factIdx: number, ...params: any[]): void => {
+        return (factIdx: number, cellVals: any[]): void => {
 
             const argLength = actionStr.split('$param').length - 1;
 
             if (!actionStr) {
                 throw Error(this.tableErrs.actionOpEmpty);
-            } else if (argLength !== params.length) {
+            } else if (argLength !== cellVals.length) {
                 throw Error(this.tableErrs.paramCount);
             }
 
             const n = actionStr.lastIndexOf('(');
             const methodName = actionStr.substring(0, n);
 
-            (this.facts[factIdx] as any)[methodName](...params);
+            this.facts[factIdx][methodName].apply(...cellVals); // pick up here
         };
     }
 
@@ -193,17 +193,17 @@ class DecisionTable {
                     throw Error(this.tableErrs.ruleNameEmpty);
                 }
 
-                let idx = 1;
+                let ruleIdx = 1;
 
                 // iterate conditions
                 for (let j = 0; j < this.conditions.length; j++) {
-                    const condPassed = this.callCondOp(h, j, ruleArr[idx++]); // pick up here
+                    const condPassed = this.callCondOp(h, j, ruleArr[ruleIdx++]); // pick up here
                     if (!condPassed) { return this.facts; }
                 }
 
                 // iterate actions
                 for (let j = 0; j < this.actions.length; j++) {
-                    this.callActionOp(h, j, ruleArr[idx]);
+                    this.callActionOp(h, j, ruleArr[ruleIdx]);
                 }
             }
         }
@@ -242,7 +242,7 @@ class DecisionTable {
             cellVals[i] = parseCell(cellVals[i], this.importsObj);
         }
 
-        this.actions[actionIdx].apply(factIdx, cellVals);
+        this.actions[actionIdx](factIdx, cellVals);
     }
 }
 
