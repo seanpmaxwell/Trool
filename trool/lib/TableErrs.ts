@@ -23,7 +23,11 @@ class TableErrs {
 
     private readonly MUST_END_WITH_PARAM = 'Condition operation must end with "$param"';
 
-    private readonly PARAM_COUNT = 'Number of params for Action operation must match';
+    private readonly PARAM_COUNT = 'The number of params for an action operation ' +
+        'must match the number of argument for the method: ';
+
+    private readonly ASSIGNMENT_PARAM_COUNT = 'An assignment action operation can only contain ' +
+        'one argument ';
 
     private readonly RULE_NAME_EMPTY = 'The rule name (first cell for a rule row for a decision ' +
         'table) cannot be empty.';
@@ -91,6 +95,10 @@ class TableErrs {
 
     get ruleNameEmpty(): string {
         return this.id + this.RULE_NAME_EMPTY;
+    }
+
+    get assignParamCount(): string {
+        return this.id + this.ASSIGNMENT_PARAM_COUNT;
     }
 }
 

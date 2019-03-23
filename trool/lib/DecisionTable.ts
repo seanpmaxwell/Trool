@@ -5,8 +5,8 @@
  * created by Sean Maxwell Mar 3, 2019
  */
 
+import { ImportsObj, Row, parseCell, compareVals, valsToArr } from './shared';
 import TableErrs from './TableErrs';
-import {ImportsObj, Row, parseCell, compareVals, valsToArr} from './shared';
 
 
 class DecisionTable {
@@ -14,7 +14,7 @@ class DecisionTable {
     private readonly id: number;
     private readonly _factName: string;
     private readonly showLogs: boolean | undefined;
-    private readonly tableErrs: TableErrs;
+    private readonly errs: TableErrs;
 
     private arrTable: Array<Row>;
     private importsObj: ImportsObj;
@@ -28,7 +28,7 @@ class DecisionTable {
         this.id = id;
         this._factName = factName;
         this.showLogs = showLogs;
-        this.tableErrs = new TableErrs(id);
+        this.errs = new TableErrs(id);
 
         this.arrTable = [];
         this.importsObj = {};
@@ -56,7 +56,7 @@ class DecisionTable {
         const opsStrArr = valsToArr(arrTable[1]);
 
         if (colHeaderArr.length !== opsStrArr.length) {
-            throw Error(this.tableErrs.colLenth);
+            throw Error(this.errs.colLenth);
         }
 
         let conditionsDone = false;
@@ -68,7 +68,7 @@ class DecisionTable {
             if (colHeaderArr[i] === 'Condition') {
 
                 if (conditionsDone) {
-                    throw Error(this.tableErrs.colHeaderArgmt);
+                    throw Error(this.errs.colHeaderArgmt);
                 }
 
                 const condFunc = this.getCondOps(opsStrArr[i]);
@@ -78,7 +78,7 @@ class DecisionTable {
             } else if (colHeaderArr[i] === 'Action') {
 
                 if (!conditionsDone) {
-                    throw Error(this.tableErrs.colHeaderArgmt);
+                    throw Error(this.errs.colHeaderArgmt);
                 }
 
                 const actionFunc = this.getActionOps(opsStrArr[i]);
@@ -86,7 +86,7 @@ class DecisionTable {
                 if (!colHeaderArr[i + 1]) { break; }
 
             } else {
-                throw Error(this.tableErrs.colHeader);
+                throw Error(this.errs.colHeader);
             }
         }
     }
@@ -99,17 +99,18 @@ class DecisionTable {
         return (factIdx: any, paramVal: any): boolean => {
 
             const fact = outer.facts[factIdx];
+            const errs = outer.errs;
             const arr = opStr.split(' ');
             const methodName = arr[0].replace('()', '');
 
             if (!opStr) {
-                throw Error(outer.tableErrs.condBlank);
+                throw Error(errs.condBlank);
             } else if (arr.length !== 3) {
-                throw Error(outer.tableErrs.opFormat);
+                throw Error(errs.opFormat);
             } else if (fact[methodName] === undefined) {
-                throw Error(outer.tableErrs.attrUndef(opStr));
+                throw Error(errs.attrUndef(opStr));
             } else if (arr[2] !== '$param') {
-                throw Error(outer.tableErrs.mustEndWithParam);
+                throw Error(errs.mustEndWithParam);
             }
 
             let attrVal = null;
@@ -127,30 +128,34 @@ class DecisionTable {
     private getActionOps(actionStr: string): Function {
 
         const outer = this;
+        const errs = this.errs;
 
         return (factIdx: number, cellVals: any[]): void => {
-
-            const opArr = actionStr.split(' ');
-
-            // assignment
-            if (opArr.length === 3) {
-                if (opArr[1] === '=') {
-
-                }
-
-            }
-
 
             const argLength = actionStr.split('$param').length - 1;
 
             if (argLength !== cellVals.length) {
-                throw Error(outer.tableErrs.paramCount);
+                throw Error(errs.paramCount + actionStr);
             }
 
-            const n = actionStr.lastIndexOf('(');
-            const methodName = actionStr.substring(0, n);
+            const opArr = actionStr.split(' ');
+            const fact = outer.facts[factIdx];
 
-            outer.facts[factIdx][methodName](...cellVals);
+            // assignment or call method
+            if (opArr.length === 3 && opArr[1] === '=') {
+
+                if (argLength !== cellVals.length) {
+                    throw Error(errs.assignParamCount + actionStr);
+                }
+
+                fact[opArr[0]] = cellVals[0];
+
+            } else {
+                const n = actionStr.lastIndexOf('(');
+                const methodName = actionStr.substring(0, n);
+
+                fact[methodName](...cellVals);
+            }
         };
     }
 
@@ -170,7 +175,7 @@ class DecisionTable {
                 const ruleArr = valsToArr(this.arrTable[i]);
 
                 if (ruleArr[0] === '') {
-                    throw Error(this.tableErrs.ruleNameEmpty);
+                    throw Error(this.errs.ruleNameEmpty);
                 }
 
                 let ruleIdx = 1;
@@ -192,7 +197,6 @@ class DecisionTable {
 
     private callCondOp(factIdx: number, condIdx: number, cellValStr: string): boolean {
 
-        // Don't check condition if cell is empty
         if (cellValStr === '') {
             return true;
         }
@@ -200,7 +204,7 @@ class DecisionTable {
         const retVal = parseCell(cellValStr, this.importsObj);
 
         if (retVal === null) {
-            throw Error(this.tableErrs.invalidVal(this.id, cellValStr));
+            throw Error(this.errs.invalidVal(this.id, cellValStr));
         }
 
         return this.conditions[condIdx](factIdx, retVal);
@@ -209,7 +213,6 @@ class DecisionTable {
 
     private callActionOp(factIdx: number, actionIdx: number, cellValStr: string): void {
 
-        // Don't call action if cell is empty
         if (cellValStr === '') {
             return;
         }
