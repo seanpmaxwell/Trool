@@ -25,8 +25,6 @@ class TableErrs {
 
     private readonly PARAM_COUNT = 'Number of params for Action operation must match';
 
-    private readonly ACTION_FORMAT = 'Action operation cannot be blank';
-
     private readonly RULE_NAME_EMPTY = 'The rule name (first cell for a rule row for a decision ' +
         'table) cannot be empty.';
 
@@ -89,10 +87,6 @@ class TableErrs {
 
     get paramCount(): string {
         return this.id + this.PARAM_COUNT;
-    }
-
-    get actionOpEmpty(): string {
-        return this.id + this.ACTION_FORMAT;
     }
 
     get ruleNameEmpty(): string {

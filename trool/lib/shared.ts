@@ -16,6 +16,11 @@ export interface Row {
 }
 
 
+export function valsToArr(obj: Object) {
+    return Object.values(obj).map(header => header.trim());
+}
+
+
 export function parseCell(cellValStr: string, importsObj: ImportsObj): any {
 
     cellValStr = cellValStr.trim();

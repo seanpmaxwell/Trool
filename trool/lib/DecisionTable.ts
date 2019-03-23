@@ -6,7 +6,7 @@
  */
 
 import TableErrs from './TableErrs';
-import { ImportsObj, Row, parseCell, compareVals } from './shared';
+import {ImportsObj, Row, parseCell, compareVals, valsToArr} from './shared';
 
 
 class DecisionTable {
@@ -37,10 +37,6 @@ class DecisionTable {
         this.actions = [];
     }
 
-
-    /**
-     * The property on the FactsObj to be updated (i.e. Visitors)
-     */
     get factName() {
         return this._factName;
     }
@@ -56,9 +52,8 @@ class DecisionTable {
         this.facts = factsArr;
         this.importsObj = importsObj;
 
-        // Get action/condition column header and operation string values
-        const colHeaderArr = Object.values(arrTable[0]).map(header => header.trim().toLowerCase());
-        const opsStrArr = Object.values(arrTable[1]).map(op => op.trim());
+        const colHeaderArr = valsToArr(arrTable[0]);
+        const opsStrArr = valsToArr(arrTable[1]);
 
         if (colHeaderArr.length !== opsStrArr.length) {
             throw Error(this.tableErrs.colLenth);
@@ -68,10 +63,9 @@ class DecisionTable {
         this.conditions = [];
         this.actions = [];
 
-        // Iterate through column headers and operations row
         for (let i = 1; i < colHeaderArr.length; i++) {
 
-            if (colHeaderArr[i] === 'condition') {
+            if (colHeaderArr[i] === 'Condition') {
 
                 if (conditionsDone) {
                     throw Error(this.tableErrs.colHeaderArgmt);
@@ -79,9 +73,9 @@ class DecisionTable {
 
                 const condFunc = this.getCondOps(opsStrArr[i]);
                 this.conditions.push(condFunc);
-                conditionsDone = (colHeaderArr[i + 1] === 'action');
+                conditionsDone = (colHeaderArr[i + 1] === 'Action');
 
-            } else if (colHeaderArr[i] === 'action') {
+            } else if (colHeaderArr[i] === 'Action') {
 
                 if (!conditionsDone) {
                     throw Error(this.tableErrs.colHeaderArgmt);
@@ -136,11 +130,20 @@ class DecisionTable {
 
         return (factIdx: number, cellVals: any[]): void => {
 
+            const opArr = actionStr.split(' ');
+
+            // assignment
+            if (opArr.length === 3) {
+                if (opArr[1] === '=') {
+
+                }
+
+            }
+
+
             const argLength = actionStr.split('$param').length - 1;
 
-            if (!actionStr) {
-                throw Error(outer.tableErrs.actionOpEmpty);
-            } else if (argLength !== cellVals.length) {
+            if (argLength !== cellVals.length) {
                 throw Error(outer.tableErrs.paramCount);
             }
 
@@ -164,7 +167,7 @@ class DecisionTable {
             // Iterate rows
             for (let i = 2; i < this.arrTable.length - 1; i++) {
 
-                const ruleArr = Object.values(this.arrTable[i]).map(cell => cell.trim());
+                const ruleArr = valsToArr(this.arrTable[i]);
 
                 if (ruleArr[0] === '') {
                     throw Error(this.tableErrs.ruleNameEmpty);
@@ -172,13 +175,11 @@ class DecisionTable {
 
                 let ruleIdx = 1;
 
-                // iterate conditions
                 for (let j = 0; j < this.conditions.length; j++) {
-                    const condPassed = this.callCondOp(h, j, ruleArr[ruleIdx++]); // pick up here
+                    const condPassed = this.callCondOp(h, j, ruleArr[ruleIdx++]);
                     if (!condPassed) { return this.facts; }
                 }
 
-                // iterate actions
                 for (let j = 0; j < this.actions.length; j++) {
                     this.callActionOp(h, j, ruleArr[ruleIdx]);
                 }
@@ -196,7 +197,7 @@ class DecisionTable {
             return true;
         }
 
-        const retVal = parseCell(cellValStr, this.importsObj); // pick up here
+        const retVal = parseCell(cellValStr, this.importsObj);
 
         if (retVal === null) {
             throw Error(this.tableErrs.invalidVal(this.id, cellValStr));
