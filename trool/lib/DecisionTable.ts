@@ -6,7 +6,7 @@
  */
 
 import TableErrs from './TableErrs';
-import { ImportsObj, Row, parseCell } from './shared';
+import { ImportsObj, Row, parseCell, compareVals } from './shared';
 
 
 class DecisionTable {
@@ -77,8 +77,8 @@ class DecisionTable {
                     throw Error(this.tableErrs.colHeaderArgmt);
                 }
 
-                const opFunc = this.getCondOps(opsStrArr[i]);
-                this.conditions.push(opFunc);
+                const condFunc = this.getCondOps(opsStrArr[i]);
+                this.conditions.push(condFunc);
                 conditionsDone = (colHeaderArr[i + 1] === 'action');
 
             } else if (colHeaderArr[i] === 'action') {
@@ -100,77 +100,54 @@ class DecisionTable {
 
     private getCondOps(opStr: string): Function {
 
+        const outer = this;
+
         return (factIdx: any, paramVal: any): boolean => {
 
-            const fact = this.facts[factIdx];
+            const fact = outer.facts[factIdx];
             const arr = opStr.split(' ');
             const methodName = arr[0].replace('()', '');
 
-            // Check condition format
             if (!opStr) {
-                throw Error(this.tableErrs.condBlank);
+                throw Error(outer.tableErrs.condBlank);
             } else if (arr.length !== 3) {
-                throw Error(this.tableErrs.opFormat);
+                throw Error(outer.tableErrs.opFormat);
             } else if (fact[methodName] === undefined) {
-                throw Error(this.tableErrs.attrUndef(opStr));
+                throw Error(outer.tableErrs.attrUndef(opStr));
             } else if (arr[2] !== '$param') {
-                throw Error(this.tableErrs.mustEndWithParam);
+                throw Error(outer.tableErrs.mustEndWithParam);
             }
 
-            // Call fact function or getter
             let attrVal = null;
-
             if (typeof fact[methodName] === 'function') {
                 attrVal = fact[methodName]();
             } else  {
                 attrVal = fact[methodName];
             }
 
-            return this.compareVals(arr[1], attrVal, paramVal);
+            return compareVals(arr[1], attrVal, paramVal);
         };
     }
 
 
-    private compareVals(operator: string, val1: any, val2: any): boolean {
-
-        if (operator === '===') {
-            return val1 === val2;
-        } else if (operator === '==') {
-            return val1 === val2;
-        } else if (operator === '!=') {
-            return val1 !== val2;
-        } else if (operator === '!==') {
-            return val1 !== val2;
-        } else if (operator === '>') {
-            return val1 > val2;
-        } else if (operator === '>=') {
-            return val1 >= val2;
-        } else if (operator === '<') {
-            return val1 < val2;
-        } else if (operator === '<=') {
-            return val1 <= val2;
-        } else {
-            throw Error('Operator: ' + operator + ' is not a comparison operators');
-        }
-    }
-
-
     private getActionOps(actionStr: string): Function {
+
+        const outer = this;
 
         return (factIdx: number, cellVals: any[]): void => {
 
             const argLength = actionStr.split('$param').length - 1;
 
             if (!actionStr) {
-                throw Error(this.tableErrs.actionOpEmpty);
+                throw Error(outer.tableErrs.actionOpEmpty);
             } else if (argLength !== cellVals.length) {
-                throw Error(this.tableErrs.paramCount);
+                throw Error(outer.tableErrs.paramCount);
             }
 
             const n = actionStr.lastIndexOf('(');
             const methodName = actionStr.substring(0, n);
 
-            this.facts[factIdx][methodName].apply(...cellVals); // pick up here
+            outer.facts[factIdx][methodName](...cellVals);
         };
     }
 
