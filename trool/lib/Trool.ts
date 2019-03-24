@@ -6,7 +6,6 @@
 
 import * as csvToJson from 'csvtojson';
 import { FactsHolder, ImportsObj, Row, Logger, parseCell } from './shared';
-
 import DecisionTable from './DecisionTable';
 import TableErrs from './TableErrs';
 
@@ -36,7 +35,6 @@ class Trool {
             const jsonArr = await csvToJson().fromFile(filePath);
             const allImports = this.setupImports(jsonArr, imports || {});
             const decisionTables = this.getTables(jsonArr, facts, allImports);
-
             return this.updateFacts(decisionTables);
         } catch (err) {
             throw err;
