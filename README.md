@@ -119,9 +119,7 @@ the top of your table columns.
 - The condition must be a statement which evaluates to `true` or `false`. The left side of the statement 
 must be a method or getter on the fact's instance-object and the right side must be `$param`. The operator 
 must be an existing JavaScript comparator such as `==` or `<=`. The values in the rows below will replace 
-`$param`.
-
-For example, suppose I want to get the age of a visitor for an app which calculates ticket prices. I
+`$param`. For example, suppose I want to get the age of a visitor for an app which calculates ticket prices. I
 would need to create a TypeScript getter (`get age(): number {}`) or a method like `getAge() {}` to 
 fetch the visitors age and compare it to the parameter value.<br>
 
@@ -131,17 +129,26 @@ the fact or else Trool with throw an error. The number or params in the passed t
 must match the number or `$param` strings or else Trool will throw an error. 
 
 - All remaining rows on a decision-table are referred to as rules. A rule works by evaluating a list of 
-conditions which, if they all evaluate to true, will execute the specified actions. A rule must
-start with a rule name and can be anything but cannot be blank.<br>
+conditions against cell values which, if they all evaluate to true, will execute the specified actions. 
+A rule must start with a rule name and can be anything but cannot be blank.
 
 - For each cell on the rule, if it is a condition column, the cell value will replace the `$param` value
 and evaluate the cell as true or false. An empty cell will automatically be evaluated as true. If
-any cell evaluates to false, that rule will fail and the decision-table will go on the next rule. If
+any cell evaluates to false, that rule will fail and the decision-table will go on the next rule.
+
+- While on a rule's action column, each param specified must be separated by a comma. If no params
+are specified (the cell is blank), the rule will skip that action column. 
 
 // show screenshot here of the Tickets table and explain the different parts. 
 
 
 **Imports:**<br>
+
+
+
+**Special Notes:**<br>
+Talk about strings and null and stuff here.
+
 // 
 // mention values provided must be null, boolean, number, string, or be a property on an import
 // mention that if a spreadsheet import and code import have the same name. The spreadsheet will override
