@@ -1,5 +1,4 @@
-# Trool
-<h2> The TypeScript/NodeJS Rule Engine </h2>
+# Trool <h5> the TypeScript/NodeJS Rule Engine </h2>
 <p>Get your rules out of your code so non-engineers can make updates over time</p>
 
 
