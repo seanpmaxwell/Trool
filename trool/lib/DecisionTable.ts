@@ -170,7 +170,8 @@ class DecisionTable {
         for (let h = 0; h < this.facts.length; h++) {
 
             // Iterate rows
-            for (let i = 2; i < this.arrTable.length - 1; i++) {
+            rowLoop:
+            for (let i = 2; i < this.arrTable.length; i++) {
 
                 const ruleArr = valsToArr(this.arrTable[i]);
 
@@ -181,12 +182,12 @@ class DecisionTable {
                 let ruleIdx = 1;
 
                 for (let j = 0; j < this.conditions.length; j++) {
-                    const condPassed = this.callCondOp(h, j, ruleArr[ruleIdx++]);
-                    if (!condPassed) { return this.facts; }
+                    const passed = this.callCondOp(h, j, ruleArr[ruleIdx++]);
+                    if (!passed) { continue rowLoop; }
                 }
 
                 for (let j = 0; j < this.actions.length; j++) {
-                    this.callActionOp(h, j, ruleArr[ruleIdx]);
+                    this.callActionOp(h, j, ruleArr[ruleIdx++]);
                 }
             }
         }

@@ -166,7 +166,7 @@ class Trool {
         const tableCount = decisionTables.length;
 
         if (tableCount === 0) {
-            cinfo('No decision tables found');
+            cwarn('No decision tables found');
             return {};
         } else {
             cinfo(tableCount + this.UPDATE_START_MSG);
@@ -174,7 +174,7 @@ class Trool {
 
         const updatedFacts: FactsObj = {};
 
-        for (let i = 0; i < decisionTables.length; i++) {
+        for (let i = 0; i < tableCount; i++) {
             const table = decisionTables[i];
             updatedFacts[table.factName] = table.updateFacts();
         }

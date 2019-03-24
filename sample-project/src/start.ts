@@ -5,7 +5,7 @@
  */
 
 import { cinfo, cerr } from 'simple-color-print';
-import { TicketOpts } from './models/Ticket';
+import { ticketOpts } from './models/Ticket';
 import PriceCalculator from './PriceCalculator';
 import Visitor from './models/Visitor';
 
@@ -17,7 +17,7 @@ import Visitor from './models/Visitor';
 
 const priceCalculator = new PriceCalculator();
 
-async function printTotalPrice(vistors: Visitor | Visitor[], ticketOption: TicketOpts):
+async function printTotalPrice(vistors: Visitor | Visitor[], ticketOption: ticketOpts):
     Promise<void> {
 
     try {
@@ -35,7 +35,7 @@ async function printTotalPrice(vistors: Visitor | Visitor[], ticketOption: Ticke
 *********************************************************************************/
 
 
-printTotalPrice(new Visitor(23), 'Season');
+printTotalPrice(new Visitor(67), 'Season');
 
 // printTotalPrice([
 //     new Visitor(5),

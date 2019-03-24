@@ -10,7 +10,7 @@ import { cerr } from 'simple-color-print';
 import { VisitorTypes, TicketTypes } from './models/constants';
 
 import Trool, { FactsObj } from 'trool';
-import Ticket, { TicketOpts } from './models/Ticket';
+import Ticket, { ticketOpts } from './models/Ticket';
 import Visitor from './models/Visitor';
 
 
@@ -26,7 +26,7 @@ class PriceCalculator {
     }
 
 
-    public async calcTotalPrice(visitors: Visitor | Visitor[], ticketOption: TicketOpts):
+    public async calcTotalPrice(visitors: Visitor | Visitor[], ticketOption: ticketOpts):
         Promise<string> {
 
         let totalPrice = 0;
@@ -48,7 +48,7 @@ class PriceCalculator {
     }
 
 
-    private setupFactsObj(visitors: Visitor | Visitor[], ticketOption: TicketOpts): FactsObj {
+    private setupFactsObj(visitors: Visitor | Visitor[], ticketOption: ticketOpts): FactsObj {
 
         const tickets = [];
 

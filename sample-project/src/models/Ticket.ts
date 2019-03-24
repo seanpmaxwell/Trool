@@ -4,19 +4,28 @@
  * created by Sean Maxwell Mar 2, 2019
  */
 
+export type ticketOpts = 'Regular' | 'Season' | null;
+
 class Ticket {
 
-    private _option: TicketOpts;
+    private _option: ticketOpts;
     private _price: number;
     private _freeTshirt: boolean;
 
 
-    constructor(option: TicketOpts) {
+    constructor(option: ticketOpts) {
         this._option = option;
         this._price = 0;
         this._freeTshirt = false;
     }
 
+    get option(): ticketOpts {
+        return this._option;
+    }
+
+    set option(option: ticketOpts) {
+        this._option = option;
+    }
 
     get price(): number {
         return this._price;
@@ -33,5 +42,4 @@ class Ticket {
     }
 }
 
-export type TicketOpts = 'Regular' | 'Season' | null;
 export default Ticket;
