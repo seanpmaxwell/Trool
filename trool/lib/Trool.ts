@@ -122,10 +122,10 @@ class Trool {
 
             } else if (startCellArr && this.isLastRow(jsonArr, i)) {
 
-                const id = decisionTables.length + 1;
-                const tableRows = jsonArr.slice(tableStart, i);
-                const factArr = this.getFacts(startCellArr, id, facts);
                 const showLogs = this.logger.showLogs;
+                const id = decisionTables.length + 1;
+                const tableRows = jsonArr.slice(tableStart, i + 1);
+                const factArr = this.getFacts(startCellArr, id, facts);
 
                 const table = new DecisionTable(id, startCellArr[1], showLogs);
                 table.initTable(tableRows, factArr, imports);
