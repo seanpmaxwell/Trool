@@ -8,7 +8,8 @@
 - Manage rules in a business spreadsheet format
 - Heavily inspired by Java's KnowledgeBase Library
 - Allows use of `Import` objects so values can be reused. These can be passed dynamically through
-the code or hardcoded in the spreadsheet. 
+the code or hardcoded in the spreadsheet.
+- GitHub Repo contains fully-functional sample project so you can start practicing right away.
 - Fully type-safe :)
 
 
@@ -19,7 +20,7 @@ the code or hardcoded in the spreadsheet.
 
 
 ## Screenshot
-put pic here
+<img alt='fullOverview' src='https://github.com/seanpmaxwell/trool/raw/master/fullOverview.png' border='0'>
 
 // mention that strict format is enforced readability purposes.
 // mention values provided must be null, boolean, number, string, or be a property on an import
