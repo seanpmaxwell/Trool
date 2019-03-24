@@ -1,5 +1,5 @@
-# Trool, the TypeScript/NodeJS Rule Engine
-<p>Get your rules out of your code so non-engineers can make updates over time</p>
+# Trool - the TypeScript/NodeJS Rule Engine
+<h3>Get your rules out of your code so non-engineers can make updates over time</h3>
 
 
 ## Features
@@ -16,7 +16,7 @@ the code or hardcoded in the spreadsheet.
 - Facts and imports from code must be JavaScript instance-objects.
 
 
-## Overview
+## Screenshot
 put pic here
 
 // mention that strict format is enforced readability purposes.
