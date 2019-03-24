@@ -14,7 +14,6 @@ class Trool {
 
     private readonly IMPORT_START_ERR = 'Import start format error for ';
     private readonly IMPORT_PROP_ERR = 'Import property can only be alpha-numeric and underscores ';
-    private readonly TABLE_FORMAT_ERR = 'DecisionTables must be separated by an empty row. Row#: ';
     private readonly UPDATE_START_MSG = ' DecisionTables found. Applying table logic to facts.';
     private readonly IMPORT_NAME_WARN = '!!WARNING!! The spreadsheet is using an import name ' +
         'already passed via the imports object. The spreadsheet will overwrite the import: ';
@@ -112,10 +111,6 @@ class Trool {
             const firstCol = jsonArr[i].field1.trim();
 
             if (firstCol.startsWith('Table: ')) {
-
-                if (tableStart !== -1) {
-                    throw Error(this.TABLE_FORMAT_ERR + i);
-                }
 
                 tableStart = i;
                 startCellArr = firstCol.split(' ');

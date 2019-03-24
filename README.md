@@ -29,12 +29,14 @@ the code or hardcoded in the spreadsheet.
 
 - A **Fact** is an instance-object or array of instance-objects, which you want to update based on
 conditions which may change over time. Create at least one decision-table on the spreadsheet so you
-can update a fact (the guide contains all the details for setting up a decision-table).
+can update a fact.
 
 - You must follow the format closely for setting up a decision-table. Trool may spit out errors if
-you do not set things up correctly. 
+you do not set things up correctly. The guide contains all the details for setting up a decision-table.
+You can look at the screenshot above if you want a quick glimpse on what decision-tables look like. 
 
-- Export your spreadsheet as a CSV file.
+- Export your spreadsheet as a CSV file. The rules for formatting the csv are the same as they are
+for the `csvtojson` library. That's what trool using internally to convert the csv to a json object.
 
 - Create a new NodeJS program (preferably with TypeScript) and import the `trool` library at the top.
 Instantiate a new `trool` object and pass `true` to the constructor if you want to show logs while
@@ -64,7 +66,7 @@ param is optional because maybe there are no imports or you only want to use one
 spreadsheet. 
 
 ```typescript
-public async calcTotalPrice(): Promise<string> {
+public async calcTotalPrice(): Promise<void> {
     
     const facts = {
         Visitors: [new Visitor(), new Visitor()],
@@ -88,11 +90,33 @@ public async calcTotalPrice(): Promise<string> {
 }
 ```
 
+- The updatedFacts variable in the previous snippet will contain all the same key/value pairs and
+arrays in the same order as the facts object that was passed in.
 
 <br>
 
+
 ## Guide
-// mention that strict format is enforced readability purposes.
+##### Important! When you setup your decision-tables and imports there are some rules to follow the in order for your tables/imports to be properly loaded into memory.
+##### Strict formatting is enforced for readability purposes.
+
+**Tables:**<br>
+All tables must start with a cell containing the text `Table: "factName"`. A table without a fact name
+or with a fact name that does not exist on the facts container object, will throw an error.<br>
+
+A table will end when it reaches an empty row, the end of a the file, or the start of a new table
+or import. For readability, you should terminate all tables with an empty row.<br>
+
+The first 2 rows on a decision-table are for specifying the conditions and the actions. If all conditions
+are true, then the actions will execute. After the start cell (the cell with `Table: "factName"`) you
+must specify at least 
+
+A remaining rows on a decision-table is referred to as a rule. A rule works by evaluating a list of 
+conditions  which, if they all evaluate to true, will execute the specified actions.<br>
+
+
+**Imports:**<br>
+// 
 // mention values provided must be null, boolean, number, string, or be a property on an import
 // mention that if a spreadsheet import and code import have the same name. The spreadsheet will override
 the code import
