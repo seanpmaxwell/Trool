@@ -15,7 +15,7 @@ class Trool {
 
     private readonly IMPORT_START_ERR = 'Import start format error for ';
     private readonly IMPORT_PROP_ERR = 'Import property can only be alpha-numeric and underscores ';
-    private readonly TABLE_FORMAT_ERR = 'End of DecisionTable reached without a start at row ';
+    private readonly TABLE_FORMAT_ERR = 'DecisionTables must be separated by an empty row. Row#: ';
     private readonly UPDATE_START_MSG = ' DecisionTables found. Applying table logic to facts.';
     private readonly IMPORT_NAME_WARN = '!!WARNING!! The spreadsheet is using an import name ' +
         'already passed via the imports object. The spreadsheet will overwrite the import: ';
@@ -59,7 +59,7 @@ class Trool {
 
             const firstCell = jsonArr[i].field1.trim();
 
-            if (firstCell.startsWith('ImportObject: ')) {
+            if (firstCell.startsWith('Import: ')) {
 
                 importName = this.getImportName(firstCell, importsObj);
 
@@ -72,8 +72,8 @@ class Trool {
                 newImportObj[firstCell] = parseCell(jsonArr[i].field2, importsObj);
 
                 const nextCell = jsonArr[i + 1] ? jsonArr[i + 1].field1.trim() : '';
-                const endReached = !nextCell || nextCell.startsWith('TableStart:') ||
-                    nextCell.startsWith('ImportStart:');
+                const endReached = !nextCell || nextCell.startsWith('Table: ') ||
+                    nextCell.startsWith('Import: ');
 
                 if (endReached) {
                     importsObj[importName] = newImportObj;
@@ -109,32 +109,33 @@ class Trool {
      *                                Setup Decision Tables
      ********************************************************************************************/
 
-    private getTables(jsonArr: Array<Row>, facts: FactsHolder, importsObj: ImportsObj):
-        DecisionTable[] {
+    private getTables(jsonArr: Row[], facts: FactsHolder, imports: ImportsObj): DecisionTable[] {
 
-        const decisionTables = [];
+        const decisionTables: DecisionTable[] = [];
         let startCellArr: string[] = [];
         let tableStart = -1;
 
         for (let i = 0; i < jsonArr.length; i++) {
 
-            const firstCellStr = jsonArr[i].field1.trim();
+            const firstCol = jsonArr[i].field1.trim();
 
-            if (firstCellStr.startsWith('TableStart: ')) {
-                tableStart = i;
-                startCellArr = firstCellStr.split(' ');
-            } else if (firstCellStr === 'TableEnd') {
+            if (firstCol.startsWith('Table: ')) {
 
-                if (tableStart === -1) {
+                if (tableStart !== -1) {
                     throw Error(this.TABLE_FORMAT_ERR + i);
                 }
 
-                const id: number = decisionTables.length + 1;
+                tableStart = i;
+                startCellArr = firstCol.split(' ');
+
+            } else if (tableStart !== -1 && this.isLastRow(jsonArr[i + 1])) {
+
+                const id = decisionTables.length + 1;
                 const table = jsonArr.slice(tableStart, i);
                 const factArr = this.getFactArr(startCellArr, id, facts);
                 const decisionTable = new DecisionTable(id, startCellArr[1], this.logger.showLogs);
 
-                decisionTable.initTable(table, factArr, importsObj);
+                decisionTable.initTable(table, factArr, imports);
                 decisionTables.push(decisionTable);
 
                 tableStart = -1;
@@ -142,20 +143,31 @@ class Trool {
             }
         }
 
-        return decisionTables;
+        return decisionTables; // pick up here
     }
 
 
-    private getFactArr(startCellArr: string[], id: number, factsObj: FactsHolder): Object[] {
+    private isLastRow(nextRow: Row): boolean {
+
+        if (!nextRow) {
+            return true;
+        }
+
+        const nextCell = nextRow.field1.trim();
+        return !nextCell || nextCell.startsWith('Table: ') || nextCell.startsWith('Import: ');
+    }
+
+
+    private getFactArr(startCellArr: string[], id: number, facts: FactsHolder): Object[] {
 
         if (startCellArr.length !== 2) {
             throw Error(TableErrs.getStartCellErr(id));
-        } else if (!factsObj[startCellArr[1]]) {
+        } else if (!facts[startCellArr[1]]) {
             throw Error(TableErrs.getFactFalseyErr(id));
         }
 
-        const facts = factsObj[startCellArr[1]];
-        return (facts instanceof Array) ? facts : [facts];
+        const factArr = facts[startCellArr[1]];
+        return (facts instanceof Array) ? factArr : [factArr];
     }
 
 

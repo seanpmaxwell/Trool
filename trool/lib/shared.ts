@@ -25,7 +25,7 @@ export function valsToArr(obj: Object) {
 }
 
 
-export function parseCell(cellValStr: string, importsObj: ImportsObj): any {
+export function parseCell(cellValStr: string, imports: ImportsObj): any {
 
     cellValStr = cellValStr.trim();
     const cellValLowerCase = cellValStr.toLowerCase();
@@ -54,12 +54,12 @@ export function parseCell(cellValStr: string, importsObj: ImportsObj): any {
         importVal = arr[1];
     }
 
-    if (importsObj.hasOwnProperty(importKey)) {
+    if (imports.hasOwnProperty(importKey)) {
 
         if (importVal) {
-            return importsObj[importKey][importVal];
+            return imports[importKey][importVal];
         } else {
-            return importsObj[importKey];
+            return imports[importKey];
         }
     }
 

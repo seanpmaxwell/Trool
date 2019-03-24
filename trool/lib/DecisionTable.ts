@@ -17,7 +17,7 @@ class DecisionTable {
     private readonly errs: TableErrs;
 
     private arrTable: Array<Row>;
-    private importsObj: ImportsObj;
+    private imports: ImportsObj;
     private facts: InstanceType<any>[];
     private conditions: Function[];
     private actions: Function[];
@@ -31,7 +31,7 @@ class DecisionTable {
         this.errs = new TableErrs(id);
 
         this.arrTable = [];
-        this.importsObj = {};
+        this.imports = {};
         this.facts = [];
         this.conditions = [];
         this.actions = [];
@@ -46,11 +46,11 @@ class DecisionTable {
      *                                  Initialize Table
      ********************************************************************************************/
 
-    public initTable(arrTable: Array<Row>, factsArr: Object[], importsObj: ImportsObj): void {
+    public initTable(arrTable: Array<Row>, factsArr: Object[], imports: ImportsObj): void {
 
         this.arrTable = arrTable;
         this.facts = factsArr;
-        this.importsObj = importsObj;
+        this.imports = imports;
 
         const colHeaderArr = valsToArr(arrTable[0]);
         const opsStrArr = valsToArr(arrTable[1]);
@@ -202,7 +202,7 @@ class DecisionTable {
             return true;
         }
 
-        const retVal = parseCell(cellValStr, this.importsObj);
+        const retVal = parseCell(cellValStr, this.imports);
 
         if (retVal === null) {
             throw Error(this.errs.invalidVal(this.id, cellValStr));
@@ -221,7 +221,7 @@ class DecisionTable {
         const cellVals = cellValStr.split(',');
 
         for (let i = 0; i < cellVals.length; i++) {
-            cellVals[i] = parseCell(cellVals[i], this.importsObj);
+            cellVals[i] = parseCell(cellVals[i], this.imports);
         }
 
         this.actions[actionIdx](factIdx, cellVals);
