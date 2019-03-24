@@ -1,4 +1,4 @@
 import Trool from './Trool';
 
-export { FactsObj, ImportsObj, Row } from './shared';
+export { FactsHolder, ImportsObj, Row } from './shared';
 export default Trool;

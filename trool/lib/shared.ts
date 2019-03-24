@@ -3,7 +3,7 @@
  * created by Sean Maxwell Mar 14, 2019
  */
 
-export interface FactsObj {
+export interface FactsHolder {
     [key: string]: InstanceType<any> | InstanceType<any>[];
 }
 
@@ -24,13 +24,14 @@ export function valsToArr(obj: Object) {
 export function parseCell(cellValStr: string, importsObj: ImportsObj): any {
 
     cellValStr = cellValStr.trim();
+    const cellValLowerCase = cellValStr.toLowerCase();
 
     // Value is primitive
     if (!isNaN(Number(cellValStr))) {
         return Number(cellValStr);
-    } else if (cellValStr === 'true') {
+    } else if (cellValLowerCase === 'true') {
         return true;
-    } else if (cellValStr === 'false') {
+    } else if (cellValLowerCase === 'false') {
         return false;
     } else if (cellValStr.startsWith('"')  && cellValStr.endsWith('"')) {
         return cellValStr.substring(1, cellValStr.length - 1);

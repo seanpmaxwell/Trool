@@ -167,27 +167,27 @@ class DecisionTable {
     public updateFacts(): Object[] {
 
         // Iterate facts
-        for (let h = 0; h < this.facts.length; h++) {
+        for (let factIdx = 0; factIdx < this.facts.length; factIdx++) {
 
             // Iterate rows
             rowLoop:
-            for (let i = 2; i < this.arrTable.length; i++) {
+            for (let rowIdx = 2; rowIdx < this.arrTable.length; rowIdx++) {
 
-                const ruleArr = valsToArr(this.arrTable[i]);
+                const ruleArr = valsToArr(this.arrTable[rowIdx]);
 
                 if (ruleArr[0] === '') {
                     throw Error(this.errs.ruleNameEmpty);
                 }
 
-                let ruleIdx = 1;
+                let colIdx = 1;
 
-                for (let j = 0; j < this.conditions.length; j++) {
-                    const passed = this.callCondOp(h, j, ruleArr[ruleIdx++]);
+                for (let i = 0; i < this.conditions.length; i++) {
+                    const passed = this.callCondOp(factIdx, i, ruleArr[colIdx++]);
                     if (!passed) { continue rowLoop; }
                 }
 
-                for (let j = 0; j < this.actions.length; j++) {
-                    this.callActionOp(h, j, ruleArr[ruleIdx++]);
+                for (let i = 0; i < this.actions.length; i++) {
+                    this.callActionOp(factIdx, i, ruleArr[colIdx++]);
                 }
             }
         }

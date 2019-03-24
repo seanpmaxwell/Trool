@@ -4,22 +4,29 @@
  * created by Sean Maxwell Mar 2, 2019
  */
 
+import { cinfo } from 'simple-color-print';
 import Ticket from './Ticket';
 
 
 class Visitor {
 
+    private readonly TICKET_FALSEY_ERR = 'Ticket cannot be falsey if trying to get price';
+
     private _age: number;
-    private _discount: number;
-    private _visitorType: string;
     private _partySize: number;
+    private _visitorType: string;
+    private _discount: number;
+    private _freeTshirt: boolean;
+    private _ticket: Ticket | null;
 
 
     constructor(age: number) {
         this._age = age;
-        this._discount = 0;
-        this._visitorType = '';
         this._partySize = 1;
+        this._visitorType = '';
+        this._discount = 0;
+        this._freeTshirt = false;
+        this._ticket = null;
     }
 
     set age(age: number) {
@@ -28,6 +35,14 @@ class Visitor {
 
     get age(): number {
         return this._age;
+    }
+
+    set partySize(partySize: number) {
+        this._partySize = partySize;
+    }
+
+    get partySize() {
+        return this._partySize;
     }
 
     set discount(discount: number) {
@@ -46,29 +61,51 @@ class Visitor {
         return this._visitorType;
     }
 
-    set partySize(partySize: number) {
-        this._partySize = partySize;
+    set freeTshirt(freeTshirt: boolean) {
+        this._freeTshirt = freeTshirt;
     }
 
-    get partySize() {
-        return this._partySize;
+    get freeTshirt(): boolean {
+        return this._freeTshirt;
     }
 
+    set ticket(ticket: Ticket | null) {
 
-    set ticket(ticket: Ticket) {
-        const price = ticket.price;
-        // let discountedPrice = 100 - pick up, adjust price before setting
-        // ticket.price = discountedPrice;
+        if (ticket) {
+            ticket.freeTshirt = this._freeTshirt;
+            const discount = 1 - (this.discount / 100);
+            ticket.price *= discount;
+        }
+
+        this._ticket = ticket;
     }
 
+    get ticket(): Ticket | null {
+        return this._ticket;
+    }
 
-    public getTicketPrice(): number {
-        return this.ticket.price;
+    get ticketPrice(): number {
+
+        if (this.ticket) {
+            return this.ticket.price;
+        } else {
+            throw Error(this.TICKET_FALSEY_ERR);
+        }
     }
 
 
     public addToDiscount(additionalDiscount: number): void {
         this._discount += additionalDiscount;
+    }
+
+
+    public printTicket(): void {
+
+        if (this.ticket) {
+            cinfo(this.ticket.toString());
+        } else {
+            cinfo('User does not have a ticket set');
+        }
     }
 }
 

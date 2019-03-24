@@ -8,9 +8,10 @@
 import * as path from 'path';
 import { cerr } from 'simple-color-print';
 import { VisitorTypes, TicketTypes } from './models/constants';
+import { ticketOpts } from './models/Ticket';
 
-import Trool, { FactsObj } from 'trool';
-import Ticket, { ticketOpts } from './models/Ticket';
+import Trool, {FactsHolder} from 'trool';
+import Ticket from './models/Ticket';
 import Visitor from './models/Visitor';
 
 
@@ -30,15 +31,16 @@ class PriceCalculator {
         Promise<string> {
 
         let totalPrice = 0;
-        const importsObj = {VisitorTypes, TicketTypes};
+        const importsObj = { VisitorTypes, TicketTypes };
+        visitors = (visitors instanceof Array) ? visitors : [visitors];
 
         try {
-            const factsObj = this.setupFactsObj(visitors, ticketOption);
             const csvFilePath = path.join(__dirname, this.CSV_FILE);
+            const factsObj = this.setupFactsObj(visitors, ticketOption);
             const updatedFacts = await this.trool.applyRules(csvFilePath, factsObj, importsObj,
                 true);
 
-            totalPrice = this._calcTotalPrice(updatedFacts);
+            totalPrice = this.addUpEachTicketPrice(updatedFacts);
         } catch (err) {
             cerr(err);
             totalPrice = -1;
@@ -48,16 +50,12 @@ class PriceCalculator {
     }
 
 
-    private setupFactsObj(visitors: Visitor | Visitor[], ticketOption: ticketOpts): FactsObj {
+    private setupFactsObj(visitors: Visitor[], ticketOption: ticketOpts): FactsHolder {
 
         const tickets = [];
 
-        if (visitors instanceof Array) {
-            visitors.forEach(visitor => {
-                visitor.partySize = visitors.length;
-                tickets.push(new Ticket(ticketOption));
-            });
-        } else {
+        for (let i = 0; i < visitors.length; i++) {
+            visitors[i].partySize = visitors.length;
             tickets.push(new Ticket(ticketOption));
         }
 
@@ -68,17 +66,16 @@ class PriceCalculator {
     }
 
 
-    private _calcTotalPrice(factsObj: FactsObj): number {
+    private addUpEachTicketPrice(factsObj: FactsHolder): number {
 
-        const visitors = factsObj.Visitors as Visitor | Visitor[];
+        const { Visitors, Tickets } = factsObj;
+
         let totalPrice = 0;
 
-        if (visitors instanceof Array) {
-            visitors.forEach(visitor => {
-                totalPrice += visitor.getTicketPrice();
-            });
-        } else {
-            totalPrice = visitors.getTicketPrice();
+        for (let i = 0; i < Visitors.length; i++) {
+            Visitors[i].ticket = Tickets[i];
+            totalPrice += Visitors[i].ticketPrice;
+            Visitors[i].printTicket();
         }
 
         return totalPrice;

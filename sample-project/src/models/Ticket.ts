@@ -19,26 +19,36 @@ class Ticket {
         this._freeTshirt = false;
     }
 
+    set option(option: ticketOpts) {
+        this._option = option;
+    }
+
     get option(): ticketOpts {
         return this._option;
     }
 
-    set option(option: ticketOpts) {
-        this._option = option;
+    set price(price: number) {
+        this._price = price;
     }
 
     get price(): number {
         return this._price;
     }
 
+    set freeTshirt(freeTshirt: boolean) {
+        this._freeTshirt = freeTshirt;
+    }
 
-    set price(price: number) {
-        this._price = price;
+    get freeTshirt(): boolean {
+        return this._freeTshirt;
     }
 
 
-    set freeTshirt(freeTshirt: boolean) {
-        this._freeTshirt = freeTshirt;
+    public toString(): string {
+
+        return `Ticket Option: ${this.option} | ` +
+             `Ticket Price: ${this.price} | ` +
+             `Free T-Shirt: ${this.freeTshirt}`;
     }
 }
 
