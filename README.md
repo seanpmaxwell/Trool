@@ -9,6 +9,7 @@
 // mention values provided must be null, boolean, number, string, or be a property on an import
 // mention that if a spreadsheet import and code import have the same name. The spreadsheet will override
 the code import
+
 // mention that it's not a good practice to set strings in directly to the spreadsheet and should
 // use a constants class. This prevents Product Owners from inputing bad values into the spreadsheet.
 // a fact must have a getter and a setter to be modified

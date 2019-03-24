@@ -5,8 +5,7 @@
  */
 
 import * as csvToJson from 'csvtojson';
-import { cinfo, cwarn } from 'simple-color-print';
-import { FactsHolder, ImportsObj, Row, parseCell } from './shared';
+import { FactsHolder, ImportsObj, Row, Logger, parseCell } from './shared';
 
 import DecisionTable from './DecisionTable';
 import TableErrs from './TableErrs';
@@ -18,22 +17,25 @@ class Trool {
     private readonly IMPORT_PROP_ERR = 'Import property can only be alpha-numeric and underscores ';
     private readonly TABLE_FORMAT_ERR = 'End of DecisionTable reached without a start at row ';
     private readonly UPDATE_START_MSG = ' DecisionTables found. Applying table logic to facts.';
-    private readonly IMPORT_NAME_WARN = '!!WARNING!!: The spreadsheet is using an import name ' +
+    private readonly IMPORT_NAME_WARN = '!!WARNING!! The spreadsheet is using an import name ' +
         'already passed via the imports object. The spreadsheet will overwrite the import: ';
 
     private readonly alphaNumReg = /^[0-9a-zA-Z_]+$/;
+    private readonly logger: Logger;
 
 
-    public async applyRules(filePath: string, facts: FactsHolder, importsObj?: ImportsObj,
-                            showLogs?: boolean): Promise<FactsHolder> {
+    constructor(showLogs?: boolean) {
+        this.logger = new Logger(showLogs || false);
+    }
 
-        importsObj = importsObj || {};
-        showLogs = showLogs || false;
+
+    public async applyRules(filePath: string, facts: FactsHolder, importsObj?: ImportsObj):
+        Promise<FactsHolder> {
 
         try {
             const jsonArr = await csvToJson().fromFile(filePath);
-            const allImports = this.setupImports(jsonArr, importsObj);
-            const decisionTables = this.getTables(jsonArr, facts, allImports, showLogs);
+            const allImports = this.setupImports(jsonArr, importsObj || {});
+            const decisionTables = this.getTables(jsonArr, facts, allImports);
 
             return this.updateFacts(decisionTables);
         } catch (err) {
@@ -96,7 +98,7 @@ class Trool {
         const importName = firstCellArr[1];
 
         if (importsObj.hasOwnProperty(importName)) {
-            cinfo(this.IMPORT_NAME_WARN + importName);
+            this.logger.warn(this.IMPORT_NAME_WARN + importName);
         }
 
         return importName;
@@ -107,8 +109,8 @@ class Trool {
      *                                Setup Decision Tables
      ********************************************************************************************/
 
-    private getTables(jsonArr: Array<Row>, facts: FactsHolder, importsObj: ImportsObj,
-                       showLogs: boolean): DecisionTable[] {
+    private getTables(jsonArr: Array<Row>, facts: FactsHolder, importsObj: ImportsObj):
+        DecisionTable[] {
 
         const decisionTables = [];
         let startCellArr: string[] = [];
@@ -130,7 +132,7 @@ class Trool {
                 const id: number = decisionTables.length + 1;
                 const table = jsonArr.slice(tableStart, i);
                 const factArr = this.getFactArr(startCellArr, id, facts);
-                const decisionTable = new DecisionTable(id, startCellArr[1], showLogs);
+                const decisionTable = new DecisionTable(id, startCellArr[1], this.logger.showLogs);
 
                 decisionTable.initTable(table, factArr, importsObj);
                 decisionTables.push(decisionTable);
@@ -166,10 +168,10 @@ class Trool {
         const tableCount = decisionTables.length;
 
         if (tableCount === 0) {
-            cwarn('No decision tables found');
+            this.logger.warn('No decision tables found');
             return {};
         } else {
-            cinfo(tableCount + this.UPDATE_START_MSG);
+            this.logger.log(tableCount + this.UPDATE_START_MSG);
         }
 
         const updatedFacts: FactsHolder = {};

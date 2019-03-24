@@ -1,7 +1,11 @@
 /**
+ * Misc shared stuff.
  *
  * created by Sean Maxwell Mar 14, 2019
  */
+
+import * as colors from 'colors';
+
 
 export interface FactsHolder {
     [key: string]: InstanceType<any> | InstanceType<any>[];
@@ -83,5 +87,34 @@ export function compareVals(operator: string, val1: any, val2: any): boolean {
         return val1 <= val2;
     } else {
         throw Error('The following operator is not a comparison operator: ' + operator);
+    }
+}
+
+
+/* tslint:disable */
+export class Logger {
+
+    private readonly _showsLogs: boolean;
+
+
+    constructor(showLogs: boolean) {
+        this._showsLogs = showLogs;
+    }
+
+    get showLogs(): boolean {
+        return this._showsLogs;
+    }
+
+    public log(msg: string): void {
+        if (this._showsLogs) {
+            console.log(colors.green(msg));
+        }
+    }
+
+
+    public warn(msg: string): void {
+        if (this._showsLogs) {
+            console.log(colors.yellow(msg));
+        }
     }
 }

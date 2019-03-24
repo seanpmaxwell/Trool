@@ -23,7 +23,7 @@ class PriceCalculator {
 
 
     constructor() {
-        this.trool = new Trool();
+        this.trool = new Trool(true);
     }
 
 
@@ -37,8 +37,7 @@ class PriceCalculator {
         try {
             const csvFilePath = path.join(__dirname, this.CSV_FILE);
             const factsObj = this.setupFactsObj(visitors, ticketOption);
-            const updatedFacts = await this.trool.applyRules(csvFilePath, factsObj, importsObj,
-                true);
+            const updatedFacts = await this.trool.applyRules(csvFilePath, factsObj, importsObj);
 
             totalPrice = this.addUpEachTicketPrice(updatedFacts);
         } catch (err) {

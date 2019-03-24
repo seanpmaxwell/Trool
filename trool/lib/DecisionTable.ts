@@ -5,7 +5,7 @@
  * created by Sean Maxwell Mar 3, 2019
  */
 
-import { ImportsObj, Row, parseCell, compareVals, valsToArr } from './shared';
+import { ImportsObj, Row, Logger, parseCell, compareVals, valsToArr } from './shared';
 import TableErrs from './TableErrs';
 
 
@@ -13,7 +13,7 @@ class DecisionTable {
 
     private readonly id: number;
     private readonly _factName: string;
-    private readonly showLogs: boolean | undefined;
+    private readonly logger: Logger;
     private readonly errs: TableErrs;
 
     private arrTable: Array<Row>;
@@ -23,11 +23,11 @@ class DecisionTable {
     private actions: Function[];
 
 
-    constructor(id: number, factName: string, showLogs?: boolean) {
+    constructor(id: number, factName: string, showLogs: boolean) {
 
         this.id = id;
         this._factName = factName;
-        this.showLogs = showLogs;
+        this.logger = new Logger(showLogs);
         this.errs = new TableErrs(id);
 
         this.arrTable = [];
