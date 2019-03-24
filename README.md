@@ -130,6 +130,8 @@ must match the number or `$param` strings or else Trool will throw an error.
 All remaining rows on a decision-table are referred to as a rules. A rule works by evaluating a list of 
 conditions which, if they all evaluate to true, will execute the specified actions.<br>
 
+// show screenshot here of the Tickets table and explain the different parts. 
+
 
 **Imports:**<br>
 // 
