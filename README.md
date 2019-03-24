@@ -26,6 +26,7 @@ the code or hardcoded in the spreadsheet.
 - install `$ npm install --save trool`
 
 - Open Excel, LibreOffice Calc, or some other spreadsheet tool of your choice.
+
 - A **Fact** is an instance-object or array of instance-objects, which you want to update based on
 conditions which may change over time. Create at least one decision-table on the spreadsheet so you
 can update a fact (the guide contains all the details for setting up a decision-table).
@@ -36,7 +37,7 @@ you do not set things up correctly.
 - Export your spreadsheet as a CSV file.
 
 - Create a new NodeJS program (preferably with TypeScript) and import the `trool` library at the top.
-Instantiate a new `trool` object and pass `true` to the constructor if you want to show logs will
+Instantiate a new `trool` object and pass `true` to the constructor if you want to show logs while
 the library updates your facts.
 
 ```typescript
@@ -55,7 +56,40 @@ class PriceCalculator {
 the updated facts. So create an `async/await` method to fire off `applyRules()` and wrap it in a try/catch
 block.
 
-- To pass the facts that needs to be 
+- `applyRules(...)` will take in the path to the csv file, the facts to be updated, and the imports.
+
+- The facts and the imports must be wrapped in holder objects, with the key being the name of the 
+fact/import to use in the spreadsheet, and the value being the actual fact or import. The `imports`
+param is optional because maybe there are no imports or you only want to use ones specified in the
+spreadsheet. 
+
+```typescript
+public async calcTotalPrice(): Promise<string> {
+    
+    const facts = {
+        Visitors: [new Visitor(), new Visitor()],
+        Ticket: new Ticket()
+    }
+
+    const imports = { 
+        VisitorTypes: {
+            ADULT: 'Adult',
+            CHILD: 'Child'
+        }
+    };
+
+    try {
+        const csvFilePath = path.join(__dirname, 'Name_of_Spreadsheet.csv');
+        const updatedFacts = await this.trool.applyRules(csvFilePath, facts, imports);
+
+    } catch (err) {
+        console.log(err.message);
+    }
+}
+```
+
+
+<br>
 
 ## Guide
 // mention that strict format is enforced readability purposes.
