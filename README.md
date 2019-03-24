@@ -24,33 +24,38 @@ the code or hardcoded in the spreadsheet.
 
 ## Quick Start
 - install `$ npm install --save trool`
+
 - Open Excel, LibreOffice Calc, or some other spreadsheet tool of your choice.
 - A **Fact** is an instance-object or array of instance-objects, which you want to update based on
 conditions which may change over time. Create at least one decision-table on the spreadsheet so you
 can update a fact (the guide contains all the details for setting up a decision-table).
+
 - You must follow the format closely for setting up a decision-table. Trool may spit out errors if
 you do not set things up correctly. 
+
 - Export your spreadsheet as a CSV file.
+
 - Create a new NodeJS program (preferably with TypeScript) and import the `trool` library at the top.
-Instantiate a new `trool` object and pass `true` to the constructor 
+Instantiate a new `trool` object and pass `true` to the constructor if you want to show logs will
+the library updates your facts.
 
 ```typescript
 import Trool from 'trool';
-import Ticket from './models/Ticket';
-import Visitor from './models/Visitor';
-
-
 
 class PriceCalculator {
 
     private trool: Trool;
-    private readonly CSV_FILE = 'rule-files/VisitorRules.csv';
-
 
     constructor() {
         this.trool = new Trool(true);
     }
 ```
+
+- The trool library only provides 1 public method `applyRules(...)` which returns a promise containing
+the updated facts. So create an `async/await` method to fire off `applyRules()` and wrap it in a try/catch
+block.
+
+- To pass the facts that needs to be 
 
 ## Guide
 // mention that strict format is enforced readability purposes.
