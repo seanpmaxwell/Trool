@@ -35,6 +35,8 @@ async function printTotalPrice(vistors: Visitor | Visitor[], ticketOption: ticke
                   Calculate Some Prices for Various Party Sizes
 *********************************************************************************/
 
+callAll();
+
 async function callAll() {
 
     await printTotalPrice(new Visitor(67), 'Season');
@@ -67,5 +69,3 @@ async function callAll() {
         new Visitor(17)
     ], 'Regular');
 }
-
-callAll();

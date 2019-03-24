@@ -71,11 +71,11 @@ class PriceCalculator {
 
         let totalPrice = 0;
 
-        for (let i = 0; i < Visitors.length; i++) {
-            Visitors[i].ticket = Tickets[i];
-            totalPrice += Visitors[i].ticketPrice;
-            Visitors[i].printTicket();
-        }
+        Visitors.forEach((visitor: Visitor, i: number) => {
+            visitor.ticket = Tickets[i];
+            totalPrice += visitor.ticketPrice;
+            visitor.printTicket();
+        });
 
         return totalPrice;
     }
