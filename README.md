@@ -2,7 +2,7 @@
 <h3>The TypeScript/NodeJS Rule Engine</h3>
 <br>
 
-**~ "_Get your rules out of your code so non-engineers can make updates over time!_"**
+<h3>~ "_Get your rules out of your code so non-engineers can make updates over time!_"</h3>
 <br>
 <br>
 
