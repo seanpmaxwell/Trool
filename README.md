@@ -21,6 +21,38 @@ the code or hardcoded in the spreadsheet.
 ## Screenshot
 <img alt='fullOverview' src='https://github.com/seanpmaxwell/trool/raw/master/fullOverview.png' border='0'>
 
+
+## Quick Start
+- install `$ npm install --save trool`
+- Open Excel, LibreOffice Calc, or some other spreadsheet tool of your choice.
+- A **Fact** is an instance-object or array of instance-objects, which you want to update based on
+conditions which may change over time. Create at least one decision-table on the spreadsheet so you
+can update a fact (the guide contains all the details for setting up a decision-table).
+- You must follow the format closely for setting up a decision-table. Trool may spit out errors if
+you do not set things up correctly. 
+- Export your spreadsheet as a CSV file.
+- Create a new NodeJS program (preferably with TypeScript) and import the `trool` library at the top.
+Instantiate a new `trool` object and pass `true` to the constructor 
+
+```typescript
+import Trool from 'trool';
+import Ticket from './models/Ticket';
+import Visitor from './models/Visitor';
+
+
+
+class PriceCalculator {
+
+    private trool: Trool;
+    private readonly CSV_FILE = 'rule-files/VisitorRules.csv';
+
+
+    constructor() {
+        this.trool = new Trool(true);
+    }
+```
+
+## Guide
 // mention that strict format is enforced readability purposes.
 // mention values provided must be null, boolean, number, string, or be a property on an import
 // mention that if a spreadsheet import and code import have the same name. The spreadsheet will override
