@@ -29,12 +29,12 @@ class Trool {
     }
 
 
-    public async applyRules(filePath: string, facts: FactsHolder, importsObj?: ImportsObj):
+    public async applyRules(filePath: string, facts: FactsHolder, imports?: ImportsObj):
         Promise<FactsHolder> {
 
         try {
             const jsonArr = await csvToJson().fromFile(filePath);
-            const allImports = this.setupImports(jsonArr, importsObj || {});
+            const allImports = this.setupImports(jsonArr, imports || {});
             const decisionTables = this.getTables(jsonArr, facts, allImports);
 
             return this.updateFacts(decisionTables);
