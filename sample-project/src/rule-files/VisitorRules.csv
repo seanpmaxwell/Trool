@@ -4,8 +4,8 @@ Table: Visitors,Condition,Condition,Condition,Condition,Action,Action,Action
 Add Discount – Adult,18,65,,,0,VisitorTypes.ADULT,
 Add Discount – Senior,65,,,,30,VisitorTypes.SENIOR,
 Add Discount – Child,,18,,,15,VisitorTypes.CHILD,
-Add Discount – Medium Party,,,4,9,5,,FALSE
-Add Discount – Large Party,,,9,,10,,TRUE
+Add Discount/Free T-shirt – Medium Party,,,4,9,5,,FALSE
+Add Discount/Free T-shirt – Large Party,,,9,,10,,TRUE
 ,,,,,,,
 ,,,,,,,
 Table: Tickets,Condition,Action,,,,,

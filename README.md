@@ -1,9 +1,27 @@
 # Trool
-## The TypeScript Rule Engine
+## The TypeScript/NodeJS Rule Engine
+<br>
+
+#### Features
 
 - Manage rules in a business spreadsheet format
 - Get your rules out of your code so non-engineers can make updates over time 
 - Heavily inspired by Java's KnowledgeBase Library
+- Allows use of `Import` objects so values can be reused. These can be passed dynamically through
+the code or hardcoded in the spreadsheet. 
+- Fully type-safe :)
+<br>
+
+#### Requirements
+
+- Spreadsheet must be exported as a .csv before usage. 
+- Can be used directly with NodeJS/JavaScript but documentation is in TypeScript.
+- Facts must be JavaScript instance objects.
+<br>
+
+
+### Overview
+put pic here
 
 // mention that strict format is enforced readability purposes.
 // mention values provided must be null, boolean, number, string, or be a property on an import

@@ -37,6 +37,8 @@ export function parseCell(cellValStr: string, imports: ImportsHolder): any {
         return true;
     } else if (cellValLowerCase === 'false') {
         return false;
+    } else if (cellValLowerCase === 'null') {
+        return null;
     } else if (cellValStr.startsWith('"')  && cellValStr.endsWith('"')) {
         return cellValStr.substring(1, cellValStr.length - 1);
     } else if (cellValStr.startsWith('“')  && cellValStr.endsWith('”')) {
