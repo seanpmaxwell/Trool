@@ -166,10 +166,8 @@ class DecisionTable {
 
     public updateFacts(): Object[] {
 
-        // Iterate facts
         for (let factIdx = 0; factIdx < this.facts.length; factIdx++) {
 
-            // Iterate rows
             rowLoop:
             for (let rowIdx = 2; rowIdx < this.arrTable.length; rowIdx++) {
 
