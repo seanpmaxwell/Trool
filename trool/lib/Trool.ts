@@ -48,9 +48,7 @@ class Trool {
      *                            Add Imports from Spreadsheet
      ********************************************************************************************/
 
-    private setupImports(jsonArr: Array<Row>, importsObj: ImportsObj): ImportsObj {
-
-        importsObj = importsObj || {};
+    private setupImports(jsonArr: Array<Row>, imports: ImportsObj): ImportsObj {
 
         let importName = '';
         let newImportObj: any = {};
@@ -61,7 +59,7 @@ class Trool {
 
             if (firstCell.startsWith('Import: ')) {
 
-                importName = this.getImportName(firstCell, importsObj);
+                importName = this.getImportName(firstCell, imports);
 
             } else if (importName) {
 
@@ -69,21 +67,21 @@ class Trool {
                     throw Error(this.IMPORT_PROP_ERR + firstCell);
                 }
 
-                newImportObj[firstCell] = parseCell(jsonArr[i].field2, importsObj);
+                newImportObj[firstCell] = parseCell(jsonArr[i].field2, imports);
 
                 const nextCell = jsonArr[i + 1] ? jsonArr[i + 1].field1.trim() : '';
                 const endReached = !nextCell || nextCell.startsWith('Table: ') ||
                     nextCell.startsWith('Import: ');
 
                 if (endReached) {
-                    importsObj[importName] = newImportObj;
+                    imports[importName] = newImportObj;
                     importName = '';
                     newImportObj = {};
                 }
             }
         }
 
-        return importsObj;
+        return imports;
     }
 
 
@@ -133,8 +131,8 @@ class Trool {
                 const id = decisionTables.length + 1;
                 const table = jsonArr.slice(tableStart, i);
                 const factArr = this.getFactArr(startCellArr, id, facts);
-                const decisionTable = new DecisionTable(id, startCellArr[1], this.logger.showLogs);
 
+                const decisionTable = new DecisionTable(id, startCellArr[1], this.logger.showLogs);
                 decisionTable.initTable(table, factArr, imports);
                 decisionTables.push(decisionTable);
 
