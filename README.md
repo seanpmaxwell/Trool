@@ -5,8 +5,6 @@
 - Get your rules out of your code so non-engineers can make updates over time 
 - Heavily inspired by Java's KnowledgeBase Library
 
-https://github.com/CacheControl/json-rules-engine
-
 // mention that strict format is enforced readability purposes.
 // mention values provided must be null, boolean, number, string, or be a property on an import
 // mention that if a spreadsheet import and code import have the same name. The spreadsheet will override
@@ -22,3 +20,5 @@ the code import
 // Set value at that cell to true and false. Break if hits false
 // empty cell will just be set to true
 // dont execute Action where blank
+
+// 600 lines of code
