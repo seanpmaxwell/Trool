@@ -51,12 +51,12 @@ class PriceCalculator {
 
     private setupFactsHolder(visitors: Visitor[], ticketOpt: ticketOpts): FactsHolder {
 
-        const tickets = [];
+        const tickets: Ticket[] = [];
 
-        for (let i = 0; i < visitors.length; i++) {
-            visitors[i].partySize = visitors.length;
+        visitors.forEach(visitor => {
+            visitor.partySize = visitors.length;
             tickets.push(new Ticket(ticketOpt));
-        }
+        });
 
         return {
             Visitors: visitors,

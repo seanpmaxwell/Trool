@@ -72,7 +72,8 @@ class Visitor {
     set ticket(ticket: Ticket | null) {
 
         if (ticket) {
-            ticket.freeTshirt = this._freeTshirt;
+            ticket.freeTshirt = this.freeTshirt;
+            ticket.visitorType = this.visitorType;
             const discount = 1 - (this.discount / 100);
             ticket.price *= discount;
         }
