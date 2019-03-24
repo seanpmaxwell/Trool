@@ -108,17 +108,27 @@ or import. For readability, you should terminate all tables with an empty row.<b
 
 The first 2 rows on a decision-table are for specifying the conditions and the actions. If all conditions
 are true, then the actions will execute. After the start cell (the cell with `Table: "factName"`) you
-must specify at least 1 condition and 1 action. The condition must be a statement which evaluates to `true`
-or `false`. The left side of the statement must be a method or getter on the fact's instance-object 
-and the right side must be `$param`. The operator must be an existing JavaScript comparator such as
-`== `or `<=`. The values in the rows below will replace `$param`.<br>
+must specify at least 1 condition and 1 action. <br>
+
+Specifying Condition and Action columns must be done by putting `'Condition'` or `'Action'`, at the 
+top of each column. These are case sensitive so make sure to capitalize the values.<br>
+
+The condition must be a statement which evaluates to `true` or `false`. The left side of the statement 
+must be a method or getter on the fact's instance-object and the right side must be `$param`. The operator 
+must be an existing JavaScript comparator such as `==` or `<=`. The values in the rows below will replace 
+`$param`.<br>
 
 For example, suppose I want to get the age of a visitor for an app which calculates ticket prices. I
-would need to create a TypeScript getter (`get age(): number {}`) or a method like `getAge() {}` fetch
-the visitors age and compare it to the parameter value.<br>
+would need to create a TypeScript getter (`get age(): number {}`) or a method like `getAge() {}` to 
+fetch the visitors age and compare it to the parameter value.<br>
 
-A remaining rows on a decision-table is referred to as a rule. A rule works by evaluating a list of 
-conditions  which, if they all evaluate to true, will execute the specified actions.<br>
+Actions are methods on a fact which will execute if all the conditions evaluate to true. Unlike conditions,
+you can have multiple params passed in. The action must be a method or a TypeScript setter function on
+the fact or else Trool with throw an error. The number or params in the passed through the cells below
+must match the number or `$param` strings or else Trool will throw an error. 
+
+All remaining rows on a decision-table are referred to as a rules. A rule works by evaluating a list of 
+conditions which, if they all evaluate to true, will execute the specified actions.<br>
 
 
 **Imports:**<br>
