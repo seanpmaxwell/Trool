@@ -1,6 +1,8 @@
 # Trool 
 <h3>The TypeScript/NodeJS Rule Engine</h3>
-<h3>_"Get your rules out of your code so non-engineers can make updates over time"_</h3>
+<br>
+
+_**Get your rules out of your code so non-engineers can make updates over time**_
 <br>
 
 
