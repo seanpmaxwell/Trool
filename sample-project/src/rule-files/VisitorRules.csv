@@ -1,29 +1,25 @@
 ,,,,,,,
-TableStart: Visitors,Condition,Condition,Condition,Condition,Action,Action,Action
+Table: Visitors,Condition,Condition,Condition,Condition,Action,Action,Action
 ,age >= $param,age < $param,partySize > $param,partySize <= $param,addToDiscount($param),visitorType = $param,freeTshirt = $param
 Add Discount – Adult,18,65,,,0,VisitorTypes.ADULT,
 Add Discount – Senior,65,,,,30,VisitorTypes.SENIOR,
 Add Discount – Child,,18,,,15,VisitorTypes.CHILD,
 Add Discount – Medium Party,,,4,9,5,,FALSE
 Add Discount – Large Party,,,9,,10,,TRUE
-TableEnd,,,,,,,
 ,,,,,,,
-,,,,,"# example with two params, someMethod($param,$param) // don’t use spaces",,
 ,,,,,,,
-TableStart: Tickets,Condition,Action,,,,,
+Table: Tickets,Condition,Action,,,,,
 ,option == $param,price = $param,,,,,
 Set Price – Regular,TicketTypes.REGULAR,70,,,,,
 Set Price – Season,TicketTypes.SEASON,600,,,,,
-TableEnd,,,,,,,
-,,,,,,,
 ,,,,,,,
 ,,,,,,,
 // Note: Imports can also be imported through code,,,,,,,
-ImportObject: VisitorTypes,,,,,,,
+Import: VisitorTypes,,,,,,,
 ADULT,“Adult”,,,,,,
 SENIOR,“Senior”,,,,,,
 CHILD,“Child”,,,,,,
 ,,,,,,,
-ImportObject: TicketTypes,,,,,,,
+Import: TicketTypes,,,,,,,
 REGULAR,“Regular”,,,,,,
 SEASON,“Season”,,,,,,

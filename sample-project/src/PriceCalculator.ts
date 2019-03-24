@@ -27,17 +27,17 @@ class PriceCalculator {
     }
 
 
-    public async calcTotalPrice(visitors: Visitor | Visitor[], ticketOption: ticketOpts):
+    public async calcTotalPrice(visitors: Visitor | Visitor[], ticketOpt: ticketOpts):
         Promise<string> {
 
         let totalPrice = 0;
-        const importsObj = { VisitorTypes, TicketTypes };
+        const imports = { VisitorTypes, TicketTypes };
         visitors = (visitors instanceof Array) ? visitors : [visitors];
 
         try {
             const csvFilePath = path.join(__dirname, this.CSV_FILE);
-            const factsObj = this.setupFactsObj(visitors, ticketOption);
-            const updatedFacts = await this.trool.applyRules(csvFilePath, factsObj, importsObj);
+            const facts = this.setupFactsHolder(visitors, ticketOpt);
+            const updatedFacts = await this.trool.applyRules(csvFilePath, facts, imports);
 
             totalPrice = this.addUpEachTicketPrice(updatedFacts);
         } catch (err) {
@@ -49,13 +49,13 @@ class PriceCalculator {
     }
 
 
-    private setupFactsObj(visitors: Visitor[], ticketOption: ticketOpts): FactsHolder {
+    private setupFactsHolder(visitors: Visitor[], ticketOpt: ticketOpts): FactsHolder {
 
         const tickets = [];
 
         for (let i = 0; i < visitors.length; i++) {
             visitors[i].partySize = visitors.length;
-            tickets.push(new Ticket(ticketOption));
+            tickets.push(new Ticket(ticketOpt));
         }
 
         return {

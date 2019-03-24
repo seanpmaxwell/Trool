@@ -4,7 +4,7 @@
  * created by Sean Maxwell Mar 2, 2019
  */
 
-import { cinfo } from 'simple-color-print';
+import { cinfo, cerr } from 'simple-color-print';
 import Ticket from './Ticket';
 
 
@@ -104,7 +104,7 @@ class Visitor {
         if (this.ticket) {
             cinfo(this.ticket.toString());
         } else {
-            cinfo('User does not have a ticket set');
+            cerr('User does not have a ticket set');
         }
     }
 }

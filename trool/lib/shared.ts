@@ -11,7 +11,7 @@ export interface FactsHolder {
     [key: string]: InstanceType<any> | InstanceType<any>[];
 }
 
-export interface ImportsObj {
+export interface ImportsHolder {
     [key: string]: any;
 }
 
@@ -25,7 +25,7 @@ export function valsToArr(obj: Object) {
 }
 
 
-export function parseCell(cellValStr: string, imports: ImportsObj): any {
+export function parseCell(cellValStr: string, imports: ImportsHolder): any {
 
     cellValStr = cellValStr.trim();
     const cellValLowerCase = cellValStr.toLowerCase();
@@ -97,8 +97,8 @@ export class Logger {
     private readonly _showsLogs: boolean;
 
 
-    constructor(showLogs: boolean) {
-        this._showsLogs = showLogs;
+    constructor(showLogs?: boolean) {
+        this._showsLogs = !!showLogs;
     }
 
     get showLogs(): boolean {

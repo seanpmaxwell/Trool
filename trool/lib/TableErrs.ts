@@ -26,7 +26,7 @@ class TableErrs {
     private readonly PARAM_COUNT = 'The number of params for an action operation ' +
         'must match the number of argument for the method: ';
 
-    private readonly ASSIGNMENT_PARAM_COUNT = 'An assignment action operation can only contain ' +
+    private readonly ASSIGN_PARAM_COUNT = 'An assignment action operation can only contain ' +
         'one argument ';
 
     private readonly RULE_NAME_EMPTY = 'The rule name (first cell for a rule row for a decision ' +
@@ -98,7 +98,7 @@ class TableErrs {
     }
 
     get assignParamCount(): string {
-        return this.id + this.ASSIGNMENT_PARAM_COUNT;
+        return this.id + this.ASSIGN_PARAM_COUNT;
     }
 }
 

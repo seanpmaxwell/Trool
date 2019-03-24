@@ -5,7 +5,7 @@
  */
 
 import * as csvToJson from 'csvtojson';
-import { FactsHolder, ImportsObj, Row, Logger, parseCell } from './shared';
+import { FactsHolder, ImportsHolder, Row, Logger, parseCell } from './shared';
 import DecisionTable from './DecisionTable';
 import TableErrs from './TableErrs';
 
@@ -24,11 +24,11 @@ class Trool {
 
 
     constructor(showLogs?: boolean) {
-        this.logger = new Logger(showLogs || false);
+        this.logger = new Logger(showLogs);
     }
 
 
-    public async applyRules(filePath: string, facts: FactsHolder, imports?: ImportsObj):
+    public async applyRules(filePath: string, facts: FactsHolder, imports?: ImportsHolder):
         Promise<FactsHolder> {
 
         try {
@@ -46,7 +46,7 @@ class Trool {
      *                            Add Imports from Spreadsheet
      ********************************************************************************************/
 
-    private setupImports(jsonArr: Array<Row>, imports: ImportsObj): ImportsObj {
+    private setupImports(jsonArr: Row[], imports: ImportsHolder): ImportsHolder {
 
         let importName = '';
         let newImportObj: any = {};
@@ -67,11 +67,7 @@ class Trool {
 
                 newImportObj[firstCell] = parseCell(jsonArr[i].field2, imports);
 
-                const nextCell = jsonArr[i + 1] ? jsonArr[i + 1].field1.trim() : '';
-                const endReached = !nextCell || nextCell.startsWith('Table: ') ||
-                    nextCell.startsWith('Import: ');
-
-                if (endReached) {
+                if (this.isLastRow(jsonArr, i)) {
                     imports[importName] = newImportObj;
                     importName = '';
                     newImportObj = {};
@@ -83,7 +79,7 @@ class Trool {
     }
 
 
-    private getImportName(firstCell: string, importsObj: ImportsObj): string {
+    private getImportName(firstCell: string, imports: ImportsHolder): string {
 
         const firstCellArr = firstCell.split(' ');
 
@@ -93,7 +89,7 @@ class Trool {
 
         const importName = firstCellArr[1];
 
-        if (importsObj.hasOwnProperty(importName)) {
+        if (imports.hasOwnProperty(importName)) {
             this.logger.warn(this.IMPORT_NAME_WARN + importName);
         }
 
@@ -105,10 +101,10 @@ class Trool {
      *                                Setup Decision Tables
      ********************************************************************************************/
 
-    private getTables(jsonArr: Row[], facts: FactsHolder, imports: ImportsObj): DecisionTable[] {
+    private getTables(jsonArr: Row[], facts: FactsHolder, imports: ImportsHolder): DecisionTable[] {
 
         const decisionTables: DecisionTable[] = [];
-        let startCellArr: string[] = [];
+        let startCellArr = null;
         let tableStart = -1;
 
         for (let i = 0; i < jsonArr.length; i++) {
@@ -124,37 +120,27 @@ class Trool {
                 tableStart = i;
                 startCellArr = firstCol.split(' ');
 
-            } else if (tableStart !== -1 && this.isLastRow(jsonArr[i + 1])) {
+            } else if (startCellArr && this.isLastRow(jsonArr, i)) {
 
                 const id = decisionTables.length + 1;
-                const table = jsonArr.slice(tableStart, i);
-                const factArr = this.getFactArr(startCellArr, id, facts);
+                const tableRows = jsonArr.slice(tableStart, i);
+                const factArr = this.getFacts(startCellArr, id, facts);
+                const showLogs = this.logger.showLogs;
 
-                const decisionTable = new DecisionTable(id, startCellArr[1], this.logger.showLogs);
-                decisionTable.initTable(table, factArr, imports);
-                decisionTables.push(decisionTable);
+                const table = new DecisionTable(id, startCellArr[1], showLogs);
+                table.initTable(tableRows, factArr, imports);
+                decisionTables.push(table);
 
                 tableStart = -1;
-                startCellArr = [];
+                startCellArr = null;
             }
         }
 
-        return decisionTables; // pick up here
+        return decisionTables;
     }
 
 
-    private isLastRow(nextRow: Row): boolean {
-
-        if (!nextRow) {
-            return true;
-        }
-
-        const nextCell = nextRow.field1.trim();
-        return !nextCell || nextCell.startsWith('Table: ') || nextCell.startsWith('Import: ');
-    }
-
-
-    private getFactArr(startCellArr: string[], id: number, facts: FactsHolder): Object[] {
+    private getFacts(startCellArr: string[], id: number, facts: FactsHolder): InstanceType<any>[] {
 
         if (startCellArr.length !== 2) {
             throw Error(TableErrs.getStartCellErr(id));
@@ -163,7 +149,7 @@ class Trool {
         }
 
         const factArr = facts[startCellArr[1]];
-        return (facts instanceof Array) ? factArr : [factArr];
+        return (factArr instanceof Array) ? factArr : [factArr];
     }
 
 
@@ -190,6 +176,16 @@ class Trool {
         }
 
         return updatedFacts;
+    }
+
+
+    /*********************************************************************************************
+     *                                      Helpers
+     ********************************************************************************************/
+
+    private isLastRow(jsonArr: Row[], idx: number): boolean {
+        const nextCell = jsonArr[idx + 1] ? jsonArr[idx + 1].field1.trim() : '';
+        return !nextCell || nextCell.startsWith('Table: ') || nextCell.startsWith('Import: ');
     }
 }
 

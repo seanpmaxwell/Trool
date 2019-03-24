@@ -5,7 +5,7 @@
  * created by Sean Maxwell Mar 3, 2019
  */
 
-import { ImportsObj, Row, Logger, parseCell, compareVals, valsToArr } from './shared';
+import { ImportsHolder, Row, Logger, parseCell, compareVals, valsToArr } from './shared';
 import TableErrs from './TableErrs';
 
 
@@ -17,7 +17,7 @@ class DecisionTable {
     private readonly errs: TableErrs;
 
     private arrTable: Array<Row>;
-    private imports: ImportsObj;
+    private imports: ImportsHolder;
     private facts: InstanceType<any>[];
     private conditions: Function[];
     private actions: Function[];
@@ -46,10 +46,10 @@ class DecisionTable {
      *                                  Initialize Table
      ********************************************************************************************/
 
-    public initTable(arrTable: Array<Row>, factsArr: Object[], imports: ImportsObj): void {
+    public initTable(arrTable: Row[], facts: InstanceType<any>[], imports: ImportsHolder): void {
 
         this.arrTable = arrTable;
-        this.facts = factsArr;
+        this.facts = facts;
         this.imports = imports;
 
         const colHeaderArr = valsToArr(arrTable[0]);
