@@ -1,4 +1,4 @@
-# Trool - a Rule Engine for NodeJS/TypeScript
+# Trool - a rule engine for NodeJS/TypeScript
 <h3>Get your rules out of your code so non-engineers can make updates over time!</h3>
 <br>
 
@@ -99,41 +99,42 @@ arrays in the same order as the facts object that was passed in.
 ## Guide
 ##### Important! When you setup your decision-tables and imports there are some rules to follow the in order for your tables/imports to be properly loaded into memory. Strict formatting is enforced for readability purposes.
 
-**Tables:**<br>
-All tables must start with a cell containing the text `Table: "factName"`. A table without a fact name
-or with a fact name that does not exist on the facts container object, will throw an error.<br>
+**Tables:**
 
-A table will end when it reaches an empty row, the end of a the file, or the start of a new table
-or import. For readability, you should terminate all tables with an empty row.<br>
+- All tables must start with a cell containing the text `Table: "factName"`. A table without a fact name
+or with a fact name that does not exist on the facts container object, will throw an error.
 
-The first 2 rows on a decision-table are for specifying the conditions and the actions. If all conditions
+- A table will end when it reaches an empty row, the end of a the file, or the start of a new table
+or import. For readability, you should terminate all tables with an empty row.
+
+- The first 2 rows on a decision-table are for specifying the conditions and the actions. If all conditions
 are true, then the actions will execute. After the start cell (the cell with `Table: "factName"`) you
-must specify at least 1 condition and 1 action. <br>
+must specify at least 1 condition and 1 action.
 
-Specifying Condition and Action columns must be done by putting `'Condition'` or `'Action'`, at the 
-top of each column. These are case sensitive so make sure to capitalize the values.<br> All conditions
+- Specifying Condition and Action columns must be done by putting `'Condition'` or `'Action'`, at the 
+top of each column. These are case sensitive so make sure to capitalize the values. All conditions
 must come before all actions and you cannot have anything other than `'Condition'` or `'Action'` at
 the top of your table columns. 
 
-The condition must be a statement which evaluates to `true` or `false`. The left side of the statement 
+- The condition must be a statement which evaluates to `true` or `false`. The left side of the statement 
 must be a method or getter on the fact's instance-object and the right side must be `$param`. The operator 
 must be an existing JavaScript comparator such as `==` or `<=`. The values in the rows below will replace 
-`$param`.<br>
+`$param`.
 
-For example, suppose I want to get the age of a visitor for an app which calculates ticket prices. I
+- For example, suppose I want to get the age of a visitor for an app which calculates ticket prices. I
 would need to create a TypeScript getter (`get age(): number {}`) or a method like `getAge() {}` to 
 fetch the visitors age and compare it to the parameter value.<br>
 
-Actions are methods on a fact which will execute if all the conditions evaluate to true. Unlike conditions,
+- Actions are methods on a fact which will execute if all the conditions evaluate to true. Unlike conditions,
 you can have multiple params passed in. The action must be a method or a TypeScript setter function on
 the fact or else Trool with throw an error. The number or params in the passed through the cells below
 must match the number or `$param` strings or else Trool will throw an error. 
 
-All remaining rows on a decision-table are referred to as rules. A rule works by evaluating a list of 
+- All remaining rows on a decision-table are referred to as rules. A rule works by evaluating a list of 
 conditions which, if they all evaluate to true, will execute the specified actions. A rule must
 start with a rule name and can be anything but cannot be blank.<br>
 
-For each cell on the rule, if it is a condition column, the cell value will replace the `$param` value
+- For each cell on the rule, if it is a condition column, the cell value will replace the `$param` value
 and evaluate the cell as true or false. An empty cell will automatically be evaluated as true. If
 any cell evaluates to false, that rule will fail and the decision-table will go on the next rule. If
 
