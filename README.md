@@ -97,8 +97,7 @@ arrays in the same order as the facts object that was passed in.
 
 
 ## Guide
-##### Important! When you setup your decision-tables and imports there are some rules to follow the in order for your tables/imports to be properly loaded into memory.
-##### Strict formatting is enforced for readability purposes.
+##### Important! When you setup your decision-tables and imports there are some rules to follow the in order for your tables/imports to be properly loaded into memory. Strict formatting is enforced for readability purposes.
 
 **Tables:**<br>
 All tables must start with a cell containing the text `Table: "factName"`. A table without a fact name
@@ -109,7 +108,14 @@ or import. For readability, you should terminate all tables with an empty row.<b
 
 The first 2 rows on a decision-table are for specifying the conditions and the actions. If all conditions
 are true, then the actions will execute. After the start cell (the cell with `Table: "factName"`) you
-must specify at least 
+must specify at least 1 condition and 1 action. The condition must be a statement which evaluates to `true`
+or `false`. The left side of the statement must be a method or getter on the fact's instance-object 
+and the right side must be `$param`. The operator must be an existing JavaScript comparator such as
+`== `or `<=`. The values in the rows below will replace `$param`.<br>
+
+For example, suppose I want to get the age of a visitor for an app which calculates ticket prices. I
+would need to create a TypeScript getter (`get age(): number {}`) or a method like `getAge() {}` fetch
+the visitors age and compare it to the parameter value.<br>
 
 A remaining rows on a decision-table is referred to as a rule. A rule works by evaluating a list of 
 conditions  which, if they all evaluate to true, will execute the specified actions.<br>
