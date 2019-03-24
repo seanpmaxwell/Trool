@@ -121,7 +121,7 @@ must be a method or getter on the fact's instance-object and the right side must
 must be an existing JavaScript comparator such as `==` or `<=`. The values in the rows below will replace 
 `$param`.
 
-- For example, suppose I want to get the age of a visitor for an app which calculates ticket prices. I
+For example, suppose I want to get the age of a visitor for an app which calculates ticket prices. I
 would need to create a TypeScript getter (`get age(): number {}`) or a method like `getAge() {}` to 
 fetch the visitors age and compare it to the parameter value.<br>
 
