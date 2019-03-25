@@ -101,7 +101,7 @@ arrays in the same order as the facts object that was passed in.
 
 **Decision Tables:**
 
-- All decision-tables must start with a cell containing the text `Table: "factName"`. A table without a fact name
+- All decision-tables must start with a cell containing the text `Table: "Fact Name"`. A table without a fact name
 or with a fact name that does not exist on the facts container object, will throw an error. If you create
 2 tables that have the same fact-name, the second table will overwrite all the changes from the first.
 
@@ -109,7 +109,7 @@ or with a fact name that does not exist on the facts container object, will thro
 or import. For readability, you should terminate all tables with an empty row.
 
 - The first 2 rows on a decision-table are for specifying the conditions and the actions. If all conditions
-are true, then the actions will execute. After the start cell (the cell with `Table: "factName"`) you
+are true, then the actions will execute. After the start cell (the cell with `Table: "Fact Name"`) you
 must specify at least 1 condition and 1 action.
 
 - Specifying Condition and Action columns must be done by putting `'Condition'` or `'Action'`, at the 
@@ -179,10 +179,10 @@ Imports can be created in the spreadsheet or passed in through `applyRules()`.
 - Trool iterates the entire spreadsheet first look for all the imports, then it goes back through
 and initializes all the decision-tables. So the ordering of your tables/imports does not really matter.
 
-- All imports must begin with the cell `Import: importName`. If you pass an import in the imports holder 
+- All imports must begin with the cell `Import: "Import Name"`. If you pass an import in the imports holder 
 (via `applyRules()`) that has a key matching an import name in the spreadsheet, you will get the warning:
 `!!WARNING!! The spreadsheet is using an import name already passed via the imports object. The spreadsheet 
-will overwrite the import: VisitorTypes`.
+will overwrite the import: "Import Name"`.
 <br>
 
 
