@@ -1,4 +1,4 @@
-# TROOL - a rule engine for NodeJS/TypeScript
+# TROOL - a spreadsheet rule engine for NodeJS/TypeScript
 <h3>Get your rules out of your code so non-engineers can make updates over time!</h3>
 <br>
 
