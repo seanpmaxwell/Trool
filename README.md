@@ -185,7 +185,9 @@ For cleanliness I recommend keeping them separated.
 `!!WARNING!! The spreadsheet is using an import name already passed via the imports object. The spreadsheet 
 will overwrite the import: "Import Name"`.
 
-- The quick-start had an example of passing imports through `applyRules()`. Let's look at an example of 
+- The quick-start had an example of passing imports through `applyRules()`. Let's look at an example of
+an import hardcoded in the spreadsheet.
+<img alt='importExample' src='https://github.com/seanpmaxwell/trool/raw/master/importExample.png' border='0'>
 <br>
 
 
