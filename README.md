@@ -139,7 +139,11 @@ any cell evaluates to false, that rule will fail and the decision-table will go 
 - While on a rule's action column, each param specified must be separated by a comma. If no params
 are specified (the cell is blank), the rule will skip that action column. 
 
-// show screenshot here of the Tickets table and explain the different parts. 
+- Whew that was a lot! Now that we've gone over the rules for creating tables, let's look at an
+example in detail.
+
+<img alt='sampleTable' src='https://github.com/seanpmaxwell/trool/raw/master/sampleTable.png' border='0'>
+
 
 
 **Imports:**<br>
