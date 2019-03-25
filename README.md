@@ -96,7 +96,8 @@ arrays in the same order as the facts object that was passed in.
 
 
 ## Guide
-##### Important! When you setup your decision-tables and imports there are some rules to follow the in order for your tables/imports to be properly loaded into memory. Strict formatting is enforced for readability purposes.
+**Important! When you setup your decision-tables and imports there are some rules to follow the in order 
+for your tables/imports to be properly loaded into memory. Strict formatting is enforced for readability purposes**.
 
 **Decision Tables:**
 
@@ -166,7 +167,7 @@ spreadsheet :)
 <br>
 
 
-**Imports:**<br>
+**Imports:**
 
 - For large complicated spreadsheets you might want to reuse certain values. Suppose for Visitors who
 might be buying these tickets the maximum age for a child is `18`. One might need to reuse this value
@@ -201,7 +202,7 @@ it would lead to a very message spreadsheet.
 <br>
 
 
-**Special Notes:**<br>
+**Special Notes:**
 
 - In Trool spreadsheets `==` under the hood is actually `===`. 
 
