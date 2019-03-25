@@ -188,7 +188,9 @@ will overwrite the import: "Import Name"`.
 an import hardcoded in the spreadsheet.
 <img alt='importExample' src='https://github.com/seanpmaxwell/trool/raw/master/importExample.png' border='0'>
 
-- With this import, each table will have access to a table named 
+- With this import, each table will have access to a object named `VisitorTypes` an all of its properties.
+If you were to place `VisitorTypes.ADULT` in a cell for the operation `visitorType = $param` for example, 
+the Visitor object would call the `visitorType` setter and pass `"Adult"` as the value. 
 <br>
 
 

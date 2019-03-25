@@ -18,7 +18,6 @@ class Trool {
     private readonly IMPORT_NAME_WARN = '!!WARNING!! The spreadsheet is using an import name ' +
         'already passed via the imports object. The spreadsheet will overwrite the import: ';
 
-    private readonly alphaNumReg = /^[0-9a-zA-Z_]+$/;
     private readonly logger: Logger;
 
 
@@ -60,7 +59,9 @@ class Trool {
 
             } else if (importName) {
 
-                if (!this.alphaNumReg.test(firstCell)) {
+                const regex = /^[a-zA-Z0-9-_]+$/;
+
+                if (!regex.test(firstCell)) {
                     throw Error(this.IMPORT_PROP_ERR + firstCell);
                 }
 
