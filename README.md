@@ -171,18 +171,21 @@ spreadsheet :)
 
 - For large complicated spreadsheets you might want to reuse certain values. Suppose for Visitors who
 might be buying these tickets the maximum age for a child is `18`. One might need to reuse this value
-for multiple rules/tables and if they update it in once place, it needs to be updated everywhere. For 
-example, the maximum age for a child might change from `18` to `15` or something like. This is where
+for multiple rules/tables and if it's updated in once place, it needs to be updated everywhere. For 
+example, the maximum age for a child might change from `18` to `15` or something like that. This is where
 imports come in handy. An import basically sets up a simple JSON object that you can access in your tables.
 Imports can be created in the spreadsheet or passed in through `applyRules()`. 
 
 - Trool iterates the entire spreadsheet first look for all the imports, then it goes back through
 and initializes all the decision-tables. So the ordering of your tables/imports does not really matter.
+For cleanliness I recommend keeping them separated. 
 
 - All imports must begin with the cell `Import: "Import Name"`. If you pass an import in the imports holder 
 (via `applyRules()`) that has a key matching an import name in the spreadsheet, you will get the warning:
 `!!WARNING!! The spreadsheet is using an import name already passed via the imports object. The spreadsheet 
 will overwrite the import: "Import Name"`.
+
+- The quick-start had an example of passing imports through `applyRules()`. Let's look at an example of 
 <br>
 
 
@@ -195,8 +198,6 @@ in trool, == is the same as ===
 // mention that if a spreadsheet import and code import have the same name. The spreadsheet will override
 the code import
 
-// mention that it's not a good practice to set strings in directly to the spreadsheet and should
-// use a constants class. This prevents Product Owners from inputing bad values into the spreadsheet.
 // a fact must have a getter and a setter to be modified
 // mention that double periods don't work like obj.key.key on single ones
 // Tell users to only use letters and numbers when setting up imports
