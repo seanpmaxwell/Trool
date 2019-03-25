@@ -99,10 +99,11 @@ arrays in the same order as the facts object that was passed in.
 ## Guide
 ##### Important! When you setup your decision-tables and imports there are some rules to follow the in order for your tables/imports to be properly loaded into memory. Strict formatting is enforced for readability purposes.
 
-**Tables:**
+**Decision Tables:**
 
-- All tables must start with a cell containing the text `Table: "factName"`. A table without a fact name
-or with a fact name that does not exist on the facts container object, will throw an error.
+- All decision-tables must start with a cell containing the text `Table: "factName"`. A table without a fact name
+or with a fact name that does not exist on the facts container object, will throw an error. If you create
+2 tables that have the same fact-name, the second table will overwrite all the changes from the first.
 
 - A table will end when it reaches an empty row, the end of a the file, or the start of a new table
 or import. For readability, you should terminate all tables with an empty row.
@@ -172,7 +173,16 @@ spreadsheet :)
 might be buying these tickets the maximum age for a child is `18`. One might need to reuse this value
 for multiple rules/tables and if they update it in once place, it needs to be updated everywhere. For 
 example, the maximum age for a child might change from `18` to `15` or something like. This is where
-imports come in handy. 
+imports come in handy. An import basically sets up a simple JSON object that you can access in your tables.
+Imports can be created in the spreadsheet or passed in through `applyRules()`. 
+
+- Trool iterates the entire spreadsheet first look for all the imports, then it goes back through
+and initializes all the decision-tables. So the ordering of your tables/imports does not really matter.
+
+- All imports must begin with the cell `Import: importName`. If you pass an import in the imports holder 
+(via `applyRules()`) that has a key matching an import name in the spreadsheet, you will get the warning:
+`!!WARNING!! The spreadsheet is using an import name already passed via the imports object. The spreadsheet 
+will overwrite the import: VisitorTypes`.
 <br>
 
 
