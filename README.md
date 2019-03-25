@@ -190,27 +190,25 @@ an import hardcoded in the spreadsheet.
 
 - With this import, each table will have access to a object named `VisitorTypes` an all of its properties.
 If you were to place `VisitorTypes.ADULT` in a cell for the operation `visitorType = $param` for example, 
-the Visitor object would call the `visitorType` setter and pass `"Adult"` as the value. 
+the Visitor object would call the `visitorType` setter and pass `"Adult"` as the value.
+
+- When using imports through `applyRules()`, you don't have to necessary use an object as a property
+and could have it as a primitive. VisitorTypes itself for example could be a string or number. I don't
+recommend using imports this way though. It could be confusing in a collaborative environment.
+
+- One more thing, you cannot use nested properties on imports: i.e. `Import.key.key`. This is intentional,
+it would lead to a very message spreadsheet. 
 <br>
 
 
 **Special Notes:**<br>
-Talk about strings and null and stuff here.
-in trool, == is the same as ===
 
-// 
-// mention values provided must be null, boolean, number, string, or be a property on an import
-// mention that if a spreadsheet import and code import have the same name. The spreadsheet will override
-the code import
+- In Trool spreadsheets `==` under the hood is actually `===`. 
 
-// a fact must have a getter and a setter to be modified
-// mention that double periods don't work like obj.key.key on single ones
-// Tell users to only use letters and numbers when setting up imports
+- The values you can pass through cells are strings, numbers, true, false, and null. Don't use objects
+or undefined. Via imports, you could actually use an object as a `$param` value, but don't do it. This
+could be confusing for non-engineers. Stick with primitives. Create extra getters and setters when dealing
+with multiple values. 
 
-// Object passed for fact "fact name" does not have the attribute or method "attribute or method" name
-// iterate through each cell in Rule row, check the value in that cell using the condition at that index. 
-// Set value at that cell to true and false. Break if hits false
-// empty cell will just be set to true
-// dont execute Action where blank
-
-// 600 lines of code
+- Import property names are the same as rules for JavaScript keys. That means alphanumeric, underscores,
+and dashes. Anything other characters will throw an error.
