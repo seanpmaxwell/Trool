@@ -15,7 +15,6 @@ the code or hardcoded in the spreadsheet.
 ## Requirements
 - Spreadsheet must be exported as a .csv before usage. 
 - Can be used directly with NodeJS/JavaScript but documentation is in TypeScript.
-- Facts and imports from code must be JavaScript instance-objects.
 
 
 ## Screenshot
@@ -162,7 +161,7 @@ place for the next rule `Set Price - Season`. In other words. if the Ticket opti
 will be `600`, if the option is `"Regular"`, the price will be `70`.
 
 - And that's how Trool works! If you need to change the price for a Regular or Seasonal ticket
-over time without buggin your engineers, just have the product-owners make updates to the
+over time without bugging your engineers, just have the product-owners (or whoever) make updates to the
 spreadsheet :)
 <br>
 
@@ -188,6 +187,8 @@ will overwrite the import: "Import Name"`.
 - The quick-start had an example of passing imports through `applyRules()`. Let's look at an example of
 an import hardcoded in the spreadsheet.
 <img alt='importExample' src='https://github.com/seanpmaxwell/trool/raw/master/importExample.png' border='0'>
+
+- With this import, each table will have access to a table named 
 <br>
 
 
