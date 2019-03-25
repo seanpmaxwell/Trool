@@ -163,6 +163,7 @@ will be `600`, if the option is `"Regular"`, the price will be `70`.
 - And that's how Trool works! If you need to change the price for a Regular or Seasonal ticket
 over time without buggin your engineers, just have the product-owners make updates to the
 spreadsheet :)
+<br>
 
 
 **Imports:**<br>
@@ -172,6 +173,7 @@ might be buying these tickets the maximum age for a child is `18`. One might nee
 for multiple rules/tables and if they update it in once place, it needs to be updated everywhere. For 
 example, the maximum age for a child might change from `18` to `15` or something like. This is where
 imports come in handy. 
+<br>
 
 
 **Special Notes:**<br>
