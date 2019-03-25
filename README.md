@@ -160,11 +160,18 @@ is equal to the string `"Regular"`. If so, it will apply the action column to th
 place for the next rule `Set Price - Season`. In other words. if the Ticket option is `"Season"`, the price
 will be `600`, if the option is `"Regular"`, the price will be `70`.
 
-- And that's how Trool works :) 
+- And that's how Trool works! If you need to change the price for a Regular or Seasonal ticket
+over time without buggin your engineers, just have the product-owners make updates to the
+spreadsheet :)
 
 
 **Imports:**<br>
 
+- For large complicated spreadsheets you might want to reuse certain values. Suppose for Visitors who
+might be buying these tickets the maximum age for a child is `18`. One might need to reuse this value
+for multiple rules/tables and if they update it in once place, it needs to be updated everywhere. For 
+example, the maximum age for a child might change from `18` to `15` or something like. This is where
+imports come in handy. 
 
 
 **Special Notes:**<br>
