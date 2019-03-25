@@ -39,14 +39,17 @@ callAll();
 
 async function callAll() {
 
+    // Party of 1
     await printTotalPrice(new Visitor(67), 'Season');
 
+    // Party of 3
     await printTotalPrice([
         new Visitor(5),
         new Visitor(35),
         new Visitor(73)
     ], 'Season');
 
+    // Part of 6
     await printTotalPrice([
         new Visitor(7),
         new Visitor(18),
@@ -56,6 +59,7 @@ async function callAll() {
         new Visitor(101)
     ], 'Regular');
 
+    // Party of 10
     await printTotalPrice([
         new Visitor(7),
         new Visitor(12),

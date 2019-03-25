@@ -10,7 +10,7 @@ import Ticket from './Ticket';
 
 class Visitor {
 
-    private readonly TICKET_FALSEY_ERR = 'Ticket cannot be falsey if trying to get price';
+    private readonly TICKET_FALSY_ERR = 'Ticket cannot be falsey if trying to get price';
 
     private _age: number;
     private _partySize: number;
@@ -90,7 +90,7 @@ class Visitor {
         if (this.ticket) {
             return this.ticket.price;
         } else {
-            throw Error(this.TICKET_FALSEY_ERR);
+            throw Error(this.TICKET_FALSY_ERR);
         }
     }
 
