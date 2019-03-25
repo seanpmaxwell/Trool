@@ -70,7 +70,7 @@ public async calcTotalPrice(): Promise<void> {
     
     const facts = {
         Visitors: [new Visitor(), new Visitor()],
-        Ticket: new Ticket()
+        Tickets: new Ticket()
     }
 
     const imports = { 
@@ -140,10 +140,27 @@ any cell evaluates to false, that rule will fail and the decision-table will go 
 are specified (the cell is blank), the rule will skip that action column. 
 
 - Whew that was a lot! Now that we've gone over the rules for creating tables, let's look at an
-example in detail.
+example in detail. In the following snippet, we see an example on a decision-table and the fact `Tickets`.
 
 <img alt='sampleTable' src='https://github.com/seanpmaxwell/trool/raw/master/sampleTable.png' border='0'>
 
+- To update this fact you needs to make sure the `Tickets` property exists on the facts-holder when it
+gets passed to `applyRules()`. If `Tickets` is an array, the decision-table will get applied to each
+Ticket instance in the array. 
+
+- The table has one condition and one action. There's also 2 rules: `Set Price - Regular` and `Set Price - Season` 
+respectively. Look on row 30 at the operations for the condition and action. On the left side of each operation 
+we can see the properties `option` and `price`. This means that each Ticket instance object passed in must have 
+getters for the `option` and `price` properties or else an error will get thrown. If you're not using TypeScript
+you'll have to look up how TypeScript implements getters and setters under the hood. 
+
+- The first rule `Set Price - Regular` will take the value for `option` and check and see if it's value
+is equal to the string `"Regular"`. If so, it will apply the action column to the fact. The setter for
+`price` will be called and the value `70` will be passed in. The exact same sequence of events will take
+place for the next rule `Set Price - Season`. In other words. if the Ticket option is `"Season"`, the price
+will be `600`, if the option is `"Regular"`, the price will be `70`.
+
+- And that's how Trool works :) 
 
 
 **Imports:**<br>
@@ -152,6 +169,7 @@ example in detail.
 
 **Special Notes:**<br>
 Talk about strings and null and stuff here.
+in trool, == is the same as ===
 
 // 
 // mention values provided must be null, boolean, number, string, or be a property on an import
