@@ -99,7 +99,7 @@ arrays in the same order as the facts object that was passed in.
 **Important! When you setup your decision-tables and imports there are some rules to follow the in order 
 for your tables/imports to be properly loaded into memory. Strict formatting is enforced for readability purposes**.
 
-**Decision Tables:**
+**Decision-Tables:**
 
 - All decision-tables must start with a cell containing the text `Table: "Fact Name"`. A table without a fact name
 or with a fact name that does not exist on the facts container object, will throw an error. If you create
@@ -152,7 +152,7 @@ Ticket instance in the array.
 - The table has one condition and one action. There's also 2 rules: `Set Price - Regular` and `Set Price - Season` 
 respectively. Look on row 30 at the operations for the condition and action. On the left side of each operation 
 we can see the properties `option` and `price`. This means that each Ticket instance object passed in must have 
-getters for the `option` and `price` properties or else an error will get thrown. If you're not using TypeScript
+getters/setters for the `option` and `price` properties or else an error will get thrown. If you're not using TypeScript
 you'll have to look up how TypeScript implements getters and setters under the hood. 
 
 - The first rule `Set Price - Regular` will take the value for `option` and check and see if it's value
@@ -211,5 +211,5 @@ or undefined. Via imports, you could actually use an object as a `$param` value,
 could be confusing for non-engineers. Stick with primitives. Create extra getters and setters when dealing
 with multiple values. 
 
-- Import property names are the same as rules for JavaScript keys. That means alphanumeric, underscores,
+- Import property name rules are the same as for JavaScript keys. That means alphanumeric, underscores,
 and dashes. Anything other characters will throw an error.
