@@ -69,30 +69,6 @@ export function parseCell(cellValStr: string, imports: ImportsHolder): any {
 }
 
 
-export function compareVals(operator: string, val1: any, val2: any): boolean {
-
-    if (operator === '===') {
-        return val1 === val2;
-    } else if (operator === '==') {
-        return val1 === val2;
-    } else if (operator === '!=') {
-        return val1 !== val2;
-    } else if (operator === '!==') {
-        return val1 !== val2;
-    } else if (operator === '>') {
-        return val1 > val2;
-    } else if (operator === '>=') {
-        return val1 >= val2;
-    } else if (operator === '<') {
-        return val1 < val2;
-    } else if (operator === '<=') {
-        return val1 <= val2;
-    } else {
-        throw Error('The following operator is not a comparison operator: ' + operator);
-    }
-}
-
-
 /* tslint:disable */
 export class Logger {
 

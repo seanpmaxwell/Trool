@@ -32,6 +32,8 @@ class TableErrs {
     private readonly RULE_NAME_EMPTY = 'The rule name (first cell for a rule row for a decision ' +
         'table) cannot be empty.';
 
+    private readonly NOT_AN_OP = 'The following operator is not a comparison operator: ';
+
 
     private readonly id: string;
 
@@ -99,6 +101,10 @@ class TableErrs {
 
     get assignParamCount(): string {
         return this.id + this.ASSIGN_PARAM_COUNT;
+    }
+
+    get notAnOperator(): string {
+        return this.id + this.NOT_AN_OP;
     }
 }
 

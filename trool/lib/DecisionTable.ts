@@ -5,7 +5,7 @@
  * created by Sean Maxwell Mar 3, 2019
  */
 
-import { ImportsHolder, Row, Logger, parseCell, compareVals, valsToArr } from './shared';
+import { ImportsHolder, Row, Logger, parseCell, valsToArr } from './shared';
 import TableErrs from './TableErrs';
 
 
@@ -120,8 +120,32 @@ class DecisionTable {
                 attrVal = fact[methodName];
             }
 
-            return compareVals(arr[1], attrVal, paramVal);
+            return this.compareVals(arr[1], attrVal, paramVal);
         };
+    }
+
+
+    private compareVals(operator: string, val1: any, val2: any): boolean {
+
+        if (operator === '===') {
+            return val1 === val2;
+        } else if (operator === '==') {
+            return val1 === val2;
+        } else if (operator === '!=') {
+            return val1 !== val2;
+        } else if (operator === '!==') {
+            return val1 !== val2;
+        } else if (operator === '>') {
+            return val1 > val2;
+        } else if (operator === '>=') {
+            return val1 >= val2;
+        } else if (operator === '<') {
+            return val1 < val2;
+        } else if (operator === '<=') {
+            return val1 <= val2;
+        } else {
+            throw Error(this.errs.notAnOperator + operator);
+        }
     }
 
 

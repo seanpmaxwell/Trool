@@ -4,8 +4,8 @@
 
 
 ## Features
-- Manage rules in a business spreadsheet format
-- Heavily inspired by Java's KnowledgeBase Library
+- Manage rules in a business spreadsheet format.
+- Heavily inspired by Java's KnowledgeBase Library.
 - Allows use of `Import` objects so values can be reused. These can be passed dynamically through
 the code or hardcoded in the spreadsheet.
 - GitHub Repo contains fully-functional sample project so you can start practicing right away.
@@ -35,7 +35,7 @@ you do not set things up correctly. The guide contains all the details for setti
 You can look at the screenshot above if you want a quick glimpse on what decision-tables look like. 
 
 - Export your spreadsheet as a CSV file. The rules for formatting the csv are the same as they are
-for the `csvtojson` library. That's what trool using internally to convert the csv to a json object.
+for the `csvtojson` library. That's what Trool uses internally to convert the csv to a json object.
 
 - Create a new NodeJS program (preferably with TypeScript) and import the `trool` library at the top.
 Instantiate a new `trool` object and pass `true` to the constructor if you want to show logs while
@@ -126,16 +126,16 @@ fetch the visitor's age and compare it to the parameter value.<br>
 
 - Actions are methods on a fact which will execute if all the conditions evaluate to true. Unlike conditions,
 you can have multiple params passed in. The action must be a method or a TypeScript setter function on
-the fact or else Trool with throw an error. The number or params in the passed through the cells below
-must match the number or `$param` strings or else Trool will throw an error. 
+the fact or else Trool will throw an error. The number of params in the action columns' cells below
+must match the number or `$param` strings or else Trool will also throw an error. 
 
-- All remaining rows on a decision-table are referred to as rules. A rule works by evaluating a list of 
-conditions against cell values which, if they all evaluate to true, will execute the specified actions. 
-A rule must start with a rule name and can be anything but cannot be blank.
+- All rows on a decision-table, except for the first 2, are referred to as rules. A rule works by evaluating 
+a list of conditions against cell values which, if they all evaluate to true, will execute the specified 
+actions. A rule must start with a rule name and can be anything but cannot be blank.
 
 - For each cell on the rule, if it is a condition column, the cell value will replace the `$param` value
-and evaluate the cell as true or false. An empty cell will automatically be evaluated as true. If
-any cell evaluates to false, that rule will fail and the decision-table will go on the next rule.
+and evaluate the cell as `true` or `false`. An empty cell will automatically be evaluated as `true`. If
+any cell evaluates to `false`, that rule will fail and the decision-table will go on the next rule.
 
 - While on a rule's action column, each param specified must be separated by a comma. If no params
 are specified (the cell is blank), the rule will skip that action column. 
@@ -149,20 +149,19 @@ example in detail. In the following snippet, we see an example on a decision-tab
 gets passed to `applyRules()`. If `Tickets` is an array, the decision-table will get applied to each
 Ticket instance in the array. 
 
-- The table has one condition and one action. There's also 2 rules: `Set Price - Regular` and `Set Price - Season` 
-respectively. Look on row 30 at the operations for the condition and action. On the left side of each operation 
+- The table has one condition and one action. There's also 2 rules: `Set Price - Regular` and `Set Price - Season`. 
+Look on row 30 at the operations for the condition and action. On the left side of each operation 
 we can see the properties `option` and `price`. This means that each Ticket instance object passed in must have 
-getters/setters for the `option` and `price` properties or else an error will get thrown. If you're not using TypeScript
-you'll have to look up how TypeScript implements getters and setters under the hood. 
+getters/setters for the `option` and `price` properties or else an error will be thrown.
 
 - The first rule `Set Price - Regular` will take the value for `option` and check and see if it's value
 is equal to the string `"Regular"`. If so, it will apply the action column to the fact. The setter for
 `price` will be called and the value `70` will be passed in. The exact same sequence of events will take
-place for the next rule `Set Price - Season`. In other words. if the Ticket option is `"Season"`, the price
+place for the next rule `Set Price - Season`. In other words, if the Ticket option is `"Season"`, the price
 will be `600`, if the option is `"Regular"`, the price will be `70`.
 
-- And that's how Trool works! If you need to change the price for a Regular or Seasonal ticket
-over time without bugging your engineers, just have the product-owners (or whoever) make updates to the
+- And that's how Trool works! If you need to change the price for a Regular or Seasonal ticket over
+time without bugging your engineers, just have the product-owners (or whoever) make updates to the
 spreadsheet :)
 <br>
 
