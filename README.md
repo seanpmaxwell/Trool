@@ -173,11 +173,11 @@ might be buying these tickets the maximum age for a child is `18`. One might nee
 for multiple rules/tables and if it's updated in once place, it needs to be updated everywhere. For 
 example, the maximum age for a child might change from `18` to `15` or something like that. This is where
 imports come in handy. An import basically sets up a simple JSON object that you can access in your tables.
-Imports can be created in the spreadsheet or passed in through `applyRules()`. 
+Imports can be created in the spreadsheet or passed through `applyRules()`. 
 
-- Trool iterates the entire spreadsheet first look for all the imports, then it goes back through
-and initializes all the decision-tables. So the ordering of your tables/imports does not really matter.
-For cleanliness I recommend keeping them separated. 
+- Trool iterates the entire spreadsheet and first looks for all the imports, then it goes back through
+and initializes all the decision-tables. So the ordering of your tables/imports does not matter.
+For cleanliness I recommend keeping them separated. // pick up here
 
 - All imports must begin with the cell `Import: "Import Name"`. If you pass an import in the imports holder 
 (via `applyRules()`) that has a key matching an import name in the spreadsheet, you will get the warning:
