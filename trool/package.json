@@ -21,7 +21,11 @@
     "typescript",
     "nodejs",
     "trool",
-    "csv"
+    "csv",
+    "spreadsheet",
+    "node",
+    "ts",
+    "rule-engine"
   ],
   "author": "seanpmaxwell",
   "license": "MIT",
