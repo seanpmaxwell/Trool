@@ -1,11 +1,18 @@
 # IntelliJ
 .idea
 
+
 # Misc
 **/node_modules
 **/package-lock.json
 
+
 # Transpiled files
+
 trool/**/*.js
 trool/**/*.js.map
 trool/**/*.d.ts
+
+sample-project-adv/**/*.js
+sample-project-adv/**/*.js.map
+sample-project-adv/**/*.d.ts
