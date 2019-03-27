@@ -177,7 +177,7 @@ Imports can be created in the spreadsheet or passed through `applyRules()`.
 
 - Trool iterates the entire spreadsheet and first looks for all the imports, then it goes back through
 and initializes all the decision-tables. So the ordering of your tables/imports does not matter.
-For cleanliness I recommend keeping them separated. // pick up here
+For cleanliness I recommend keeping them separated.
 
 - All imports must begin with the cell `Import: "Import Name"`. If you pass an import in the imports holder 
 (via `applyRules()`) that has a key matching an import name in the spreadsheet, you will get the warning:
@@ -188,12 +188,12 @@ will overwrite the import: "Import Name"`.
 an import hardcoded in the spreadsheet.
 <img alt='importExample' src='https://github.com/seanpmaxwell/trool/raw/master/importExample.png' border='0'>
 
-- With this import, each table will have access to a object named `VisitorTypes` an all of its properties.
+- With this import, each table will have access to a object named `VisitorTypes` on all of its properties.
 If you were to place `VisitorTypes.ADULT` in a cell for the operation `visitorType = $param` for example, 
 the Visitor object would call the `visitorType` setter and pass `"Adult"` as the value.
 
 - When using imports through `applyRules()`, you don't have to necessary use an object as a property
-and could have it as a primitive. VisitorTypes itself for example could be a string or number. I don't
+and could have it as a primitive. VisitorTypes itself could be a string or number. I don't
 recommend using imports this way though. It could be confusing in a collaborative environment.
 
 - One more thing, you cannot use nested properties on imports: i.e. `Import.key.key`. This is intentional,
@@ -203,7 +203,7 @@ it would lead to a very message spreadsheet.
 
 **Special Notes:**
 
-- In Trool spreadsheets `==` under the hood is actually `===`. 
+- In Trool spreadsheets, `==` under the hood is actually using `===`. 
 
 - The values you can pass through cells are strings, numbers, true, false, and null. Don't use objects
 or undefined. Via imports, you could actually use an object as a `$param` value, but don't do it. This
