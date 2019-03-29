@@ -12,6 +12,13 @@ class CalcEngine {
     //
     // }
 
+    // Each encounter will have an assigned patient object
+    // Patient object will be used to determine if encounter gets used (i.e. birthdate)
+    // Combinations of Encounters (or a single Encounter) will be a DataObject
+    // Array of DataObjects will be used in the calculation
+    // Encounter and DataObject will have DecisionTables in the spreadsheet
+
+
 }
 
 export default CalcEngine;
