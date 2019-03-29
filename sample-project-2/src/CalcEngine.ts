@@ -8,17 +8,24 @@
 
 class CalcEngine {
 
-    // constructor() {
-    //
-    // }
-
-    // Each encounter will have an assigned patient object
-    // Patient object will be used to determine if encounter gets used (i.e. birthdate)
-    // Combinations of Encounters (or a single Encounter) will be a DataObject
-    // Array of DataObjects will be used in the calculation
-    // Encounter and DataObject will have DecisionTables in the spreadsheet
+    private showLogs: boolean;
 
 
+    constructor() {
+        this.showLogs = false;
+    }
+
+
+    public computeScore(): number {
+        return 0;
+    }
 }
 
 export default CalcEngine;
+
+// Each encounter will have an assigned patient object
+// Patient object will be used to determine if encounter gets used (i.e. birthdate)
+// Combinations of Encounters (or a single Encounter) will be a DataObject
+// Array of DataObjs will be used in the calculation, each DataObj will have a value
+// Encounter and DataObjHolder will have DecisionTables in the spreadsheet
+// DataObjHolder will call Actions which add DataObjs to the final DataObjs array

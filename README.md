@@ -8,7 +8,7 @@
 - Heavily inspired by Java's KnowledgeBase Library.
 - Allows use of `Import` objects so values can be reused. These can be passed dynamically through
 the code or hardcoded in the spreadsheet.
-- GitHub Repo contains fully-functional sample project so you can start practicing right away.
+- GitHub Repo contains fully-functional sample project so you can start practicing right away. 
 - Fully type-safe :)
 
 
@@ -76,7 +76,7 @@ public async calcTotalPrice(): Promise<void> {
         VisitorTypes: {
             ADULT: 'Adult',
             CHILD: 'Child'
-        }
+       __ }
     };
 
     try {
@@ -92,6 +92,16 @@ public async calcTotalPrice(): Promise<void> {
 - The updatedFacts variable in the previous snippet will contain all the same key/value pairs and
 arrays in the same order as the facts object that was passed in.
 
+<br>
+
+
+## Sample Projects
+The first _sample-project_ has a simple example showing how to calculate ticket prices for an array
+of visitors based on the party and the age of each visitor. If you want to get started quickly and are
+new to rule-engines you should definitely check this one out first. This project will also not change over
+time. _sample-project-2_ is a complex example showing us how to compute a score for medical providers 
+based on the number and type of patient visits that they have. This project will change over time and
+is used for maintenance on the _trool_ library. 
 <br>
 
 

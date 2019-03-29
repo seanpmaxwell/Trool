@@ -7,7 +7,6 @@
 
 import * as path from 'path';
 import { cerr } from 'simple-color-print';
-import { VisitorTypes, TicketTypes } from './models/constants';
 import { ticketOpts } from './models/Ticket';
 
 import Trool, { FactsHolder } from 'trool';
@@ -31,13 +30,12 @@ class PriceCalculator {
         Promise<string> {
 
         let totalPrice = 0;
-        const imports = { VisitorTypes, TicketTypes };
         visitors = (visitors instanceof Array) ? visitors : [visitors];
 
         try {
             const csvFilePath = path.join(__dirname, this.CSV_FILE);
             const facts = this.setupFactsHolder(visitors, ticketOpt);
-            const updatedFacts = await this.trool.applyRules(csvFilePath, facts, imports);
+            const updatedFacts = await this.trool.applyRules(csvFilePath, facts);
 
             totalPrice = this.addUpEachTicketPrice(updatedFacts);
         } catch (err) {
