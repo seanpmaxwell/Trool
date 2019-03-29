@@ -11,9 +11,6 @@
     "emitDecoratorMetadata": true,
     "moduleResolution": "node",
     "importHelpers": true,
-    "paths": {
-      "trool": ["../trool"]
-    },
     "types": [
       "node"
     ],
