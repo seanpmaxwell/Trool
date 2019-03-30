@@ -9,20 +9,40 @@ import * as moment from 'moment';
 
 class Patient {
 
-    private _birthdate: Date | null;
+    private _firstName: string;
+    private _lastName: string;
+    private _birthdate: Date;
     private _ageGroup: ageGroups;
 
 
-    constructor() {
-        this._birthdate = null;
+    constructor(firstName: string, lastName: string, birthdate: Date) {
+        this._firstName = firstName;
+        this._lastName = lastName;
+        this._birthdate = birthdate;
         this._ageGroup = null;
     }
 
-    set birthdate(birthdate: Date | null) {
+    set firstName(firstName: string) {
+        this._firstName = firstName;
+    }
+
+    get firstName(): string {
+        return this._firstName;
+    }
+
+    set lastName(lastName: string) {
+        this._lastName = lastName;
+    }
+
+    get lastName(): string {
+        return this._lastName;
+    }
+
+    set birthdate(birthdate: Date) {
         this._birthdate = birthdate;
     }
 
-    get birthdate(): Date | null {
+    get birthdate(): Date {
         return this._birthdate;
     }
 

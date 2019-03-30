@@ -10,15 +10,15 @@ import Patient from './Patient';
 
 class Encounter {
 
-    private _patient: Patient | null;
     private _code: string;
-    private _category: string;
+    private _category: string | null;
+    private _patient: Patient | null;
 
 
-    constructor() {
-        this._patient = null;
-        this._code = '';
-        this._category = '';
+    constructor(code: string, category: string | null, patient: Patient) {
+        this._code = code;
+        this._category = category;
+        this._patient = patient;
     }
 
     set patient(patient: Patient | null) {
@@ -37,11 +37,11 @@ class Encounter {
         return this._code;
     }
 
-    set category(category: string) {
+    set category(category: string | null) {
         this._category = category;
     }
 
-    get category(): string {
+    get category(): string | null {
         return this._category;
     }
 }

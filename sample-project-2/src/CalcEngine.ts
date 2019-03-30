@@ -6,17 +6,23 @@
  * created by Sean Maxwell Mar 27, 2019
  */
 
+import Trool from 'trool';
+import Encounter from './models/Encounter';
+
+
 class CalcEngine {
 
-    private showLogs: boolean;
+    private trool: Trool;
 
 
     constructor() {
-        this.showLogs = false;
+        this.trool = new Trool(true);
     }
 
 
-    public computeScore(): number {
+    public computeScore(encounters: Encounter[]): number {
+
+
         return 0;
     }
 }
