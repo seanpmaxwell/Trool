@@ -10,6 +10,4 @@ import CalcEngine from './CalcEngine';
 
 
 
-const patients = [
-    new Patient()
-];
+

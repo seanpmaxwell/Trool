@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/seanpmaxwell/Trool#readme",
   "dependencies": {
+    "moment": "^2.24.0",
     "simple-color-print": "^1.0.6"
   },
   "devDependencies": {

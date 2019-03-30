@@ -11,10 +11,14 @@ import Patient from './Patient';
 class Encounter {
 
     private _patient: Patient | null;
+    private _code: string;
+    private _category: string;
 
 
     constructor() {
         this._patient = null;
+        this._code = '';
+        this._category = '';
     }
 
     set patient(patient: Patient | null) {
@@ -24,4 +28,22 @@ class Encounter {
     get patient(): Patient | null {
         return this._patient;
     }
+
+    set code(code: string) {
+        this._code = code;
+    }
+
+    get code(): string {
+        return this._code;
+    }
+
+    set category(category: string) {
+        this._category = category;
+    }
+
+    get category(): string {
+        return this._category;
+    }
 }
+
+export default Encounter;

@@ -4,26 +4,35 @@
  * created by Sean Maxwell Mar 27, 2019
  */
 
-type ageGroups = 'Adult' | 'Child' | 'Senior' | null;
+import * as moment from 'moment';
 
 
 class Patient {
 
-    private _age: number;
+    private _birthdate: Date | null;
     private _ageGroup: ageGroups;
 
 
     constructor() {
-        this._age = -1;
+        this._birthdate = null;
         this._ageGroup = null;
     }
 
-    set age(age: number) {
-        this._age = age;
+    set birthdate(birthdate: Date | null) {
+        this._birthdate = birthdate;
     }
 
-    get age(): number {
-        return this._age;
+    get birthdate(): Date | null {
+        return this._birthdate;
+    }
+
+    get ageInYears(): number {
+
+        if (this._birthdate) {
+            return moment().diff(this._birthdate, 'years');
+        } else {
+            return 0;
+        }
     }
 
     set ageGroup(ageGroup: ageGroups) {
@@ -35,4 +44,5 @@ class Patient {
     }
 }
 
+export type ageGroups = 'Adult' | 'Child' | 'Senior' | null;
 export default Patient;
