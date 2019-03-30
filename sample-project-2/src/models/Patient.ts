@@ -4,7 +4,7 @@
  * created by Sean Maxwell Mar 27, 2019
  */
 
-import * as moment from 'moment';
+
 
 
 class Patient {
@@ -44,15 +44,6 @@ class Patient {
 
     get birthdate(): Date {
         return this._birthdate;
-    }
-
-    get ageInYears(): number {
-
-        if (this._birthdate) {
-            return moment().diff(this._birthdate, 'years');
-        } else {
-            return 0;
-        }
     }
 
     set ageGroup(ageGroup: ageGroups) {

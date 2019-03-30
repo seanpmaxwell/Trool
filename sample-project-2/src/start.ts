@@ -13,7 +13,7 @@ import CalcEngine from './CalcEngine';
 
 // Data incoming from a provider
 const patient1 = new Patient('Gordan', 'Freeman', new Date(1965, 5, 20));
-const encounter1 = new Encounter('2222.234820.11443', null, patient1);
+const encounter1 = new Encounter('2222.234820.11443', patient1);
 
 
 
