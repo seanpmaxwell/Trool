@@ -55,10 +55,6 @@ class DecisionTable {
         const colHeaderArr = valsToArr(arrTable[0]);
         const opsStrArr = valsToArr(arrTable[1]);
 
-        if (colHeaderArr.length !== opsStrArr.length) {
-            throw Error(this.errs.colLenth);
-        }
-
         let conditionsDone = false;
         this.conditions = [];
         this.actions = [];
@@ -104,13 +100,13 @@ class DecisionTable {
             const methodName = arr[0].replace('()', '');
 
             if (!opStr) {
-                throw Error(errs.condBlank);
+                throw Error(errs.opBlank);
             } else if (arr.length !== 3) {
-                throw Error(errs.opFormat);
+                throw Error(errs.opFormat + ` "${opStr}"`);
             } else if (fact[methodName] === undefined) {
-                throw Error(errs.attrUndef(opStr));
+                throw Error(errs.attrUndef + ` "${opStr}"`);
             } else if (arr[2] !== '$param') {
-                throw Error(errs.mustEndWithParam);
+                throw Error(errs.mustEndWithParam + ` "${opStr}"`);
             }
 
             let attrVal = null;
@@ -151,32 +147,44 @@ class DecisionTable {
 
     private getActionOps(actionStr: string): Function {
 
+        if (!actionStr) {
+            throw Error(this.errs.opBlank);
+        }
+
         const outer = this;
         const errs = this.errs;
 
         return (factIdx: number, cellVals: any[]): void => {
 
             const argLength = actionStr.split('$param').length - 1;
+            const op = ` "${actionStr}"`;
 
             if (argLength !== cellVals.length) {
-                throw Error(errs.paramCount + actionStr);
+                throw Error(errs.paramCount + op);
             }
 
             const opArr = actionStr.split(' ');
             const fact = outer.facts[factIdx];
 
-            // assignment or call method
-            if (opArr.length === 3 && opArr[1] === '=') {
+            // check if assignment or method call
+            if (opArr[1] === '=') {
 
-                if (argLength !== cellVals.length) {
-                    throw Error(errs.assignParamCount + actionStr);
+                if (cellVals.length !== 1) {
+                    throw Error(errs.assignParamCount + op);
+                } else if (fact[opArr[0]] === undefined) {
+                    throw Error(errs.attrUndef + op);
                 }
 
                 fact[opArr[0]] = cellVals[0];
 
             } else {
+
                 const n = actionStr.lastIndexOf('(');
                 const methodName = actionStr.substring(0, n);
+
+                if (fact[methodName] === undefined) {
+                    throw Error(errs.attrUndef + op);
+                }
 
                 fact[methodName](...cellVals);
             }

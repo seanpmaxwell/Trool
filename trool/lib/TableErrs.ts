@@ -1,33 +1,38 @@
 /**
- *
+ * There are so many errors to check the format of the Decision Table
+ * they have all been moved here.
  *
  * created by Sean Maxwell Mar 18, 2019
  */
 
+
 class TableErrs {
+
+    private readonly START_CELL = 'First cell must contain "Table:" and specify 1 and only 1 fact.';
+
+    private readonly FACT_FALSEY = 'The fact specified in the first cell was not present or is ' +
+        'null. Please use and instance-object or an array of instances-objects as a fact value.';
 
     private readonly COL_HEADER = 'Action/Condition column headers can only be "Condition" ' +
         'or "Action".';
 
-    private readonly COL_HEADER_ARGMT = 'All conditions must specified before all actions';
+    private readonly COL_HEADER_ARGMT = 'All conditions must be specified before all actions';
 
-    private readonly COL_LENGTH = 'The number of Action/Condition column headers must match ' +
-        'and line up with the number of operations.';
-
-    private readonly COND_BLANK = 'Condition cannot be blank';
+    private readonly OP_BLANK = 'Operation cannot be blank';
 
     private readonly OP_FORMAT = 'The operation must began with the Fact\'s attribute, contain ' +
-        'one operators, and end with "$param".';
+        'one operator, and end with "$param". Operation:';
 
-    private readonly ATTR_UNDEF = 'Attribute does not not exist on the fact for condition: ';
+    private readonly ATTR_UNDEF = 'Attribute does not exist on the fact for operation:';
 
-    private readonly MUST_END_WITH_PARAM = 'Condition operation must end with "$param"';
+    private readonly MUST_END_WITH_PARAM = 'Condition operation must end with "$param". ' +
+        'Operation:';
 
-    private readonly PARAM_COUNT = 'The number of params for an action operation ' +
-        'must match the number of argument for the method: ';
+    private readonly PARAM_COUNT = 'The number of params for an action operation must match the ' +
+        'number of argument for the method:';
 
     private readonly ASSIGN_PARAM_COUNT = 'An assignment action operation can only contain ' +
-        'one argument ';
+        'one argument. Assignment:';
 
     private readonly RULE_NAME_EMPTY = 'The rule name (first cell for a rule row for a decision ' +
         'table) cannot be empty.';
@@ -43,29 +48,18 @@ class TableErrs {
     }
 
 
-    public attrUndef(opStr: string): string {
-        return this.id + this.ATTR_UNDEF + opStr;
-    }
-
-
-    public static getStartCellErr(id: number): string {
-        return `Decision Table ${id} start cell must contain "Start:" and specify 1 and ` +
-            'only 1 fact.';
-    }
-
-
-    public static getFactFalseyErr(id: number): string {
-        return `The fact specified in the start cell for Decision Table ${id} was not present ` +
-            'or is null. Please use and instance-object or an array of instances-objects as ' +
-            'a fact value.';
-    }
-
-
     public invalidVal(id: number, cellVal: string) {
         return 'Value ' + cellVal + ' provided in table ' + id + ' provided was not a ' +
             'null, boolean, number, string, or import';
     }
 
+    get startCell(): string {
+        return this.id + this.START_CELL;
+    }
+
+    get factFalsey(): string {
+        return this.id + this.FACT_FALSEY;
+    }
 
     get colHeader(): string {
         return this.id + this.COL_HEADER;
@@ -75,16 +69,16 @@ class TableErrs {
         return this.id + this.COL_HEADER_ARGMT;
     }
 
-    get colLenth(): string {
-        return this.id + this.COL_LENGTH;
-    }
-
-    get condBlank(): string {
-        return this.id + this.COND_BLANK;
+    get opBlank(): string {
+        return this.id + this.OP_BLANK;
     }
 
     get opFormat(): string {
         return this.id + this.OP_FORMAT;
+    }
+
+    get attrUndef(): string {
+        return this.id + this.ATTR_UNDEF;
     }
 
     get mustEndWithParam(): string {

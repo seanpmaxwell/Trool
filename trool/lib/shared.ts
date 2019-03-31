@@ -69,7 +69,6 @@ export function parseCell(cellValStr: string, imports: ImportsHolder): any {
 }
 
 
-/* tslint:disable */
 export class Logger {
 
     private readonly _showsLogs: boolean;
@@ -83,6 +82,7 @@ export class Logger {
         return this._showsLogs;
     }
 
+    /* tslint:disable */
     public log(msg: string): void {
         if (this._showsLogs) {
             console.log(colors.green(msg));

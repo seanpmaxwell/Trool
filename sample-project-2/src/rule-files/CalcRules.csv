@@ -1,0 +1,19 @@
+,,,,
+Table:,Condition,Condition,Action,Action
+,ageInYears >= $param,coode == $param,initPop() = $param,category = $param
+Is part of Initial Population?,18,,TRUE,
+Cardiac Surgery?,,EncounterCodes.CardiacSurgery,,EncounterCategories.CardiacSurgery
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+// Note: eMap stands for Encounter Mappings. Values are based on government regulation,,,,
+Import: EncounterCodes,,,,
+CardiacSurgery,“2222.234820.11443”,,,
+,,,,
+,,,,
+Import: EncounterCategories,,,,
+CardiacSurgery,“[Surgery No: Heart]”,,,

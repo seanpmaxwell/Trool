@@ -12,7 +12,8 @@ import TableErrs from './TableErrs';
 
 class Trool {
 
-    private readonly IMPORT_START_ERR = 'Import start format error for ';
+    private readonly NO_TABLES_WARN = 'No decision tables found';
+    private readonly IMPORT_START_ERR = 'Import start format error for';
     private readonly IMPORT_PROP_ERR = 'Import property can only be alpha-numeric and underscores ';
     private readonly UPDATE_START_MSG = ' DecisionTables found. Applying table logic to facts.';
     private readonly IMPORT_NAME_WARN = '!!WARNING!! The spreadsheet is using an import name ' +
@@ -53,7 +54,7 @@ class Trool {
 
             const firstCell = jsonArr[i].field1.trim();
 
-            if (firstCell.startsWith('Import: ')) {
+            if (firstCell.startsWith('Import:')) {
 
                 importName = this.getImportName(firstCell, imports);
 
@@ -84,7 +85,7 @@ class Trool {
         const firstCellArr = firstCell.split(' ');
 
         if (firstCellArr.length !== 2) {
-            throw Error(this.IMPORT_START_ERR + firstCell);
+            throw Error(this.IMPORT_START_ERR + ` "${firstCell}"`);
         }
 
         const importName = firstCellArr[1];
@@ -111,7 +112,7 @@ class Trool {
 
             const firstCol = jsonArr[i].field1.trim();
 
-            if (firstCol.startsWith('Table: ')) {
+            if (firstCol.startsWith('Table:')) {
 
                 tableStart = i;
                 startCellArr = firstCol.split(' ');
@@ -138,10 +139,12 @@ class Trool {
 
     private getFacts(startCellArr: string[], id: number, facts: FactsHolder): InstanceType<any>[] {
 
+        const tableErrs = new TableErrs(id);
+
         if (startCellArr.length !== 2) {
-            throw Error(TableErrs.getStartCellErr(id));
+            throw Error(tableErrs.startCell);
         } else if (!facts[startCellArr[1]]) {
-            throw Error(TableErrs.getFactFalseyErr(id));
+            throw Error(tableErrs.factFalsey);
         }
 
         const factArr = facts[startCellArr[1]];
@@ -158,7 +161,7 @@ class Trool {
         const tableCount = decisionTables.length;
 
         if (tableCount === 0) {
-            this.logger.warn('No decision tables found');
+            this.logger.warn(this.NO_TABLES_WARN);
             return {};
         } else {
             this.logger.log(tableCount + this.UPDATE_START_MSG);
@@ -181,7 +184,7 @@ class Trool {
 
     private isLastRow(jsonArr: Row[], idx: number): boolean {
         const nextCell = jsonArr[idx + 1] ? jsonArr[idx + 1].field1.trim() : '';
-        return !nextCell || nextCell.startsWith('Table: ') || nextCell.startsWith('Import: ');
+        return !nextCell || nextCell.startsWith('Table:') || nextCell.startsWith('Import:');
     }
 }
 
