@@ -9,7 +9,8 @@ import * as path from 'path';
 import { cerr } from 'simple-color-print';
 import { ticketOpts } from './models/Ticket';
 
-import Trool, { FactsHolder } from 'trool';
+// import Trool, { FactsHolder } from 'trool';
+import Trool, { FactsHolder } from '../../trool';
 import Ticket from './models/Ticket';
 import Visitor from './models/Visitor';
 
