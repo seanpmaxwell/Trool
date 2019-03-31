@@ -37,7 +37,10 @@ class TableErrs {
     private readonly RULE_NAME_EMPTY = 'The rule name (first cell for a rule row for a decision ' +
         'table) cannot be empty.';
 
-    private readonly NOT_AN_OP = 'The following operator is not a comparison operator: ';
+    private readonly NOT_AN_OP = 'The following operator is not a comparison operator:';
+
+    private readonly INVALID_VAL = 'The value provided in the table was not a null, boolean, ' +
+        'number, string, or import. Cell value or values:';
 
 
     private readonly id: string;
@@ -45,12 +48,6 @@ class TableErrs {
 
     constructor(id: number) {
         this.id = 'Error on DecisionTable ' + id + ': ';
-    }
-
-
-    public invalidVal(id: number, cellVal: string) {
-        return 'Value ' + cellVal + ' provided in table ' + id + ' provided was not a ' +
-            'null, boolean, number, string, or import';
     }
 
     get startCell(): string {
@@ -97,8 +94,12 @@ class TableErrs {
         return this.id + this.ASSIGN_PARAM_COUNT;
     }
 
-    get notAnOperator(): string {
+    get notAnOp(): string {
         return this.id + this.NOT_AN_OP;
+    }
+
+    get invalidVal(): string {
+        return this.id + this.INVALID_VAL;
     }
 }
 

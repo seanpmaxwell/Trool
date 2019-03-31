@@ -1,8 +1,8 @@
 ,,,,
-Table:,Condition,Condition,Action,Action
-,ageInYears >= $param,coode == $param,initPop() = $param,category = $param
+Table: Encounters,Condition,Condition,Action,Action
+,ageInYears == $param,code == $param,initPop = $param,category = $param
 Is part of Initial Population?,18,,TRUE,
-Cardiac Surgery?,,EncounterCodes.CardiacSurgery,,EncounterCategories.CardiacSurgery
+Cardiac Surgery?,,EncounterCodes.CardiacSurgery,FALSE,EncounterCategories.CardiacSurgery
 ,,,,
 ,,,,
 ,,,,

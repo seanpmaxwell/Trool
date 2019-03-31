@@ -140,7 +140,7 @@ class DecisionTable {
         } else if (operator === '<=') {
             return val1 <= val2;
         } else {
-            throw Error(this.errs.notAnOperator + operator);
+            throw Error(this.errs.notAnOp + ` "${operator}"`);
         }
     }
 
@@ -235,7 +235,7 @@ class DecisionTable {
         const retVal = parseCell(cellValStr, this.imports);
 
         if (retVal === null) {
-            throw Error(this.errs.invalidVal(this.id, cellValStr));
+            throw Error(this.errs.invalidVal + ` "${cellValStr}"`);
         }
 
         return this.conditions[condIdx](factIdx, retVal);
@@ -251,7 +251,14 @@ class DecisionTable {
         const cellVals = cellValStr.split(',');
 
         for (let i = 0; i < cellVals.length; i++) {
-            cellVals[i] = parseCell(cellVals[i], this.imports);
+
+            const val = parseCell(cellVals[i], this.imports);
+
+            if (val === null) {
+                throw Error(this.errs.invalidVal + ` "${cellValStr}"`);
+            } else {
+                cellVals[i] = val;
+            }
         }
 
         this.actions[actionIdx](factIdx, cellVals);
