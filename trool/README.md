@@ -13,8 +13,8 @@ the code or hardcoded in the spreadsheet.
 
 
 ## Requirements
-- Spreadsheet must be exported as a .csv before usage. 
-- Can be used directly with NodeJS/JavaScript but documentation is in TypeScript.
+- The spreadsheet must be exported as a _.csv_ before usage. 
+- Can be used directly with JavaScript (ES5 and ES6) but documentation is in TypeScript.
 
 
 ## Screenshot
@@ -27,7 +27,7 @@ the code or hardcoded in the spreadsheet.
 - Open Excel, LibreOffice Calc, or some other spreadsheet tool of your choice.
 
 - A **Fact** is an instance-object or array of instance-objects, which you want to update based on
-conditions which may change over time. Create at least one decision-table on the spreadsheet so you
+conditions that may change over time. Create at least one decision-table on the spreadsheet so you
 can update a fact.
 
 - You must follow the format closely for setting up a decision-table. Trool may spit out errors if
@@ -211,4 +211,4 @@ could be confusing for non-engineers. Stick with primitives. Create extra getter
 with multiple values. 
 
 - Import property name rules are the same as for JavaScript keys. That means alphanumeric, underscores,
-and dashes. Anything other characters will throw an error.
+and dashes. Anything other than characters will throw an error.
