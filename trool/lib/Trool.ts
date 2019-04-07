@@ -60,9 +60,7 @@ class Trool {
 
             } else if (importName) {
 
-                const regex = /^[a-zA-Z0-9-_]+$/;
-
-                if (!regex.test(firstCell)) {
+                if (!/^[a-zA-Z0-9-_]+$/.test(firstCell)) {
                     throw Error(this.IMPORT_PROP_ERR + firstCell);
                 }
 
