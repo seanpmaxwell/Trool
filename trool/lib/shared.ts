@@ -7,25 +7,25 @@
 import * as colors from 'colors';
 
 
-export interface FactsHolder {
-    [key: string]: InstanceType<any> | InstanceType<any>[];
+export interface IFactsHolder {
+    [key: string]: InstanceType<any> | Array<InstanceType<any>>;
 }
 
-export interface ImportsHolder {
+export interface IImportsHolder {
     [key: string]: any;
 }
 
-export interface Row {
+export interface IRow {
     [key: string]: string;
 }
 
 
-export function valsToArr(obj: Object) {
-    return Object.values(obj).map(header => header.trim());
+export function valsToArr(obj: object) {
+    return Object.values(obj).map((header) => header.trim());
 }
 
 
-export function parseCell(cellValStr: string, imports: ImportsHolder): any {
+export function parseCell(cellValStr: string, imports: IImportsHolder): any {
 
     cellValStr = cellValStr.trim();
     const cellValLowerCase = cellValStr.toLowerCase();

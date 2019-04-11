@@ -8,7 +8,6 @@
 
 import * as path from 'path';
 import { cinfo, cerr } from 'simple-color-print';
-
 import Trool, { FactsHolder } from 'trool';
 import Encounter from './models/Encounter';
 
@@ -30,7 +29,7 @@ class CalcEngine {
         let score = -1;
 
         const facts = {
-            Encounters: encounters
+            Encounters: encounters,
         };
 
         try {
@@ -39,9 +38,9 @@ class CalcEngine {
             score = this.performCalculation(updatedFacts);
         } catch (err) {
             cerr(err);
-        } finally {
-            return score;
         }
+
+        return score;
     }
 
 

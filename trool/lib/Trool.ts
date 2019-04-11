@@ -5,7 +5,7 @@
  */
 
 import * as csvToJson from 'csvtojson';
-import { FactsHolder, ImportsHolder, Row, Logger, parseCell } from './shared';
+import { IFactsHolder, IImportsHolder, IRow, Logger, parseCell } from './shared';
 import DecisionTable from './DecisionTable';
 import TableErrs from './TableErrs';
 
@@ -27,8 +27,8 @@ class Trool {
     }
 
 
-    public async applyRules(filePath: string, facts: FactsHolder, imports?: ImportsHolder):
-        Promise<FactsHolder> {
+    public async applyRules(filePath: string, facts: IFactsHolder, imports?: IImportsHolder):
+        Promise<IFactsHolder> {
 
         try {
             const jsonArr = await csvToJson().fromFile(filePath);
@@ -45,7 +45,7 @@ class Trool {
      *                            Add Imports from Spreadsheet
      ********************************************************************************************/
 
-    private setupImports(jsonArr: Row[], imports: ImportsHolder): ImportsHolder {
+    private setupImports(jsonArr: IRow[], imports: IImportsHolder): IImportsHolder {
 
         let importName = '';
         let newImportObj: any = {};
@@ -78,7 +78,7 @@ class Trool {
     }
 
 
-    private getImportName(firstCell: string, imports: ImportsHolder): string {
+    private getImportName(firstCell: string, imports: IImportsHolder): string {
 
         const firstCellArr = firstCell.split(' ');
 
@@ -100,7 +100,8 @@ class Trool {
      *                                Setup Decision Tables
      ********************************************************************************************/
 
-    private getTables(jsonArr: Row[], facts: FactsHolder, imports: ImportsHolder): DecisionTable[] {
+    private getTables(jsonArr: IRow[], facts: IFactsHolder, imports: IImportsHolder):
+                        DecisionTable[] {
 
         const decisionTables: DecisionTable[] = [];
         let startCellArr = null;
@@ -135,7 +136,8 @@ class Trool {
     }
 
 
-    private getFacts(startCellArr: string[], id: number, facts: FactsHolder): InstanceType<any>[] {
+    private getFacts(startCellArr: string[], id: number, facts: IFactsHolder):
+                        Array<InstanceType<any>> {
 
         const tableErrs = new TableErrs(id);
 
@@ -154,7 +156,7 @@ class Trool {
      *                                    Update Facts
      ********************************************************************************************/
 
-    private updateFacts(decisionTables: DecisionTable[]): FactsHolder {
+    private updateFacts(decisionTables: DecisionTable[]): IFactsHolder {
 
         const tableCount = decisionTables.length;
 
@@ -165,7 +167,7 @@ class Trool {
             this.logger.log(tableCount + this.UPDATE_START_MSG);
         }
 
-        const updatedFacts: FactsHolder = {};
+        const updatedFacts: IFactsHolder = {};
 
         for (let i = 0; i < tableCount; i++) {
             const table = decisionTables[i];
@@ -180,7 +182,7 @@ class Trool {
      *                                      Helpers
      ********************************************************************************************/
 
-    private isLastRow(jsonArr: Row[], idx: number): boolean {
+    private isLastRow(jsonArr: IRow[], idx: number): boolean {
         const nextCell = jsonArr[idx + 1] ? jsonArr[idx + 1].field1.trim() : '';
         return !nextCell || nextCell.startsWith('Table:') || nextCell.startsWith('Import:');
     }

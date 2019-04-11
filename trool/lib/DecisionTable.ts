@@ -5,9 +5,13 @@
  * created by Sean Maxwell Mar 3, 2019
  */
 
-import { ImportsHolder, Row, Logger, parseCell, valsToArr } from './shared';
+import { IImportsHolder, IRow, Logger, parseCell, valsToArr } from './shared';
 import TableErrs from './TableErrs';
 
+
+type Instances = Array<InstanceType<any>>;
+type ConditionFunction = ((factIdx: any, paramVal: any) => boolean);
+type ActionFunction = ((factIdx: number, cellVals: any[]) => void);
 
 class DecisionTable {
 
@@ -16,11 +20,11 @@ class DecisionTable {
     private readonly logger: Logger;
     private readonly errs: TableErrs;
 
-    private arrTable: Array<Row>;
-    private imports: ImportsHolder;
-    private facts: InstanceType<any>[];
-    private conditions: Function[];
-    private actions: Function[];
+    private arrTable: IRow[];
+    private imports: IImportsHolder;
+    private facts: Array<InstanceType<any>>;
+    private conditions: ConditionFunction[];
+    private actions: ActionFunction[];
 
 
     constructor(id: number, factName: string, showLogs: boolean) {
@@ -46,7 +50,7 @@ class DecisionTable {
      *                                  Initialize Table
      ********************************************************************************************/
 
-    public initTable(arrTable: Row[], facts: InstanceType<any>[], imports: ImportsHolder): void {
+    public initTable(arrTable: IRow[], facts: Instances, imports: IImportsHolder): void {
 
         this.arrTable = arrTable;
         this.facts = facts;
@@ -88,7 +92,7 @@ class DecisionTable {
     }
 
 
-    private getCondOps(opStr: string): Function {
+    private getCondOps(opStr: string): ConditionFunction {
 
         const outer = this;
 
@@ -145,7 +149,7 @@ class DecisionTable {
     }
 
 
-    private getActionOps(actionStr: string): Function {
+    private getActionOps(actionStr: string): ActionFunction {
 
         if (!actionStr) {
             throw Error(this.errs.opBlank);
@@ -196,7 +200,7 @@ class DecisionTable {
      *                                  Update Facts
      ********************************************************************************************/
 
-    public updateFacts(): Object[] {
+    public updateFacts(): Instances {
 
         for (let factIdx = 0; factIdx < this.facts.length; factIdx++) {
 

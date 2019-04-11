@@ -26,7 +26,7 @@ const encounters = [encounter1];
 
 // Compute Score
 const calcEngine = new CalcEngine();
-calcEngine.computeScore(encounters).then(score => {
+calcEngine.computeScore(encounters).then((score) => {
     cinfo('Final Score: ' + score);
 });
 

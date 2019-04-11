@@ -42,9 +42,9 @@ class PriceCalculator {
         } catch (err) {
             cerr(err);
             totalPrice = -1;
-        } finally {
-            return '$' + totalPrice.toFixed(2);
         }
+
+        return '$' + totalPrice.toFixed(2);
     }
 
 
@@ -52,14 +52,14 @@ class PriceCalculator {
 
         const tickets: Ticket[] = [];
 
-        visitors.forEach(visitor => {
+        visitors.forEach((visitor) => {
             visitor.partySize = visitors.length;
             tickets.push(new Ticket(ticketOpt));
         });
 
         return {
+            Tickets: tickets,
             Visitors: visitors,
-            Tickets: tickets
         };
     }
 
