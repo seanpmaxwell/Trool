@@ -1,34 +1,17 @@
 {
-  "compileOnSave": true,
+  "extends": "../tsconfig.base.json",
   "compilerOptions": {
-    "module": "commonjs",
-    "strict": true,
-    "noImplicitAny": true,
     "baseUrl": "./",
-    "declaration": true,
     "declarationDir": "lib/",
     "sourceMap": true,
-    "removeComments": true,
-    "experimentalDecorators": true,
-    "target": "es5",
-    "emitDecoratorMetadata": true,
-    "moduleResolution": "node",
-    "importHelpers": true,
-    "types": [
-      "node"
-    ],
     "typeRoots": [
       "node_modules/@types"
-    ],
-    "lib": [
-      "es2015",
-      "dom"
     ]
   },
-  "include": [
-    "./lib/**/*"
-  ],
   "exclude": [
     "node_modules"
+  ],
+  "include": [
+    "./lib/**/*"
   ]
 }

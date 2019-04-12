@@ -104,7 +104,7 @@ class Trool {
                         DecisionTable[] {
 
         const decisionTables: DecisionTable[] = [];
-        let startCellArr = null;
+        let startCellArr: null | string[] = null;
         let tableStart = -1;
 
         for (let i = 0; i < jsonArr.length; i++) {

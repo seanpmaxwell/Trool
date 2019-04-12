@@ -82,9 +82,10 @@ export class Logger {
         return this._showsLogs;
     }
 
-    /* tslint:disable */
+
     public log(msg: string): void {
         if (this._showsLogs) {
+            // tslint:disable-next-line
             console.log(colors.green(msg));
         }
     }
@@ -92,6 +93,7 @@ export class Logger {
 
     public warn(msg: string): void {
         if (this._showsLogs) {
+            // tslint:disable-next-line
             console.log(colors.yellow(msg));
         }
     }

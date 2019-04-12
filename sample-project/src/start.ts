@@ -4,7 +4,7 @@
  * created by Sean Maxwell Mar 2, 2019
  */
 
-import { cinfo, cerr } from 'simple-color-print';
+import { cerr } from 'simple-color-print';
 import { ticketOpts } from './models/Ticket';
 import PriceCalculator from './PriceCalculator';
 import Visitor from './models/Visitor';
@@ -22,8 +22,8 @@ async function printTotalPrice(vistors: Visitor | Visitor[], ticketOption: ticke
 
     try {
         const totalPrice = await priceCalculator.calcTotalPrice(vistors, ticketOption);
-        cinfo(totalPrice);
-        /* tslint:disable */ console.log('\n'); /* tslint:enable */
+        // tslint:disable-next-line
+        console.log(totalPrice + '\n');
     } catch (err) {
         cerr(err);
     }

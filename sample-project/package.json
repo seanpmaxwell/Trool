@@ -1,6 +1,6 @@
 {
   "name": "sample-project",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "sample project for the trool library",
   "main": "src/start.ts",
   "scripts": {
@@ -24,8 +24,7 @@
   },
   "homepage": "https://github.com/seanpmaxwell/Trool#readme",
   "dependencies": {
-    "simple-color-print": "^1.0.6",
-    "trool": "^1.0.4"
+    "simple-color-print": "^1.0.6"
   },
   "devDependencies": {
     "@types/node": "^11.10.4",

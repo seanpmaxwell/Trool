@@ -42,7 +42,6 @@ class TableErrs {
     private readonly INVALID_VAL = 'The value provided in the table was not a null, boolean, ' +
         'number, string, or import. Cell value or values:';
 
-
     private readonly id: string;
 
 

@@ -9,8 +9,7 @@ import * as path from 'path';
 import { cerr } from 'simple-color-print';
 import { ticketOpts } from './models/Ticket';
 
-// import Trool, { FactsHolder } from 'trool';
-import Trool, { FactsHolder } from '../../trool';
+import Trool, { IFactsHolder } from 'trool';
 import Ticket from './models/Ticket';
 import Visitor from './models/Visitor';
 
@@ -48,7 +47,7 @@ class PriceCalculator {
     }
 
 
-    private setupFactsHolder(visitors: Visitor[], ticketOpt: ticketOpts): FactsHolder {
+    private setupFactsHolder(visitors: Visitor[], ticketOpt: ticketOpts): IFactsHolder {
 
         const tickets: Ticket[] = [];
 
@@ -64,7 +63,7 @@ class PriceCalculator {
     }
 
 
-    private addUpEachTicketPrice(factsObj: FactsHolder): number {
+    private addUpEachTicketPrice(factsObj: IFactsHolder): number {
 
         const { Visitors, Tickets } = factsObj;
 
