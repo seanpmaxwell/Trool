@@ -1,4 +1,4 @@
-import Trool from './Trool';
+import Trool from "./Trool";
 
-export { IFactsHolder, IImportsHolder, IRow } from './shared';
+export { IFactsHolder, IImportsHolder, IRow } from "./shared";
 export default Trool;

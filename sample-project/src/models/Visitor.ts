@@ -4,13 +4,13 @@
  * created by Sean Maxwell Mar 2, 2019
  */
 
-import { cinfo, cerr } from 'simple-color-print';
-import Ticket from './Ticket';
+import { cinfo, cerr } from "simple-color-print";
+import Ticket from "./Ticket";
 
 
 class Visitor {
 
-    private readonly TICKET_FALSY_ERR = 'Ticket cannot be falsey if trying to get price';
+    private readonly TICKET_FALSY_ERR = "Ticket cannot be falsy if trying to get price";
 
     private _age: number;
     private _partySize: number;
@@ -23,7 +23,7 @@ class Visitor {
     constructor(age: number) {
         this._age = age;
         this._partySize = 1;
-        this._visitorType = '';
+        this._visitorType = "";
         this._discount = 0;
         this._freeTshirt = false;
         this._ticket = null;
@@ -105,7 +105,7 @@ class Visitor {
         if (this.ticket) {
             cinfo(this.ticket.toString());
         } else {
-            cerr('User does not have a ticket set');
+            cerr("User does not have a ticket set");
         }
     }
 }

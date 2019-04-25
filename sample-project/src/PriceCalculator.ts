@@ -5,20 +5,20 @@
  * created by Sean Maxwell Mar 2, 2019
  */
 
-import * as path from 'path';
-import { cerr } from 'simple-color-print';
-import { ticketOpts } from './models/Ticket';
+import * as path from "path";
+import { cerr } from "simple-color-print";
+import { ticketOpts } from "./models/Ticket";
 
-import Trool, { IFactsHolder } from 'trool';
-import Ticket from './models/Ticket';
-import Visitor from './models/Visitor';
+import Trool, { IFactsHolder } from "trool";
+import Ticket from "./models/Ticket";
+import Visitor from "./models/Visitor";
 
 
 
 class PriceCalculator {
 
     private trool: Trool;
-    private readonly CSV_FILE = 'rule-files/VisitorRules.csv';
+    private readonly CSV_FILE = "rule-files/VisitorRules.csv";
 
 
     constructor() {
@@ -43,7 +43,7 @@ class PriceCalculator {
             totalPrice = -1;
         }
 
-        return '$' + totalPrice.toFixed(2);
+        return "$" + totalPrice.toFixed(2);
     }
 
 
