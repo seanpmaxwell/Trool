@@ -4,20 +4,20 @@
  * created by Sean Maxwell Mar 2, 2019
  */
 
-import * as csvToJson from "csvtojson";
-import { IFactsHolder, IImportsHolder, IRow, Logger, parseCell } from "./shared";
-import DecisionTable from "./DecisionTable";
-import TableErrs from "./TableErrs";
+import * as csvToJson from 'csvtojson';
+import { IFactsHolder, IImportsHolder, IRow, Logger, parseCell } from './shared';
+import DecisionTable from './DecisionTable';
+import TableErrs from './TableErrs';
 
 
 class Trool {
 
-    private readonly NO_TABLES_WARN = "No decision tables found";
-    private readonly IMPORT_START_ERR = "Import start format error for";
-    private readonly IMPORT_PROP_ERR = "Import property can only be alpha-numeric and underscores ";
-    private readonly UPDATE_START_MSG = " DecisionTables found. Applying table logic to facts.";
-    private readonly IMPORT_NAME_WARN = "!!WARNING!! The spreadsheet is using an import name " +
-        "already passed via the imports object. The spreadsheet will overwrite the import: ";
+    private readonly NO_TABLES_WARN = 'No decision tables found';
+    private readonly IMPORT_START_ERR = 'Import start format error for';
+    private readonly IMPORT_PROP_ERR = 'Import property can only be alpha-numeric and underscores ';
+    private readonly UPDATE_START_MSG = ' DecisionTables found. Applying table logic to facts.';
+    private readonly IMPORT_NAME_WARN = '!!WARNING!! The spreadsheet is using an import name ' +
+        'already passed via the imports object. The spreadsheet will overwrite the import: ';
 
     private readonly logger: Logger;
 
@@ -46,29 +46,22 @@ class Trool {
      ********************************************************************************************/
 
     private setupImports(jsonArr: IRow[], imports: IImportsHolder): IImportsHolder {
-
-        let importName = "";
+        let importName = '';
         let newImportObj: any = {};
 
         for (let i = 0; i < jsonArr.length; i++) {
-
             const firstCell = jsonArr[i].field1.trim();
 
-            if (firstCell.startsWith("Import:")) {
-
+            if (firstCell.startsWith('Import:')) {
                 importName = this.getImportName(firstCell, imports);
-
             } else if (importName) {
-
                 if (!/^[a-zA-Z0-9-_]+$/.test(firstCell)) {
                     throw Error(this.IMPORT_PROP_ERR + firstCell);
                 }
-
                 newImportObj[firstCell] = parseCell(jsonArr[i].field2, imports);
-
                 if (this.isLastRow(jsonArr, i)) {
                     imports[importName] = newImportObj;
-                    importName = "";
+                    importName = '';
                     newImportObj = {};
                 }
             }
@@ -78,14 +71,11 @@ class Trool {
 
 
     private getImportName(firstCell: string, imports: IImportsHolder): string {
-        const firstCellArr = firstCell.split(" ");
-
+        const firstCellArr = firstCell.split(' ');
         if (firstCellArr.length !== 2) {
-            throw Error(this.IMPORT_START_ERR + ` "${firstCell}"`);
+            throw Error(this.IMPORT_START_ERR + ` '${firstCell}'`);
         }
-
         const importName = firstCellArr[1];
-
         if (imports.hasOwnProperty(importName)) {
             this.logger.warn(this.IMPORT_NAME_WARN + importName);
         }
@@ -105,25 +95,19 @@ class Trool {
         let tableStart = -1;
 
         for (let i = 0; i < jsonArr.length; i++) {
-
             const firstCol = jsonArr[i].field1.trim();
 
-            if (firstCol.startsWith("Table:")) {
-
+            if (firstCol.startsWith('Table:')) {
                 tableStart = i;
-                startCellArr = firstCol.split(" ");
-
+                startCellArr = firstCol.split(' ');
             } else if (startCellArr && this.isLastRow(jsonArr, i)) {
-
                 const showLogs = this.logger.showLogs;
                 const id = decisionTables.length + 1;
                 const tableRows = jsonArr.slice(tableStart, i + 1);
                 const factArr = this.getFacts(startCellArr, id, facts);
-
                 const table = new DecisionTable(id, startCellArr[1], showLogs);
                 table.initTable(tableRows, factArr, imports);
                 decisionTables.push(table);
-
                 tableStart = -1;
                 startCellArr = null;
             }
@@ -136,13 +120,11 @@ class Trool {
     private getFacts(startCellArr: string[], id: number, facts: IFactsHolder):
                         Array<InstanceType<any>> {
         const tableErrs = new TableErrs(id);
-
         if (startCellArr.length !== 2) {
             throw Error(tableErrs.startCell);
         } else if (!facts[startCellArr[1]]) {
             throw Error(tableErrs.factFalsey);
         }
-
         const factArr = facts[startCellArr[1]];
         return (factArr instanceof Array) ? factArr : [factArr];
     }
@@ -154,16 +136,13 @@ class Trool {
 
     private updateFacts(decisionTables: DecisionTable[]): IFactsHolder {
         const tableCount = decisionTables.length;
-
         if (tableCount === 0) {
             this.logger.warn(this.NO_TABLES_WARN);
             return {};
         } else {
             this.logger.log(tableCount + this.UPDATE_START_MSG);
         }
-
         const updatedFacts: IFactsHolder = {};
-
         for (let i = 0; i < tableCount; i++) {
             const table = decisionTables[i];
             updatedFacts[table.factName] = table.updateFacts();
@@ -177,8 +156,8 @@ class Trool {
      ********************************************************************************************/
 
     private isLastRow(jsonArr: IRow[], idx: number): boolean {
-        const nextCell = jsonArr[idx + 1] ? jsonArr[idx + 1].field1.trim() : "";
-        return !nextCell || nextCell.startsWith("Table:") || nextCell.startsWith("Import:");
+        const nextCell = jsonArr[idx + 1] ? jsonArr[idx + 1].field1.trim() : '';
+        return !nextCell || nextCell.startsWith('Table:') || nextCell.startsWith('Import:');
     }
 }
 

@@ -4,7 +4,7 @@
  * created by Sean Maxwell Mar 2, 2019
  */
 
-export type ticketOpts = "Regular" | "Season" | null;
+export type ticketOpts = 'Regular' | 'Season' | null;
 
 class Ticket {
 
@@ -16,7 +16,7 @@ class Ticket {
 
     constructor(option: ticketOpts) {
         this._option = option;
-        this._visitorType = "";
+        this._visitorType = '';
         this._price = 0;
         this._freeTshirt = false;
     }

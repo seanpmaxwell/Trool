@@ -4,10 +4,10 @@
  * created by Sean Maxwell Mar 2, 2019
  */
 
-import { cerr } from "simple-color-print";
-import { ticketOpts } from "./models/Ticket";
-import PriceCalculator from "./PriceCalculator";
-import Visitor from "./models/Visitor";
+import { cerr } from 'simple-color-print';
+import { ticketOpts } from './models/Ticket';
+import PriceCalculator from './PriceCalculator';
+import Visitor from './models/Visitor';
 
 
 
@@ -23,7 +23,7 @@ async function printTotalPrice(vistors: Visitor | Visitor[], ticketOption: ticke
     try {
         const totalPrice = await priceCalculator.calcTotalPrice(vistors, ticketOption);
         // tslint:disable-next-line
-        console.log(totalPrice + "\n");
+        console.log(totalPrice + '\n');
     } catch (err) {
         cerr(err);
     }
@@ -40,14 +40,14 @@ callAll();
 async function callAll() {
 
     // Party of 1
-    await printTotalPrice(new Visitor(67), "Season");
+    await printTotalPrice(new Visitor(67), 'Season');
 
     // Party of 3
     await printTotalPrice([
         new Visitor(5),
         new Visitor(35),
         new Visitor(73),
-    ], "Season");
+    ], 'Season');
 
     // Party of 6
     await printTotalPrice([
@@ -57,7 +57,7 @@ async function callAll() {
         new Visitor(18),
         new Visitor(65),
         new Visitor(101),
-    ], "Regular");
+    ], 'Regular');
 
     // Party of 10
     await printTotalPrice([
@@ -71,5 +71,5 @@ async function callAll() {
         new Visitor(42),
         new Visitor(59),
         new Visitor(17),
-    ], "Regular");
+    ], 'Regular');
 }

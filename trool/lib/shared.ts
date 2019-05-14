@@ -4,7 +4,7 @@
  * created by Sean Maxwell Mar 14, 2019
  */
 
-import * as colors from "colors";
+import * as colors from 'colors';
 
 
 export interface IFactsHolder {
@@ -32,17 +32,17 @@ export function parseCell(cellValStr: string, imports: IImportsHolder): any {
     // Value is primitive
     if (!isNaN(Number(cellValStr))) {
         return Number(cellValStr);
-    } else if (cellValLowerCase === "true") {
+    } else if (cellValLowerCase === 'true') {
         return true;
-    } else if (cellValLowerCase === "false") {
+    } else if (cellValLowerCase === 'false') {
         return false;
-    } else if (cellValLowerCase === "null") {
+    } else if (cellValLowerCase === 'null') {
         return null;
-    } else if (cellValStr.startsWith("\"")  && cellValStr.endsWith("\"")) {
+    } else if (cellValStr.startsWith('\'')  && cellValStr.endsWith('\'')) {
         return cellValStr.substring(1, cellValStr.length - 1);
-    } else if (cellValStr.startsWith("'")  && cellValStr.endsWith("'")) {
+    } else if (cellValStr.startsWith('"')  && cellValStr.endsWith('"')) {
         return cellValStr.substring(1, cellValStr.length - 1);
-    } else if (cellValStr.startsWith("“")  && cellValStr.endsWith("”")) {
+    } else if (cellValStr.startsWith('“')  && cellValStr.endsWith('”')) {
         return cellValStr.substring(1, cellValStr.length - 1);
     }
 
@@ -51,8 +51,8 @@ export function parseCell(cellValStr: string, imports: IImportsHolder): any {
     let importKey = cellValStr;
     let importVal;
 
-    if (cellValStr.includes(".")) {
-        const arr = cellValStr.split(".");
+    if (cellValStr.includes('.')) {
+        const arr = cellValStr.split('.');
         importKey = arr[0];
         importVal = arr[1];
     }
