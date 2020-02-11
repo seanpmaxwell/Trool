@@ -12,7 +12,7 @@ class TableErrs {
         'fact.';
 
     private readonly FACT_FALSEY = 'The fact specified in the first cell was not present or is ' +
-        'null. Please use and instance-object or an array of instances-objects as a fact value.';
+        'null. Please use an instance-object or an array of instances-objects as a fact value.';
 
     private readonly COL_HEADER = 'Action/Condition column headers can only be "Condition" ' +
         'or "Action".';
