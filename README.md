@@ -38,50 +38,48 @@ You can look at the screen-shot above if you want a quick glimpse on what decisi
 for the `csvtojson` library. That's what Trool uses internally to convert the csv to a JSON object.
 
 - Create a new NodeJS program (preferably with TypeScript) and import the `trool` library at the top.
-Instantiate a new `trool` object and pass `true` to the constructor if you want to show logs while
-the library updates your facts.
 
 ```typescript
 import Trool from 'trool';
 
 class PriceCalculator {
 
-    private trool: Trool;
-
-    constructor() {
-        this.trool = new Trool(true);
-    }
 ```
 
-- The trool library only provides 1 public method `applyRules(...)` which returns a promise containing
-the updated facts. So create an `async/await` method to fire off `applyRules()` and wrap it in a `try/catch`
-block.
+- To use Trool you must call two methods `init()` and `applyRules()`. The first one takes in your
+facts array and the path to the CSV file. `init()` is asynchronous so make sure to use `async/await`
+with it. `applyRules()` returns the update facts and must be called after `init()`.
 
-- `applyRules(...)` needs the path to the csv file, the facts to be updated, and optionally any imports.
+- `init()` has two optional params `showLogs` and `imports`. If you want access to the decision-tables
+for some reason after `init()` is called, there is the `decisionTables` getter on the trool instance. 
 
 - The facts and the imports must be wrapped in holder objects, with the key being the name of the 
-fact/import to use in the spreadsheet, and the value being the actual fact or import. The `imports`
-param is optional because you only want to use ones specified in the spreadsheet or have no need for any. 
+fact/import to use in the spreadsheet and the value being the actual fact or import. The `imports`
+param is optional because you may only want to use ones specified in the spreadsheet or have no need for any. 
 
 ```typescript
 public async calcTotalPrice(): Promise<void> {
     
     const factsHolder = {
         Visitors: [new Visitor(), new Visitor()],
-        Tickets: new Ticket()
-    }
+        Tickets: new Ticket(),
+    };
 
     const importsHolder = { 
         VisitorTypes: {
             ADULT: 'Adult',
-            CHILD: 'Child'
-        }
+            CHILD: 'Child',
+        },
     };
 
     try {
-        const csvFilePath = path.join(__dirname, 'Name_of_Spreadsheet.csv');
-        const updatedFacts = await this.trool.applyRules(csvFilePath, factsHolder, importsHolder);
-
+        const facts = this.setupFactsHolder(visitors, ticketOpt);
+        const trool = new Trool();
+        await trool.init(csvFilePath, factsHolder, true, importsHolder);
+        const updatedFacts = trool.applyRules();
+        totalPrice = this.addUpEachTicketPrice(updatedFacts);
+        // Access decision tables
+        cinfo(trool.decisionTables);
     } catch (err) {
         console.error(err.message);
     }

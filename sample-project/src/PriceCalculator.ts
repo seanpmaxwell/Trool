@@ -6,7 +6,7 @@
  */
 
 import * as path from 'path';
-import { cerr } from 'simple-color-print';
+import { cinfo, cerr } from 'simple-color-print';
 import { ticketOpts } from './models/Ticket';
 
 import Trool, { IFactsHolder } from 'trool';
@@ -17,13 +17,7 @@ import Visitor from './models/Visitor';
 
 class PriceCalculator {
 
-    private trool: Trool;
     private readonly CSV_FILE = 'rule-files/VisitorRules.csv';
-
-
-    constructor() {
-        this.trool = new Trool(true);
-    }
 
 
     /**
@@ -35,14 +29,20 @@ class PriceCalculator {
     public async calcTotalPrice(
         visitors: Visitor | Visitor[],
         ticketOpt: ticketOpts,
+        printDecisionTables?: boolean,
     ): Promise<string> {
         let totalPrice = 0;
         visitors = (visitors instanceof Array) ? visitors : [visitors];
         try {
             const csvFilePath = path.join(__dirname, this.CSV_FILE);
             const facts = this.setupFactsHolder(visitors, ticketOpt);
-            const updatedFacts = await this.trool.applyRules(csvFilePath, facts);
+            const trool = new Trool();
+            await trool.init(csvFilePath, facts, true);
+            const updatedFacts = trool.applyRules();
             totalPrice = this.addUpEachTicketPrice(updatedFacts);
+            if (printDecisionTables) {
+                cinfo(trool.decisionTables);
+            }
         } catch (err) {
             cerr(err);
             totalPrice = -1;

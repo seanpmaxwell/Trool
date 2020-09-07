@@ -146,7 +146,7 @@ class DecisionTable {
             }
             const opArr = actionStr.split(' ');
             const fact = outer.facts[factIdx];
-            // check if assignment or method call
+            // Check if assignment or method call
             if (opArr[1] === '=') {
                 if (cellVals.length !== 1) {
                     throw Error(errs.assignParamCount + op);

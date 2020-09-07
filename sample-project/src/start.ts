@@ -43,6 +43,8 @@ import Visitor from './models/Visitor';
         new Visitor(59),
         new Visitor(17),
     ]);
+    // Print decision-tables
+    await printTotalPrice(priceCalculator, 'Season', new Visitor(0), true);
 })();
 
 
@@ -56,9 +58,11 @@ async function printTotalPrice(
     calculator: PriceCalculator,
     ticketOption: ticketOpts,
     vistors: Visitor | Visitor[],
+    printDecisionTables?: boolean,
 ): Promise<void> {
     try {
-        const totalPrice = await calculator.calcTotalPrice(vistors, ticketOption);
+        const totalPrice = await calculator.calcTotalPrice(vistors, ticketOption,
+            printDecisionTables);
         cinfo(totalPrice + '\n');
     } catch (err) {
         cerr(err);

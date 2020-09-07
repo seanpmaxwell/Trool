@@ -19,34 +19,60 @@ class Trool {
     private readonly IMPORT_NAME_WARN = '!!WARNING!! The spreadsheet is using an import name ' +
         'already passed via the imports object. The spreadsheet will overwrite the import: ';
 
-    private readonly logger: Logger;
-
-
-    constructor(showLogs?: boolean) {
-        this.logger = new Logger(showLogs);
-    }
+    private logger: Logger = new Logger();
+    private _decisionTables: DecisionTable[] = [];
 
 
     /**
-     * Main entry point for the library.
+     * Create the decision tables.
      *
      * @param filePath
      * @param facts
      * @param imports
+     * @param showLogs
      */
-    public async applyRules(
+    public async init(
         filePath: string,
         facts: IFactsHolder,
+        showLogs?: boolean,
         imports?: IImportsHolder,
-    ): Promise<IFactsHolder> {
+    ) {
         try {
+            this.logger = new Logger(showLogs);
             const jsonArr = await csvToJson().fromFile(filePath);
             const allImports = this.setupImports(jsonArr, imports || {});
-            const decisionTables = this.getTables(jsonArr, facts, allImports);
-            return this.updateFacts(decisionTables);
+            this._decisionTables = this.getTables(jsonArr, facts, allImports);
         } catch (err) {
             throw err;
         }
+    }
+
+
+    /**
+     * Apply rules of all the decision-tables. Return the updated facts.
+     */
+    public applyRules(): IFactsHolder {
+        const tableCount = this._decisionTables.length;
+        if (tableCount === 0) {
+            this.logger.warn(this.NO_TABLES_WARN);
+            return {};
+        } else {
+            this.logger.log(tableCount + this.UPDATE_START_MSG);
+        }
+        const updatedFacts: IFactsHolder = {};
+        for (let i = 0; i < tableCount; i++) {
+            const table = this._decisionTables[i];
+            updatedFacts[table.factName] = table.updateFacts();
+        }
+        return updatedFacts;
+    }
+
+
+    /**
+     * Return the decision-tables to user.
+     */
+    public get decisionTables(): DecisionTable[] {
+        return this._decisionTables;
     }
 
 
@@ -152,27 +178,6 @@ class Trool {
         }
         const factArr = facts[startCellArr[1]];
         return (factArr instanceof Array) ? factArr : [factArr];
-    }
-
-
-    /*********************************************************************************************
-     *                                    Update Facts
-     ********************************************************************************************/
-
-    private updateFacts(decisionTables: DecisionTable[]): IFactsHolder {
-        const tableCount = decisionTables.length;
-        if (tableCount === 0) {
-            this.logger.warn(this.NO_TABLES_WARN);
-            return {};
-        } else {
-            this.logger.log(tableCount + this.UPDATE_START_MSG);
-        }
-        const updatedFacts: IFactsHolder = {};
-        for (let i = 0; i < tableCount; i++) {
-            const table = decisionTables[i];
-            updatedFacts[table.factName] = table.updateFacts();
-        }
-        return updatedFacts;
     }
 
 
