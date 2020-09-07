@@ -70,7 +70,7 @@ class Trool {
             const firstCell = jsonArr[i].field1.trim();
             if (firstCell.startsWith('Import:')) {
                 importName = this.getImportName(firstCell, imports);
-            } else if (importName) {
+            } else if (!!importName) {
                 if (!/^[a-zA-Z0-9-_]+$/.test(firstCell)) {
                     throw Error(this.IMPORT_PROP_ERR + firstCell);
                 }
