@@ -84,13 +84,11 @@ class DecisionTable {
 
     private getCondOps(opStr: string): ConditionFunction {
         const outer = this;
-
         return (factIdx: any, paramVal: any): boolean => {
             const fact = outer.facts[factIdx];
             const errs = outer.errs;
             const arr = opStr.split(' ');
             const methodName = arr[0].replace('()', '');
-
             if (!opStr) {
                 throw Error(errs.opBlank);
             } else if (arr.length !== 3) {
@@ -100,7 +98,6 @@ class DecisionTable {
             } else if (arr[2] !== '$param') {
                 throw Error(errs.mustEndWithParam + ` "${opStr}"`);
             }
-
             let attrVal = null;
             if (typeof fact[methodName] === 'function') {
                 attrVal = fact[methodName]();

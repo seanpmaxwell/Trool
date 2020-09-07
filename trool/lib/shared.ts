@@ -20,15 +20,14 @@ export interface IRow {
 }
 
 
-export function valsToArr(obj: object) {
+export const valsToArr = (obj: object) => {
     return Object.values(obj).map((header) => header.trim());
-}
+};
 
 
-export function parseCell(cellValStr: string, imports: IImportsHolder): any {
+export const parseCell = (cellValStr: string, imports: IImportsHolder) => {
     cellValStr = cellValStr.trim();
     const cellValLowerCase = cellValStr.toLowerCase();
-
     // Value is primitive
     if (!isNaN(Number(cellValStr))) {
         return Number(cellValStr);
@@ -45,18 +44,14 @@ export function parseCell(cellValStr: string, imports: IImportsHolder): any {
     } else if (cellValStr.startsWith('“')  && cellValStr.endsWith('”')) {
         return cellValStr.substring(1, cellValStr.length - 1);
     }
-
     // Value is from an import
-
     let importKey = cellValStr;
     let importVal;
-
     if (cellValStr.includes('.')) {
         const arr = cellValStr.split('.');
         importKey = arr[0];
         importVal = arr[1];
     }
-
     if (imports.hasOwnProperty(importKey)) {
         if (importVal) {
             return imports[importKey][importVal];
@@ -65,7 +60,7 @@ export function parseCell(cellValStr: string, imports: IImportsHolder): any {
         }
     }
     return null;
-}
+};
 
 
 export class Logger {
