@@ -6,6 +6,7 @@
 
 export type ticketOpts = 'Regular' | 'Season' | null;
 
+
 class Ticket {
 
     private _option: ticketOpts;
@@ -21,33 +22,41 @@ class Ticket {
         this._freeTshirt = false;
     }
 
+
     set option(option: ticketOpts) {
         this._option = option;
     }
+
 
     get option(): ticketOpts {
         return this._option;
     }
 
+
     set visitorType(visitorType: string) {
         this._visitorType = visitorType;
     }
+
 
     get visitorType(): string {
         return this._visitorType;
     }
 
+
     set price(price: number) {
         this._price = price;
     }
+
 
     get price(): number {
         return this._price;
     }
 
+
     set freeTshirt(freeTshirt: boolean) {
         this._freeTshirt = freeTshirt;
     }
+
 
     get freeTshirt(): boolean {
         return this._freeTshirt;

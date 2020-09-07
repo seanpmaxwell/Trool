@@ -1,28 +1,18 @@
 {
   "name": "sample-project",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "sample project for the trool library",
   "main": "src/start.ts",
+  "author": "sean maxwell",
+  "license": "MIT",
+  "homepage": "https://github.com/seanpmaxwell/Trool#readme",
+  "bugs": {
+    "url": "https://github.com/seanpmaxwell/Trool/issues"
+  },
   "scripts": {
     "start": "ts-node -r tsconfig-paths/register ./src/start.ts",
     "test": "npm test"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+ssh://git@github.com/seanpmaxwell/Trool.git"
-  },
-  "keywords": [
-    "trool",
-    "sample",
-    "project",
-    "sample-project"
-  ],
-  "author": "sean maxwell",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/seanpmaxwell/Trool/issues"
-  },
-  "homepage": "https://github.com/seanpmaxwell/Trool#readme",
   "dependencies": {
     "simple-color-print": "^1.0.6"
   },
@@ -33,5 +23,15 @@
     "tslint": "^5.13.1",
     "tslint-lines-between-class-members": "^1.3.1",
     "typescript": "^3.3.3333"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/seanpmaxwell/Trool.git"
+  },
+  "keywords": [
+    "trool",
+    "sample",
+    "project",
+    "sample-project"
+  ]
 }

@@ -29,64 +29,74 @@ class Visitor {
         this._ticket = null;
     }
 
+
     set age(age: number) {
         this._age = age;
     }
+
 
     get age(): number {
         return this._age;
     }
 
+
     set partySize(partySize: number) {
         this._partySize = partySize;
     }
+
 
     get partySize() {
         return this._partySize;
     }
 
+
     set discount(discount: number) {
         this._discount = discount;
     }
+
 
     get discount(): number {
         return this._discount;
     }
 
+
     set visitorType(visitorType: string) {
         this._visitorType = visitorType;
     }
+
 
     get visitorType() {
         return this._visitorType;
     }
 
+
     set freeTshirt(freeTshirt: boolean) {
         this._freeTshirt = freeTshirt;
     }
+
 
     get freeTshirt(): boolean {
         return this._freeTshirt;
     }
 
-    set ticket(ticket: Ticket | null) {
 
+    set ticket(ticket: Ticket | null) {
         if (ticket) {
             ticket.freeTshirt = this.freeTshirt;
             ticket.visitorType = this.visitorType;
             const discount = 1 - (this.discount / 100);
             ticket.price *= discount;
         }
-
         this._ticket = ticket;
     }
+
 
     get ticket(): Ticket | null {
         return this._ticket;
     }
 
-    get ticketPrice(): number {
 
+    get ticketPrice(): number {
         if (this.ticket) {
             return this.ticket.price;
         } else {
@@ -101,7 +111,6 @@ class Visitor {
 
 
     public printTicket(): void {
-
         if (this.ticket) {
             cinfo(this.ticket.toString());
         } else {

@@ -26,8 +26,16 @@ class PriceCalculator {
     }
 
 
-    public async calcTotalPrice(visitors: Visitor | Visitor[], ticketOpt: ticketOpts):
-        Promise<string> {
+    /**
+     * Calculate total price for an array of visitors.
+     *
+     * @param visitors
+     * @param ticketOpt
+     */
+    public async calcTotalPrice(
+        visitors: Visitor | Visitor[],
+        ticketOpt: ticketOpts,
+    ): Promise<string> {
         let totalPrice = 0;
         visitors = (visitors instanceof Array) ? visitors : [visitors];
         try {
@@ -39,7 +47,6 @@ class PriceCalculator {
             cerr(err);
             totalPrice = -1;
         }
-
         return '$' + totalPrice.toFixed(2);
     }
 

@@ -1,66 +1,37 @@
 /**
- * Setup Visitor data for the Price Calculator.
+ * Calculate some prices for various party sizes.
  *
  * created by Sean Maxwell Mar 2, 2019
  */
 
-import { cerr } from 'simple-color-print';
+import { cinfo, cerr } from 'simple-color-print';
 import { ticketOpts } from './models/Ticket';
 import PriceCalculator from './PriceCalculator';
 import Visitor from './models/Visitor';
 
 
 
-/*********************************************************************************
-                           Setup Price Calculator
-*********************************************************************************/
-
-const priceCalculator = new PriceCalculator();
-
-async function printTotalPrice(vistors: Visitor | Visitor[], ticketOption: ticketOpts):
-    Promise<void> {
-
-    try {
-        const totalPrice = await priceCalculator.calcTotalPrice(vistors, ticketOption);
-        // tslint:disable-next-line
-        console.log(totalPrice + '\n');
-    } catch (err) {
-        cerr(err);
-    }
-}
-
-
-
-/*********************************************************************************
-                  Calculate Some Prices for Various Party Sizes
-*********************************************************************************/
-
-callAll();
-
-async function callAll() {
-
+(async () => {
+    const priceCalculator = new PriceCalculator();
     // Party of 1
-    await printTotalPrice(new Visitor(67), 'Season');
-
+    await printTotalPrice(priceCalculator, 'Season', new Visitor(67));
     // Party of 3
-    await printTotalPrice([
+    await printTotalPrice(priceCalculator, 'Season', [
         new Visitor(5),
         new Visitor(35),
         new Visitor(73),
-    ], 'Season');
-
+    ]);
     // Party of 6
-    await printTotalPrice([
+    await printTotalPrice(priceCalculator, 'Regular', [
         new Visitor(7),
         new Visitor(18),
         new Visitor(48),
         new Visitor(18),
         new Visitor(65),
         new Visitor(101),
-    ], 'Regular');
-
+    ]);
     // Party of 10
-    await printTotalPrice([
+    await printTotalPrice(priceCalculator, 'Regular', [
         new Visitor(7),
         new Visitor(12),
         new Visitor(19),
@@ -71,5 +42,25 @@ async function callAll() {
         new Visitor(42),
         new Visitor(59),
         new Visitor(17),
-    ], 'Regular');
+    ]);
+})();
+
+
+/**
+ * Print total price for a visitor party size.
+ *
+ * @param vistors
+ * @param ticketOption
+ */
+async function printTotalPrice(
+    calculator: PriceCalculator,
+    ticketOption: ticketOpts,
+    vistors: Visitor | Visitor[],
+): Promise<void> {
+    try {
+        const totalPrice = await calculator.calcTotalPrice(vistors, ticketOption);
+        cinfo(totalPrice + '\n');
+    } catch (err) {
+        cerr(err);
+    }
 }

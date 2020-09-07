@@ -4,7 +4,7 @@
  * created by Sean Maxwell Mar 2, 2019
  */
 
-import * as csvToJson from 'csvtojson';
+import csvToJson from 'csvtojson';
 import { IFactsHolder, IImportsHolder, IRow, Logger, parseCell } from './shared';
 import DecisionTable from './DecisionTable';
 import TableErrs from './TableErrs';
@@ -27,9 +27,18 @@ class Trool {
     }
 
 
-    public async applyRules(filePath: string, facts: IFactsHolder, imports?: IImportsHolder):
-        Promise<IFactsHolder> {
-
+    /**
+     * Main entry point for the library.
+     *
+     * @param filePath
+     * @param facts
+     * @param imports
+     */
+    public async applyRules(
+        filePath: string,
+        facts: IFactsHolder,
+        imports?: IImportsHolder,
+    ): Promise<IFactsHolder> {
         try {
             const jsonArr = await csvToJson().fromFile(filePath);
             const allImports = this.setupImports(jsonArr, imports || {});
@@ -45,13 +54,20 @@ class Trool {
      *                            Add Imports from Spreadsheet
      ********************************************************************************************/
 
-    private setupImports(jsonArr: IRow[], imports: IImportsHolder): IImportsHolder {
+    /**
+     * Setup imports from CSV file.
+     *
+     * @param jsonArr
+     * @param imports
+     */
+    private setupImports(
+        jsonArr: IRow[],
+        imports: IImportsHolder,
+    ): IImportsHolder {
         let importName = '';
         let newImportObj: any = {};
-
         for (let i = 0; i < jsonArr.length; i++) {
             const firstCell = jsonArr[i].field1.trim();
-
             if (firstCell.startsWith('Import:')) {
                 importName = this.getImportName(firstCell, imports);
             } else if (importName) {
@@ -87,16 +103,23 @@ class Trool {
      *                                Setup Decision Tables
      ********************************************************************************************/
 
-    private getTables(jsonArr: IRow[], facts: IFactsHolder, imports: IImportsHolder):
-                        DecisionTable[] {
-
+    /**
+     * Setup the decision tables from the csv file.
+     *
+     * @param jsonArr
+     * @param facts
+     * @param imports
+     */
+    private getTables(
+        jsonArr: IRow[],
+        facts: IFactsHolder,
+        imports: IImportsHolder,
+    ): DecisionTable[] {
         const decisionTables: DecisionTable[] = [];
         let startCellArr: null | string[] = null;
         let tableStart = -1;
-
         for (let i = 0; i < jsonArr.length; i++) {
             const firstCol = jsonArr[i].field1.trim();
-
             if (firstCol.startsWith('Table:')) {
                 tableStart = i;
                 startCellArr = firstCol.split(' ');
@@ -112,13 +135,15 @@ class Trool {
                 startCellArr = null;
             }
         }
-
         return decisionTables;
     }
 
 
-    private getFacts(startCellArr: string[], id: number, facts: IFactsHolder):
-                        Array<InstanceType<any>> {
+    private getFacts(
+        startCellArr: string[],
+        id: number,
+        facts: IFactsHolder,
+    ): Array<InstanceType<any>> {
         const tableErrs = new TableErrs(id);
         if (startCellArr.length !== 2) {
             throw Error(tableErrs.startCell);

@@ -4,7 +4,7 @@
  * created by Sean Maxwell Mar 14, 2019
  */
 
-import * as colors from 'colors';
+import colors from 'colors';
 
 
 export interface IFactsHolder {

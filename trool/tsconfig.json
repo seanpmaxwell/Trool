@@ -3,6 +3,7 @@
   "compilerOptions": {
     "baseUrl": "./",
     "declarationDir": "lib/",
+    "esModuleInterop": true,
     "sourceMap": true,
     "typeRoots": [
       "node_modules/@types"

@@ -9,9 +9,11 @@ import { IImportsHolder, IRow, Logger, parseCell, valsToArr } from './shared';
 import TableErrs from './TableErrs';
 
 
+
 type Instances = Array<InstanceType<any>>;
 type ConditionFunction = ((factIdx: any, paramVal: any) => boolean);
 type ActionFunction = ((factIdx: number, cellVals: any[]) => void);
+
 
 class DecisionTable {
 
@@ -39,6 +41,7 @@ class DecisionTable {
         this.actions = [];
     }
 
+
     get factName() {
         return this._factName;
     }
@@ -52,16 +55,12 @@ class DecisionTable {
         this.arrTable = arrTable;
         this.facts = facts;
         this.imports = imports;
-
         const colHeaderArr = valsToArr(arrTable[0]);
         const opsStrArr = valsToArr(arrTable[1]);
-
         let conditionsDone = false;
         this.conditions = [];
         this.actions = [];
-
         for (let i = 1; i < colHeaderArr.length; i++) {
-
             if (colHeaderArr[i] === 'Condition') {
                 if (conditionsDone) {
                     throw Error(this.errs.colHeaderArgmt);
@@ -142,9 +141,7 @@ class DecisionTable {
         }
         const outer = this;
         const errs = this.errs;
-
         return (factIdx: number, cellVals: any[]): void => {
-
             const argLength = actionStr.split('$param').length - 1;
             const op = ` "${actionStr}"`;
             if (argLength !== cellVals.length) {
@@ -152,7 +149,6 @@ class DecisionTable {
             }
             const opArr = actionStr.split(' ');
             const fact = outer.facts[factIdx];
-
             // check if assignment or method call
             if (opArr[1] === '=') {
                 if (cellVals.length !== 1) {
@@ -179,7 +175,6 @@ class DecisionTable {
 
     public updateFacts(): Instances {
         for (let factIdx = 0; factIdx < this.facts.length; factIdx++) {
-
             rowLoop:
             for (let rowIdx = 2; rowIdx < this.arrTable.length; rowIdx++) {
                 const ruleArr = valsToArr(this.arrTable[rowIdx]);
