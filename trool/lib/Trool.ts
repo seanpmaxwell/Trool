@@ -24,7 +24,7 @@ class Trool {
 
 
     /**
-     * Create the decision tables.
+     * Initialize the engine.
      *
      * @param filePath
      * @param facts
@@ -37,14 +37,47 @@ class Trool {
         showLogs?: boolean,
         imports?: IImportsHolder,
     ) {
-        try {
-            this.logger = new Logger(showLogs);
-            const jsonArr = await csvToJson().fromFile(filePath);
-            const allImports = this.setupImports(jsonArr, imports || {});
-            this._decisionTables = this.getTables(jsonArr, facts, allImports);
-        } catch (err) {
-            throw err;
-        }
+        const jsonArr = await csvToJson().fromFile(filePath);
+        this.createDecisionTables(jsonArr, facts, showLogs, imports);
+    }
+
+
+    /**
+     * Initialize the engine with the CSV file content passed as string.
+     *
+     * @param fileContent
+     * @param facts
+     * @param imports
+     * @param showLogs
+     */
+    public async initFromString(
+        fileContent: string,
+        facts: IFactsHolder,
+        showLogs?: boolean,
+        imports?: IImportsHolder,
+    ) {
+        const jsonArr = await csvToJson().fromString(fileContent);
+        this.createDecisionTables(jsonArr, facts, showLogs, imports);
+    }
+
+
+    /**
+     * Create the decision tables.
+     *
+     * @param filePath
+     * @param facts
+     * @param imports
+     * @param showLogs
+     */
+    private createDecisionTables(
+        jsonArr: IRow[],
+        facts: IFactsHolder,
+        showLogs?: boolean,
+        imports?: IImportsHolder,
+    ) {
+        this.logger = new Logger(showLogs);
+        const allImports = this.setupImports(jsonArr, imports || {});
+        this._decisionTables = this.getTables(jsonArr, facts, allImports);
     }
 
 
