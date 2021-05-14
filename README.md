@@ -210,3 +210,28 @@ with multiple values.
 
 - Import property name rules are the same as for JavaScript keys. That means alphanumeric, underscores,
 and dashes. Anything other than characters will throw an error.
+
+- In case you don't have local access to your rules file, or can't otherwise pass a file path, you can use
+`initFromString()` and pass the content of the CSV file as a string instead:
+  ```typescript
+      const factsHolder = {
+          Visitors: [new Visitor(), new Visitor()],
+          Tickets: new Ticket(),
+      };
+
+      const importsHolder = {
+          VisitorTypes: {
+              ADULT: 'Adult',
+              CHILD: 'Child',
+          },
+      };
+
+      try {
+          const s3 = new AWS.S3();
+          const data = await s3.getObject({ Bucket: bucketName, Key: bucketKey });
+
+          const facts = this.setupFactsHolder(visitors, ticketOpt);
+          const trool = new Trool();
+          await trool.initFromString(data.Body, factsHolder, true, importsHolder);
+
+  ```
