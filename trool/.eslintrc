@@ -1,0 +1,20 @@
+{
+    "root": true,
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+      "@typescript-eslint"
+    ],
+    "extends": [
+      "eslint:recommended",
+      "plugin:@typescript-eslint/eslint-recommended",
+      "plugin:@typescript-eslint/recommended"
+    ],
+    "rules": {
+      "semi": "warn",
+      "comma-dangle": ["warn", {
+        "arrays": "always-multiline",
+        "objects": "always-multiline"
+      }],
+      "@typescript-eslint/explicit-member-accessibility": "warn"
+    }
+}

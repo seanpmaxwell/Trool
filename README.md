@@ -235,3 +235,14 @@ and dashes. Anything other than characters will throw an error.
           await trool.initFromString(data.Body, factsHolder, true, importsHolder);
 
   ```
+
+
+
+// TODO
+- Combine init and constructor for decision table, it will just be an interface. create a method
+called get table. Don't pass factors holder there
+- Move applyRules back to main trool file.
+- apply rules will take the factsHolder as an arg and will be public
+- add tslint
+
+- update readme and say that if no decision table for fact in the facts holder, it will not be modified.
