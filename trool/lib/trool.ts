@@ -206,7 +206,13 @@ function isLastRow(rows: TRow[], idx: number): boolean {
 }
 
 
-
+/**
+ * 
+ * @param this 
+ * @param factsHolder 
+ * @param memImports 
+ * @returns 
+ */
 function applyRules(
     this: ITrool,
     factsHolder: TFactsHolder,
@@ -231,6 +237,12 @@ function applyRules(
 }
 
 
+/**
+ * 
+ * @param csvImports 
+ * @param memImports 
+ * @returns 
+ */
 function combineImports(
     csvImports: TImportsHolder,
     memImports?: TImportsHolder,
@@ -246,6 +258,13 @@ function combineImports(
 }
 
 
+/**
+ * 
+ * @param table 
+ * @param facts 
+ * @param imports 
+ * @returns 
+ */
 function updateFacts(
     table: IDecisionTable,
     facts: TFactsArr,
@@ -274,6 +293,14 @@ function updateFacts(
 }
 
 
+/**
+ * 
+ * @param fact 
+ * @param condition 
+ * @param cellValStr 
+ * @param imports 
+ * @returns 
+ */
 function callCondOp(
     fact: TFact,
     condition: TCondition,
@@ -291,6 +318,14 @@ function callCondOp(
 }
 
 
+/**
+ * 
+ * @param fact 
+ * @param action 
+ * @param cellValStr 
+ * @param imports 
+ * @returns 
+ */
 function callActionOp(
     fact: TFact,
     action: TAction,
@@ -314,6 +349,12 @@ function callActionOp(
 }
 
 
+/**
+ * 
+ * @param cellValStr 
+ * @param imports 
+ * @returns 
+ */
 function parseCell(cellValStr: string, imports: TImportsHolder): TPrimitive {
     cellValStr = cellValStr.trim();
     const cellValLowerCase = cellValStr.toLowerCase();
