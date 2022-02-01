@@ -6,7 +6,7 @@
 
 import csvToJson from 'csvtojson';
 import { JetLogger, LoggerModes } from 'jet-logger';
-import { getNewDecisionTbl, IDecisionTable, TAction, TCondition } from './decisionTable2';
+import { getNewDecisionTbl, IDecisionTable, TAction, TCondition } from './decisionTable';
 import { valsToArr } from './shared';
 
 
