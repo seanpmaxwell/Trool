@@ -88,7 +88,7 @@ export default async function trool(
         csvImports: setupImports(rows),
         decisionTables: getTables(rows),
         applyRules,
-    }
+    } as const;
 }
 
 
