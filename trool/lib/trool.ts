@@ -46,7 +46,6 @@ type TObject = Record<string, any>;
 export type TRow = {
     [key in `field${number}`]: string;
 };
-// export type TRow = {[key: `field${number}`]: string}
 export type TFactsHolder = Record<string, TObject[]>;
 type TImportsHolder = Record<string, TObject>;
 type TImport = TImportsHolder[keyof TImportsHolder];
