@@ -44,7 +44,11 @@ let logger = JetLogger();
 
 export type TPrimitive = boolean | number | null | string;
 type TObject = Record<string, any>;
-export type TRow = {[key: `field${number}`]: string}
+type TFieldStr = `field${number}`;
+export type TRow = {
+    [key in TFieldStr]: string;
+};
+// export type TRow = {[key: `field${number}`]: string}
 export type TFactsHolder = Record<string, TObject[]>;
 type TImportsHolder = Record<string, TObject>;
 type TImport = TImportsHolder[keyof TImportsHolder];

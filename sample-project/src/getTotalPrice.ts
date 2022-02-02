@@ -24,7 +24,7 @@ const csvFilePath = 'rule-files/VisitorRules.csv';
  * @param printDecisionTables 
  * @returns 
  */
-export async function calcTotalPrice(
+export default async function calcTotalPrice(
     visitors: IVisitor | IVisitor[],
     ticketOpt: ITicket['option'],
     printDecisionTables?: boolean,
