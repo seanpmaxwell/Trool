@@ -9,7 +9,8 @@ import getTotalPrice from './getTotalPrice';
 import Visitor from './models/visitor';
 
 
-const partyOf3 = [
+const singleVisitor = Visitor.new(67),
+    partyOf3 = [
         Visitor.new(5),
         Visitor.new(35),
         Visitor.new(73),
@@ -37,15 +38,20 @@ const partyOf3 = [
 
 (async () => {
     // Party of 1
-    let totalPrice = await getTotalPrice(Visitor.new(67), 'Regular');
-    logger.info('Total Price: ' + totalPrice);
+    let totalPrice = await getTotalPrice(singleVisitor, 'Regular');
+    printTotal(totalPrice);
     // Party of 3
-    // totalPrice = await getTotalPrice(partyOf3, 'Season');
-    // logger.info(totalPrice);
+    totalPrice = await getTotalPrice(partyOf3, 'Season');
+    printTotal(totalPrice);
     // // Party of 6
-    // totalPrice = await getTotalPrice(partyOf6, 'Regular');
-    // logger.info(totalPrice);
+    totalPrice = await getTotalPrice(partyOf6, 'Regular');
+    printTotal(totalPrice);
     // // Party of 10
-    // totalPrice = await getTotalPrice(partyOf10, 'Regular');
-    // logger.info(totalPrice);
+    totalPrice = await getTotalPrice(partyOf10, 'Regular');
+    printTotal(totalPrice);
 })();
+
+
+function printTotal(totalPrice: string) {
+    logger.info('Total Price: ' + totalPrice + '\n');
+}
