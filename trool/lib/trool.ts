@@ -44,9 +44,8 @@ let logger = JetLogger();
 
 export type TPrimitive = boolean | number | null | string;
 type TObject = Record<string, any>;
-type TFieldStr = `field${number}`;
 export type TRow = {
-    [key in TFieldStr]: string;
+    [key in `field${number}`]: string;
 };
 // export type TRow = {[key: `field${number}`]: string}
 export type TFactsHolder = Record<string, TObject[]>;
@@ -217,27 +216,27 @@ function isLastRow(rows: TRow[], idx: number): boolean {
  * @param memImports 
  * @returns 
  */
-function applyRules(
+function applyRules<T extends TObject>(
     this: ITrool,
-    factsHolder: TFactsHolder,
+    factsHolder: T,
     memImports?: TImportsHolder,
-): TFactsHolder {
+): T {
     const tableCount = this.decisionTables.length;
     if (tableCount === 0) {
         logger.warn(messages.warnings.noTables);
-        return {};
+        return factsHolder;
     } else {
         logger.info(tableCount + messages.applyingRules);
     }
     const imports = combineImports(this.csvImports, memImports);
-    const updatedFacts: TFactsHolder = {};
+    const updatedFacts: TObject = {};
     for (let i = 0; i < tableCount; i++) {
         const table = this.decisionTables[i];
         const factVal = factsHolder[table.factName];
         const factArr = (factVal instanceof Array) ? factVal : [factVal];
         updatedFacts[table.factName] = updateFacts(table, factArr, imports)
     }
-    return updatedFacts;
+    return updatedFacts as T;
 }
 
 
@@ -271,9 +270,9 @@ function combineImports(
  */
 function updateFacts(
     table: IDecisionTable,
-    facts: TFactsArr,
+    facts: TObject[],
     imports: TImportsHolder,
-): TFactsArr {
+): TObject[] {
     const { tableRows, conditions, actions } = table;
     for (let factIdx = 0; factIdx < facts.length; factIdx++) {
         const fact = facts[factIdx];

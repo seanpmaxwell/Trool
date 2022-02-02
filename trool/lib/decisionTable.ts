@@ -121,21 +121,21 @@ function getConditionsAndActions(tableRows: TRow[], factName: string) {
 function getCondOps(opStr: string, factName: string): TCondition {
     return (fact: TFact, paramVal: any): boolean => {
         const arr = opStr.split(' ');
-        const methodName = arr[0].replace('()', '');
+        const property = arr[0].replace('()', '');
         if (!opStr) {
             throw new TableError(factName, errors.opBlank);
         } else if (arr.length !== 3) {
             throw new TableError(factName, errors.opFormat + ` "${opStr}"`);
-        } else if (fact[methodName] === undefined) {
+        } else if (fact[property] === undefined) {
             throw new TableError(factName, errors.attrUndef + ` "${opStr}"`);
         } else if (arr[2] !== '$param') {
             throw new TableError(factName, errors.mustEndWithParam + ` "${opStr}"`);
         }
         let attrVal = null;
-        if (typeof fact[methodName] === 'function') {
-            attrVal = fact[methodName]();
+        if (typeof fact[property] === 'function') {
+            attrVal = fact[property]();
         } else  {
-            attrVal = fact[methodName];
+            attrVal = fact[property];
         }
         return compareVals(arr[1], attrVal, paramVal, factName);
     };

@@ -41,9 +41,10 @@ function toString(ticket?: ITicket): string {
     }
     return `Ticket Option: ${ticket.option} | ` +
         `Visitor Type: ${ticket.visitorType} | ` +
-        `Ticket Price: ${ticket.price} | ` +
+        `Ticket Price: $${ticket.price} | ` +
         `Free T-Shirt: ${ticket.freeTShirt}`;
 }
+
 
 
 // Export default
