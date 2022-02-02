@@ -6,8 +6,7 @@
 
 import csvToJson from 'csvtojson';
 import { JetLogger, LoggerModes } from 'jet-logger';
-import { getNewDecisionTbl, IDecisionTable, TAction, TCondition } from './decisionTable';
-import { valsToArr } from './shared';
+import { getNewDecisionTbl, IDecisionTable, rowToArr, TAction, TCondition } from './decisionTable';
 
 
 
@@ -122,7 +121,7 @@ function setupImports(rows: TRow[]): TImportsHolder {
             if (!/^[a-zA-Z0-9-_]+$/.test(firstCell)) {
                 throw Error(messages.errors.importProp + firstCell);
             }
-            newImportObj[firstCell] = parseCell(rows[i].field2, imports);
+            newImportObj[firstCell] = processValFromCell(rows[i].field2, imports);
             if (isLastRow(rows, i)) {
                 imports[importName] = newImportObj;
                 importName = '';
@@ -210,6 +209,7 @@ function isLastRow(rows: TRow[], idx: number): boolean {
 
 
 /**
+ * Apply rules from the decision-tables to the facts.
  * 
  * @param this 
  * @param factsHolder 
@@ -241,6 +241,8 @@ function applyRules<T extends TObject>(
 
 
 /**
+ * Merge in-memory and csv imports to single object. If overlapping name, 
+ * memory imports take priority.
  * 
  * @param csvImports 
  * @param memImports 
@@ -262,6 +264,7 @@ function combineImports(
 
 
 /**
+ * Update a single array of facts.
  * 
  * @param table 
  * @param facts 
@@ -278,7 +281,7 @@ function updateFacts(
         const fact = facts[factIdx];
         rowLoop:
         for (let rowIdx = 2; rowIdx < tableRows.length; rowIdx++) {
-            const ruleArr = valsToArr(tableRows[rowIdx]);
+            const ruleArr = rowToArr(tableRows[rowIdx]);
             if (ruleArr[0] === '') {
                 throw Error(messages.errors.ruleNameEmpty);
             }
@@ -297,6 +300,7 @@ function updateFacts(
 
 
 /**
+ * Call an Condition function.
  * 
  * @param fact 
  * @param condition 
@@ -313,7 +317,7 @@ function callCondOp(
     if (cellValStr === '') {
         return true;
     }
-    const retVal = parseCell(cellValStr, imports);
+    const retVal = processValFromCell(cellValStr, imports);
     if (retVal === null) {
         throw Error(messages.errors.invalidVal + ` '${cellValStr}'`);
     }
@@ -322,6 +326,7 @@ function callCondOp(
 
 
 /**
+ * Call an Action function.
  * 
  * @param fact 
  * @param action 
@@ -341,7 +346,7 @@ function callActionOp(
     const cellVals = cellValStr.split(',');
     const retVals = []
     for (let i = 0; i < cellVals.length; i++) {
-        const val = parseCell(cellVals[i], imports);
+        const val = processValFromCell(cellVals[i], imports);
         if (val === null) {
             throw Error(messages.errors.invalidVal + ` '${cellValStr}'`);
         } else {
@@ -353,12 +358,16 @@ function callActionOp(
 
 
 /**
+ * Look at a value cell. And determine the value from the string.
  * 
  * @param cellValStr 
  * @param imports 
  * @returns 
  */
-function parseCell(cellValStr: string, imports: TImportsHolder): TPrimitive {
+ function processValFromCell(
+    cellValStr: string,
+    imports: TImportsHolder,
+): TPrimitive {
     cellValStr = cellValStr.trim();
     const cellValLowerCase = cellValStr.toLowerCase();
     // Value is primitive

@@ -5,7 +5,7 @@
  * created by Sean Maxwell Mar 3, 2019
  */
 
-import { TableError, valsToArr } from './shared';
+import { TableError } from './shared';
 import { TFact, TLogger, TPrimitive, TRow } from './trool';
 
 
@@ -39,8 +39,8 @@ export type TAction = (fact: TFact, cellVals: TPrimitive[]) => void;
 
 export interface IDecisionTable {
     factName: string;
-    logger: TLogger;
     tableRows: TRow[];
+    logger: TLogger;
     conditions: TCondition[];
     actions: TAction[];
 }
@@ -82,8 +82,8 @@ export function getNewDecisionTbl(
  * @returns 
  */
 function getConditionsAndActions(tableRows: TRow[], factName: string) {
-    const colHeaderArr = valsToArr(tableRows[0]);
-    const opsStrArr = valsToArr(tableRows[1]);
+    const colHeaderArr = rowToArr(tableRows[0]);
+    const opsStrArr = rowToArr(tableRows[1]);
     let conditionsDone = false;
     const conditions = [];
     const actions = [];
@@ -109,6 +109,17 @@ function getConditionsAndActions(tableRows: TRow[], factName: string) {
 
     return { conditions, actions };
 }
+
+
+/**
+ * Get row as array of strings.
+ * 
+ * @param row 
+ * @returns 
+ */
+ export function rowToArr(row: TRow): string[] {
+    return Object.values(row).map((cell) => cell.trim());
+};
 
 
 /**

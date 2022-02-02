@@ -9,17 +9,6 @@ import { TRow } from "./trool";
 
 
 /**
- * Get row as array of strings.
- * 
- * @param row 
- * @returns 
- */
-export function valsToArr(row: TRow): string[] {
-    return Object.values(row).map((header) => header.trim());
-};
-
-
-/**
  * Add Table id to Error message.
  */
 export class TableError extends Error {
