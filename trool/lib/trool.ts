@@ -68,14 +68,14 @@ interface ITrool {
  * Main export function.
  * 
  * @param filePathOrContent 
+ * @param initFromString 
  * @param showLogs 
- * @param imports 
  * @returns 
  */
 export default async function trool(
     filePathOrContent: string,
-    showLogs?: boolean,
     initFromString?: boolean,
+    showLogs?: boolean,
 ): Promise<ITrool> {
     if (showLogs === false) {
         logger = JetLogger(LoggerModes.Off);

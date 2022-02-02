@@ -246,3 +246,4 @@ called get table. Don't pass factors holder there
 - add tslint
 
 - update readme and say that if no decision table for fact in the facts holder, it will not be modified.
+- need to update the apply rules to accepts generics for the facts holder
