@@ -235,3 +235,11 @@ and dashes. Anything other than characters will throw an error.
           await trool.initFromString(data.Body, factsHolder, true, importsHolder);
 
   ```
+
+
+
+// TODO
+
+- update readme and say that if no decision table for fact in the facts holder, it will not be modified.
+- need to update the apply rules to accepts generics for the facts holder
+- Let user now that property for fact must be primitive property or function that returns a value.

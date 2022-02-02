@@ -124,9 +124,8 @@ would need to create a TypeScript getter (`get age(): number {}`) or a method li
 fetch the visitor's age and compare it to the parameter value.
 
 - Actions are methods on a fact which will execute if all the conditions evaluate to true. Unlike conditions,
-you can have multiple params passed in. The action must be a method or a TypeScript setter function on
-the fact or else Trool will throw an error. The number of params in the action columns' cells below
-must match the number or `$param` strings or else Trool will throw an error. 
+you can have multiple params passed in. The action must be a key on the Fact object who's value is
+either a function or a primitive. If it's a primitive, an assignment will be done, if it's a function then the function will be fired. The number of params in the action columns' cells below must match the number or `$param` strings or else Trool will throw an error. 
 
 - All rows on a decision-table, except for the first 2, are referred to as _rules_. A rule works by evaluating 
 a list of conditions against cell values which, if they all evaluate to true, will execute the specified 

@@ -1,4 +1,3 @@
-import Trool from './Trool';
-
-export { IFactsHolder, IImportsHolder, IRow } from './shared';
-export default Trool;
+export { TFactsHolder, TFactsArr, TFact } from './trool';
+import trool from './trool'
+export default trool;
