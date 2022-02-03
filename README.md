@@ -54,6 +54,9 @@ param is optional because you may only want to use the ones specified in the spr
 
 ```typescript
 import trool from 'trool';
+import logger from 'jet-logger';
+
+const csvFilePath = 'some-file-path';
 
 const factsHolder = {
     Visitors: [visitor1, visitor2],
@@ -70,10 +73,10 @@ const importsHolder = {
 (async () => {
     try {
         const engine = await trool(csvFilePath);
-        const updatedFacts = trool.applyRules(factsHolder, importsHolder);
+        const updatedFacts = engine.applyRules(factsHolder, importsHolder);
         totalPrice = addUpEachTicketPrice(updatedFacts);
         // Access decision tables if you want
-        logger.info(trool.decisionTables);
+        logger.info(engine.decisionTables);
     } catch (err) {
         logger.error(err.message);
     }
