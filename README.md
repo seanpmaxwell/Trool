@@ -14,7 +14,7 @@ the code or hardcoded in the spreadsheet.
 
 ## Requirements
 - The spreadsheet must be exported as a _.csv_ before usage. 
-- Can be used directly with JavaScript (ES5 and ES6) but documentation is in TypeScript.
+- Can be used directly with JavaScript (ES5 and ES6) but TypeScript is highly recommended.
 
 
 ## Screenshot
@@ -26,13 +26,11 @@ the code or hardcoded in the spreadsheet.
 
 - Open Excel, LibreOffice Calc, or some other spreadsheet tool of your choice.
 
-- A **Fact** is an instance-object or array of instance-objects, which you want to update based on
-conditions that may change over time. Create at least one decision-table on the spreadsheet so you
-can update a fact.
+- A **Fact** is an object or array of objects, which you want to update based on conditions that may change over time. Create at least one decision-table on the spreadsheet so you can update a fact.
 
 - You must follow the format closely for setting up a decision-table. Trool may throw errors if
 you do not set things up correctly. The guide contains all the details for setting up a decision-table.
-You can look at the screen-shot above if you want a quick glimpse on what decision-tables look like. 
+You can look at the screen-shot above if you want a quick glimpse of what decision-tables look like. 
 
 - Export your spreadsheet as a CSV file. The rules for formatting the csv are the same as they are
 for the `csvtojson` library. That's what Trool uses internally to convert the csv to a JSON object.
@@ -40,50 +38,46 @@ for the `csvtojson` library. That's what Trool uses internally to convert the cs
 - Create a new NodeJS program (preferably with TypeScript) and import the `trool` library at the top.
 
 ```typescript
-import Trool from 'trool';
+import trool from 'trool';
 
-class PriceCalculator {
+...your code
 
 ```
 
-- To use Trool you must call two methods `init()` and `applyRules()`. The first one takes in your
-facts array and the path to the CSV file. `init()` is asynchronous so make sure to use `async/await`
-with it. `applyRules()` returns the update facts and must be called after `init()`.
+- To use Trool you must intialize it by calling `trool(...params)`. The `trool` function takes in the path to the CSV file, or you can pass in a string formatted as a csv and pass `true` as the second param. `trool()` is asynchronous so make sure to use `async/await` with it. `trool` returns the rule-engine containing the initialized decision-tables. Call `applyRules()` on the engine and pass in the facts-holder which in turn returns the updated facts.
 
-- `init()` has two optional params `showLogs` and `imports`. If you want access to the decision-tables
-for some reason after `init()` is called, there is the `decisionTables` getter on the trool instance. 
+- `trool()` has an additional optional param `showLogs` to turn logging on or off. If you want access to the decision-tables for some reason, there is the `.decisionTables` prop on the engine object. 
 
 - The facts and the imports must be wrapped in holder objects, with the key being the name of the 
 fact/import to use in the spreadsheet and the value being the actual fact or import. The `imports`
-param is optional because you may only want to use ones specified in the spreadsheet or have no need for any. 
+param is optional because you may only want to use the ones specified in the spreadsheet or have no need for any. 
 
 ```typescript
-public async calcTotalPrice(): Promise<void> {
-    
-    const factsHolder = {
-        Visitors: [new Visitor(), new Visitor()],
-        Tickets: new Ticket(),
-    };
+import trool from 'trool';
 
-    const importsHolder = { 
-        VisitorTypes: {
-            ADULT: 'Adult',
-            CHILD: 'Child',
-        },
-    };
+const factsHolder = {
+    Visitors: [visitor1, visitor2],
+    Tickets: ticket1,
+};
 
+const importsHolder = { 
+    VisitorTypes: {
+        ADULT: 'Adult',
+        CHILD: 'Child',
+    },
+};
+
+(async () => {
     try {
-        const facts = this.setupFactsHolder(visitors, ticketOpt);
-        const trool = new Trool();
-        await trool.init(csvFilePath, factsHolder, true, importsHolder);
-        const updatedFacts = trool.applyRules();
-        totalPrice = this.addUpEachTicketPrice(updatedFacts);
-        // Access decision tables
-        cinfo(trool.decisionTables);
+        const engine = await trool(csvFilePath);
+        const updatedFacts = trool.applyRules(factsHolder, importsHolder);
+        totalPrice = addUpEachTicketPrice(updatedFacts);
+        // Access decision tables if you want
+        logger.info(trool.decisionTables);
     } catch (err) {
-        console.error(err.message);
+        logger.error(err.message);
     }
-}
+})();
 ```
 
 - The `updatedFacts` variable in the previous snippet will contain all the same key/value pairs and
@@ -101,8 +95,7 @@ purposes**.
 **Decision-Tables:**
 
 - All decision-tables must start with a cell containing the text `Table: "Fact Name"`. A table without a 
-fact name or with a fact name that does not exist on the facts-holder will throw an error. If you create
-2 tables that have the same fact-name, the second table will overwrite all the changes from the first.
+fact name will throw an error. If you create two tables that have the same fact-name, the second table will overwrite all the changes from the first.
 
 - A table will end when it reaches an empty row, the end of the file, or the start of a new table
 or import. For readability, you should terminate all tables with an empty row.
@@ -117,20 +110,15 @@ must come before all actions and you cannot have anything other than `'Condition
 the top of your table columns. 
 
 - The condition must be a statement which evaluates to `true` or `false`. The left side of the statement 
-must be a method or getter on the fact's instance-object and the right side must be `$param`. The operator 
+must be a method or property on the fact's object and the right side must be `$param`. The operator 
 must be an existing JavaScript comparator such as `==` or `<=`. The values in the rows below will replace 
 `$param`. For example, suppose I want to get the age of a visitor for an app which calculates ticket prices. I
-would need to create a TypeScript getter (`get age(): number {}`) or a method like `getAge() {}` to 
-fetch the visitor's age and compare it to the parameter value.
+would need have the property `age` on the fact's object.
 
 - Actions are methods on a fact which will execute if all the conditions evaluate to true. Unlike conditions,
-you can have multiple params passed in. The action must be a method or a TypeScript setter function on
-the fact or else Trool will throw an error. The number of params in the action columns' cells below
-must match the number or `$param` strings or else Trool will throw an error. 
+you can have multiple params passed in. The action must be a method or property on the fact or else Trool will throw an error. The number of params in the action columns' cells below must match the number of `$param` strings or else Trool will throw an error. 
 
-- All rows on a decision-table, except for the first 2, are referred to as _rules_. A rule works by evaluating 
-a list of conditions against cell values which, if they all evaluate to true, will execute the specified 
-actions. A rule must start with a rule name and can be anything but cannot be blank.
+- All rows on a decision-table, except for the first 2, are referred to as _rules_. A rule works by evaluating a list of conditions against cell values which, if they all evaluate to true, will execute the specified actions. A rule must start with a rule name and can be anything but cannot be blank.
 
 - For each cell on the rule, if it is a condition column, the cell value will replace the `$param` value
 and evaluate the cell as `true` or `false`. An empty cell will automatically be evaluated as `true`. If
@@ -146,18 +134,13 @@ example in detail. In the following snippet, we see an example on a decision-tab
 
 - To update this fact you needs to make sure the `Tickets` property exists on the facts-holder when it
 gets passed to `applyRules()`. If `Tickets` is an array, the decision-table will get applied to each
-Ticket instance in the array. 
+Ticket object in the array. 
 
-- The table has one condition and one action. There's also 2 rules: `Set Price - Regular` and `Set Price - Season`. 
-Look at the operations for the condition and action. On the left side of each operation 
-we can see the properties `option` and `price`. This means that each Ticket instance object passed in must have 
-getters/setters for the `option` and `price` properties or else an error will be thrown.
+- The table has one condition and one action. There's also 2 rules: `Set Price - Regular` and `Set Price - Season`. Look at the operations for the condition and action. On the left side of each operation 
+we can see the properties `option` and `price`. This means that each Ticket object passed in must have the `option` and `price` properties or else an error will be thrown.
 
 - The first rule `Set Price - Regular` will take the value for `option` and check and see if its value
-is equal to the string `"Regular"`. If so, it will apply the action column to the fact. The setter for
-`price` will be called and the value `70` will be passed in. The exact same sequence of events will take
-place for the next rule `Set Price - Season`. In other words, if the Ticket option is `"Season"`, the price
-will be `600`, if the option is `"Regular"`, the price will be `70`.
+is equal to the string `"Regular"`. If so, it will apply the action column to the fact. The property `price` will be set to the value `70`. The exact same sequence of events will take place for the next rule `Set Price - Season`. In other words, if the Ticket option is `"Season"`, the price will be `600`, if the option is `"Regular"`, the price will be `70`.
 
 - And that's how Trool works! If you need to change the price for a Regular or Seasonal ticket over
 time without bugging your engineers, just have someone else make updates to the spreadsheet :)
@@ -166,36 +149,19 @@ time without bugging your engineers, just have someone else make updates to the 
 
 **Imports:**
 
-- For large complicated spreadsheets you might want to reuse certain values. Suppose for Visitors who
-might be buying these tickets the maximum age for a child is `18`. One might need to reuse this value
-for multiple rules/tables and if it's updated in once place, it needs to be updated everywhere. For 
-example, the maximum age for a child might change from `18` to `15` or something like that. This is where
-imports come in handy. An import basically sets up a simple JSON object that you can access in your tables.
-Imports can be created in the spreadsheet or passed through `applyRules()`. 
+- For large complicated spreadsheets you might want to reuse certain values. Suppose for Visitors who might be buying these tickets the maximum age for a child is `18`. One might need to reuse this value for multiple rules/tables and if it's updated in one place, it needs to be updated everywhere. For example, the maximum age for a child might change from `18` to `15` or something like that. This is where imports come in handy. An import basically sets up a simple JSON object that you can access in your tables. Imports can be created in the spreadsheet or passed through `applyRules()`. 
 
-- Trool iterates the entire spreadsheet and first looks for all the imports, then it goes back through
-and initializes all the decision-tables. So the ordering of your tables/imports does not matter.
-For cleanliness I recommend keeping them separated.
+- Trool iterates the entire spreadsheet and first looks for all the imports, then it goes back through and initializes all the decision-tables. So the ordering of your tables/imports does not matter. For cleanliness I recommend keeping them separated.
 
-- All imports must begin with the cell `Import: "Import Name"`. If you pass an import in the imports holder 
-(via `applyRules()`) that has a key matching an import name in the spreadsheet, you will get the warning:
-`!!WARNING!! The spreadsheet is using an import name already passed via the imports object. The spreadsheet 
-will overwrite the import: "Import Name"`.
+- All imports must begin with the cell `Import: "Import Name"`. If you pass an import in the imports holder (via `applyRules()`) that has a key matching an import name in the spreadsheet, you will get the warning: `!!WARNING!! The spreadsheet is using an import name already passed via the imports object. The spreadsheet will overwrite the import: "Import Name"`.
 
-- The quick-start had an example of passing imports through `applyRules()`. Let's look at an example of
-an import hardcoded in the spreadsheet.
-<img alt='importExample' src='https://github.com/seanpmaxwell/trool/raw/master/importExample.png' border='0'>
+- The quick-start had an example of passing imports through `applyRules()`. Let's look at an example of an import hardcoded in the spreadsheet. <img alt='importExample' src='https://github.com/seanpmaxwell/trool/raw/master/importExample.png' border='0'>
 
-- With this import, each table will have access to an object named `TicketTypes` and all of its properties.
-If you were to place `TicketTypes.SEASON` in a cell for the operation `option == $param`, 
-the Ticket object would call the `option` getter and pass `"SEASON"` as the value.
+- With this import, each table will have access to an object named `TicketTypes` and all of its properties. If you were to place `TicketTypes.SEASON` in a cell for the operation `option == $param`, the Ticket object property `option` will be set to `"SEASON"` as the value.
 
-- When using imports through `applyRules()`, you don't have to necessary use an object as a property
-and could have it as a primitive. VisitorTypes itself could be a string or number. I don't
-recommend using imports this way though; it could be confusing in a collaborative environment.
+- When using imports through `applyRules()`, you don't have to necessarily use an object as a property and could have it as a primitive. VisitorTypes itself could be a string or number. I don't recommend using imports this way though; it could be confusing in a collaborative environment.
 
-- One more thing, you cannot use nested properties on imports: i.e. `Import.key.key` This is intentional,
-it would lead to a very message spreadsheet. 
+- One more thing, you cannot use nested properties on imports: i.e. `Import.key.key` This is intentional, it would lead to a very message spreadsheet. 
 <br>
 
 
@@ -203,43 +169,6 @@ it would lead to a very message spreadsheet.
 
 - In Trool spreadsheets, `==` under the hood is actually using `===`. 
 
-- The values you can pass through cells are strings, numbers, true, false, and null. Don't use objects
-or undefined. Via imports, you could actually use an object as a `$param` value, but don't do it. This
-could be confusing for non-engineers. Stick with primitives. Create extra getters and setters when dealing
-with multiple values. 
+- The values you can pass through cells are `string`, `number`, `boolean`, and `null`. Don't use objects or `undefined`. Via imports, you could actually use an object as a `$param` value, but don't do it. This could be confusing for non-engineers. Stick with primitives.
 
-- Import property name rules are the same as for JavaScript keys. That means alphanumeric, underscores,
-and dashes. Anything other than characters will throw an error.
-
-- In case you don't have local access to your rules file, or can't otherwise pass a file path, you can use
-`initFromString()` and pass the content of the CSV file as a string instead:
-  ```typescript
-      const factsHolder = {
-          Visitors: [new Visitor(), new Visitor()],
-          Tickets: new Ticket(),
-      };
-
-      const importsHolder = {
-          VisitorTypes: {
-              ADULT: 'Adult',
-              CHILD: 'Child',
-          },
-      };
-
-      try {
-          const s3 = new AWS.S3();
-          const data = await s3.getObject({ Bucket: bucketName, Key: bucketKey });
-
-          const facts = this.setupFactsHolder(visitors, ticketOpt);
-          const trool = new Trool();
-          await trool.initFromString(data.Body, factsHolder, true, importsHolder);
-
-  ```
-
-
-
-// TODO
-
-- update readme and say that if no decision table for fact in the facts holder, it will not be modified.
-- need to update the apply rules to accepts generics for the facts holder
-- Let user now that property for fact must be primitive property or function that returns a value.
+- Property name rules are the same as for JavaScript keys. That means alphanumeric, underscores, and dashes. Anything other than characters will throw an error.
