@@ -63,7 +63,12 @@ interface IEngine {
 // **** Functions **** //
 
 /**
- * Main export function.
+ * Get the rule engine.
+ * 
+ * @param filePathOrContent the path to a csv file or string formatted as csv.
+ * @param initFromString set to true if initiating csv from string.
+ * @param showLogs turn on console logging.
+ * @returns 
  */
 async function trool(
     filePathOrContent: string,
@@ -174,6 +179,11 @@ function isLastRow(rows: TRow[], idx: number): boolean {
 
 /**
  * Apply rules from the decision-tables to the facts.
+ * 
+ * @param this The instance of the engine.
+ * @param factsHolder Object with the facts to be updated.
+ * @param memImports Imports pass through apply rules (not in the csv file).
+ * @returns 
  */
 function applyRules<T extends TObject>(
     this: IEngine,
