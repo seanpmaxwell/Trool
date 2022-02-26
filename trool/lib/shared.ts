@@ -4,9 +4,6 @@
  * created by Sean Maxwell Mar 14, 2019
  */
 
-import { TRow } from "./trool";
-
-
 
 /**
  * Add Table id to Error message.

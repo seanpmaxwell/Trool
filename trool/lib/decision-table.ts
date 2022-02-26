@@ -9,10 +9,7 @@ import { TableError } from './shared';
 import { TFact, TLogger, TPrimitive, TRow } from './trool';
 
 
-
-/*****************************************************************************************
- *                                    Vars/Constants
- ****************************************************************************************/
+// **** Vars/Constants **** //
 
 const errors = {
     colHeader: 'Action/Condition column headers can only be "Condition" or "Action".',
@@ -29,10 +26,7 @@ const errors = {
 } as const;
 
 
-
-/*****************************************************************************************
- *                                       Types
- ****************************************************************************************/
+// **** Types **** //
 
 export type TCondition = (fact: TFact, paramVal: any) => boolean;
 export type TAction = (fact: TFact, cellVals: TPrimitive[]) => void;
@@ -46,17 +40,10 @@ export interface IDecisionTable {
 }
 
 
-
-/*****************************************************************************************
- *                                       Functions
- ****************************************************************************************/
+// **** Functions **** //
 
 /**
  * Get a new DecisionTable instance.
- * 
- * @param factName 
- * @param logger 
- * @returns 
  */
 export function getNewDecisionTbl(
     factName: string,
@@ -73,13 +60,8 @@ export function getNewDecisionTbl(
     }
 }
 
-
 /**
  * Get Condition and Action functions.
- * 
- * @param tableRows
- * @param factName
- * @returns 
  */
 function getConditionsAndActions(tableRows: TRow[], factName: string) {
     const colHeaderArr = rowToArr(tableRows[0]);
@@ -110,24 +92,15 @@ function getConditionsAndActions(tableRows: TRow[], factName: string) {
     return { conditions, actions };
 }
 
-
 /**
  * Get row as array of strings.
- * 
- * @param row 
- * @returns 
  */
  export function rowToArr(row: TRow): string[] {
     return Object.values(row).map((cell) => cell.trim());
 };
 
-
 /**
  * Get the Condition functions.
- * 
- * @param opStr
- * @param factName
- * @returns 
  */
 function getCondOps(opStr: string, factName: string): TCondition {
     return (fact: TFact, paramVal: any): boolean => {
@@ -152,15 +125,8 @@ function getCondOps(opStr: string, factName: string): TCondition {
     };
 }
 
-
 /**
  * Determine an equality operation from a string.
- * 
- * @param operator 
- * @param val1 
- * @param val2
- * @param factName
- * @returns 
  */
 function compareVals(operator: string, val1: any, val2: any, factName: string): boolean {
     if (operator === '===') {
@@ -184,13 +150,8 @@ function compareVals(operator: string, val1: any, val2: any, factName: string): 
     }
 }
 
-
 /**
  * Get the action functions.
- * 
- * @param actionStr
- * @param factName
- * @returns 
  */
 function getActionOps(actionStr: string, factName: string): TAction {
     if (!actionStr) {

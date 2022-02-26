@@ -16,10 +16,7 @@ import {
 } from './decision-table';
 
 
-
-/*****************************************************************************************
- *                                    Vars/Constants
- ****************************************************************************************/
+// **** Vars/Constants **** //
 
 const messages = {
     applyingRules: ' DecisionTables found. Applying table logic to facts.',
@@ -39,14 +36,10 @@ const messages = {
     },
 } as const;
 
-
 let logger = JetLogger();
 
 
-
-/*****************************************************************************************
- *                                       Types
- ****************************************************************************************/
+// **** Types **** //
 
 export type TPrimitive = boolean | number | null | string;
 type TObject = Record<string, any>;
@@ -60,31 +53,23 @@ export type TFactsArr = TFactsHolder[keyof TFactsHolder];
 export type TFact = TFactsArr[number];
 export type TLogger = typeof logger;
 
-interface ITrool {
+interface IEngine {
     csvImports: TImportsHolder;
     decisionTables: IDecisionTable[];
     applyRules: typeof applyRules;
 }
 
 
-
-/*****************************************************************************************
- *                                       Functions
- ****************************************************************************************/
+// **** Functions **** //
 
 /**
  * Main export function.
- * 
- * @param filePathOrContent 
- * @param initFromString 
- * @param showLogs 
- * @returns 
  */
-export default async function trool(
+async function trool(
     filePathOrContent: string,
     initFromString?: boolean,
     showLogs?: boolean,
-): Promise<ITrool> {
+): Promise<IEngine> {
     if (showLogs === false) {
         logger = JetLogger(LoggerModes.Off);
     }
@@ -96,24 +81,16 @@ export default async function trool(
     } as const;
 }
 
-
 /**
  * Get an object array from either a csv file or a csv string.
- * 
- * @param filePathOrContent 
- * @param initFromString 
- * @returns 
  */
 function getRows(filePathOrContent: string, initFromString?: boolean) {
     return initFromString ? csvToJson().fromString(filePathOrContent) : 
         csvToJson().fromFile(filePathOrContent);
 }
 
-
 /**
  * Setup imports from CSV file.
- *
- * @param rows
  */
 function setupImports(rows: TRow[]): TImportsHolder {
     const imports: TImportsHolder = {};
@@ -138,13 +115,8 @@ function setupImports(rows: TRow[]): TImportsHolder {
     return imports;
 }
 
-
 /**
  * Get the name of an import.
- * 
- * @param firstCell 
- * @param imports 
- * @returns 
  */
 function getImportName(firstCell: string, imports: TImportsHolder): string {
     const firstCellArr = firstCell.split(' ');
@@ -158,12 +130,8 @@ function getImportName(firstCell: string, imports: TImportsHolder): string {
     return importName;
 }
 
-
 /**
  * Setup the decision tables from the rows.
- *
- * @param rows
- * @param facts
  */
 function getTables(rows: TRow[]): IDecisionTable[] {
     const decisionTables: IDecisionTable[] = [];
@@ -185,12 +153,8 @@ function getTables(rows: TRow[]): IDecisionTable[] {
     return decisionTables;
 }
 
-
 /**
  * Check table name
- * 
- * @param firstCol
- * @returns 
  */
 function getStartCellArr(firstCol: string): string[] {
     const startCellArr: string[] = firstCol.split(' ');
@@ -200,30 +164,19 @@ function getStartCellArr(firstCol: string): string[] {
     return startCellArr;
 }
 
-
 /**
  * See if a row is the last row in the table.
- * 
- * @param rows 
- * @param idx 
- * @returns 
  */
 function isLastRow(rows: TRow[], idx: number): boolean {
     const nextCell = (rows[idx + 1] ? rows[idx + 1].field1.trim() : '');
     return !nextCell || nextCell.startsWith('Table:') || nextCell.startsWith('Import:');
 }
 
-
 /**
  * Apply rules from the decision-tables to the facts.
- * 
- * @param this 
- * @param factsHolder 
- * @param memImports 
- * @returns 
  */
 function applyRules<T extends TObject>(
-    this: ITrool,
+    this: IEngine,
     factsHolder: T,
     memImports?: TImportsHolder,
 ): T {
@@ -245,14 +198,9 @@ function applyRules<T extends TObject>(
     return updatedFacts as T;
 }
 
-
 /**
  * Merge in-memory and csv imports to single object. If overlapping name, 
  * memory imports take priority.
- * 
- * @param csvImports 
- * @param memImports 
- * @returns 
  */
 function combineImports(
     csvImports: TImportsHolder,
@@ -268,14 +216,8 @@ function combineImports(
     return allImports;
 }
 
-
 /**
  * Update a single array of facts.
- * 
- * @param table 
- * @param facts 
- * @param imports 
- * @returns 
  */
 function updateFacts(
     table: IDecisionTable,
@@ -304,15 +246,8 @@ function updateFacts(
     return facts;
 }
 
-
 /**
  * Call an Condition function.
- * 
- * @param fact 
- * @param condition 
- * @param cellValStr 
- * @param imports 
- * @returns 
  */
 function callCondOp(
     fact: TFact,
@@ -330,15 +265,8 @@ function callCondOp(
     return condition(fact, retVal);
 }
 
-
 /**
  * Call an Action function.
- * 
- * @param fact 
- * @param action 
- * @param cellValStr 
- * @param imports 
- * @returns 
  */
 function callActionOp(
     fact: TFact,
@@ -362,13 +290,8 @@ function callActionOp(
     action(fact, retVals);
 }
 
-
 /**
  * Look at a value cell. And determine the value from the string.
- * 
- * @param cellValStr 
- * @param imports 
- * @returns 
  */
 function processValFromCell(
     cellValStr: string,
@@ -407,3 +330,7 @@ function processValFromCell(
     }
     return null;
 };
+
+
+// Export trool
+export default trool;
