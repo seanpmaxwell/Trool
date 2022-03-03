@@ -1,3 +1,3 @@
-export { TFactsHolder, TFactsArr, TFact } from './trool';
+export { TFactsHolder, TFactsArr, TFact } from './engine';
 import trool from './trool'
 export default trool;

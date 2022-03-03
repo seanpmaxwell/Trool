@@ -6,7 +6,7 @@
  */
 
 import { TableError } from './shared';
-import { TFact, TLogger, TPrimitive, TRow } from './trool';
+import { TFact, TLogger, TPrimitive, TRow } from './engine';
 
 
 // **** Vars/Constants **** //
