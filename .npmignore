@@ -1,0 +1,13 @@
+# Not needed npm stuff
+package-lock.json
+node_modules/
+tsconfig.json
+
+# Ignore dev files
+lib/*.ts
+
+# Include typings files
+!*.d.ts
+
+# Ignore pics
+*.png
