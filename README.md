@@ -10,6 +10,7 @@
 the code or hardcoded in the spreadsheet.
 - GitHub Repo contains fully-functional sample project so you can start practicing right away.
 - Fully type-safe :)
+- Link to a sample project demonstrating usage can be found here: __https://github.com/seanpmaxwell/trool-sample__
 
 
 ## Requirements
