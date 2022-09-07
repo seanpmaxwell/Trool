@@ -5,12 +5,9 @@
  */
 
 
-/**
- * Add Table id to Error message.
- */
 export class TableError extends Error {
 
-    public constructor(factName: string, message: string) {
-        super('Error on DecisionTable(' + factName + ') : ' + message);
-    }
+  public constructor(factName: string, message: string) {
+    super('Error on DecisionTable(' + factName + ') : ' + message);
+  }
 }

@@ -1,6 +1,6 @@
 {
   "name": "trool",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "description": "a spreadsheet rule engine for NodeJS/TypeScript",
   "main": "./lib/index.js",
   "typings": "./lib/index.d.ts",

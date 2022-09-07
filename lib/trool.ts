@@ -5,34 +5,345 @@
  */
 
 import csvToJson from 'csvtojson';
-import newEngine, { IEngine } from './engine';
+import { Converter } from 'csvtojson/v2/Converter';
+import { JetLogger, LoggerModes } from 'jet-logger';
 
+import {
+  getNewDecisionTbl,
+  IDecisionTable,
+  rowToArr,
+  TAction,
+  TCondition,
+} from './decision-table';
+
+
+// **** Variables **** //
+
+let logger = JetLogger();
+
+const messages = {
+  applyingRules: ' DecisionTables found. Applying table logic to facts.',
+  warnings: {
+    noTables: 'No decision tables found',
+    importName: '!!WARNING!! The spreadsheet is using an import name already passed via ' +
+      'the imports object. The spreadsheet will overwrite the import: ',
+  },
+  errors: {
+    importStart: 'Import start format error for',
+    importProp: 'Import property can only be alpha-numeric and underscores ',
+    ruleNameEmpty: 'The rule name (first cell for a rule row for a decision table) cannot ' + 
+      'be empty.',
+    invalidVal: 'The value provided in the table was not a null, boolean, number, string, ' + 
+      'or import. Cell value or values:',
+    startCell: 'First cell must contain "Table:" and specify 1 and only 1 fact.',
+  },
+} as const;
+
+
+// **** Types **** //
+
+export type TPrimitive = boolean | number | null | string;
+export type TObject = Record<string, any>;
+export type TRow = {
+    [key in `field${number}`]: string;
+};
+export type TFactsHolder = Record<string, TObject[]>;
+export type TImportsHolder = Record<string, TObject>;
+export type TImport = TImportsHolder[keyof TImportsHolder];
+export type TFactsArr = TFactsHolder[keyof TFactsHolder];
+export type TFact = TFactsArr[number];
+export type TLogger = typeof logger;
+
+
+export interface IEngine {
+  csvImports: TImportsHolder;
+  decisionTables: IDecisionTable[];
+  applyRules: typeof applyRules;
+}
+
+
+// **** Functions **** //
 
 /**
  * Get the rule engine.
- * 
- * @param filePathOrContent the path to a csv file or string formatted as csv.
- * @param initFromString set to true if initiating csv from string.
- * @param showLogs turn on console logging.
- * @returns 
  */
 async function trool(
-    filePathOrContent: string,
-    initFromString?: boolean,
-    showLogs?: boolean,
+  filePathOrContent: string,
+  initFromString?: boolean,
+  showLogs?: boolean,
 ): Promise<IEngine> {
-    const rows = await getRows(filePathOrContent, initFromString);
-    return newEngine(!!showLogs, rows)
+  const rows = await getRows(filePathOrContent, initFromString);
+  return newEngine(!!showLogs, rows)
 }
 
 /**
- * Get an object array from either a csv file or a csv string.
- */
-function getRows(filePathOrContent: string, initFromString?: boolean) {
-    return initFromString ? csvToJson().fromString(filePathOrContent) : 
-        csvToJson().fromFile(filePathOrContent);
+* Get an object array from either a csv file or a csv string.
+*/
+function getRows(filePathOrContent: string, initFromString?: boolean): Converter {
+  if (initFromString) {
+    return csvToJson().fromString(filePathOrContent);
+  } else {
+    return csvToJson().fromFile(filePathOrContent);
+  }
 }
 
+/**
+ * New rule engine instance.
+ */
+function newEngine(showLogs: boolean, rows: any[]) {
+  if (showLogs === false) {
+    logger = JetLogger(LoggerModes.Off);
+  }
+  return {
+    csvImports: setupImports(rows),
+    decisionTables: getTables(rows),
+    applyRules,
+  } as const;
+}
 
-// Export trool
+/**
+ * Setup imports from CSV file.
+ */
+function setupImports(rows: TRow[]): TImportsHolder {
+  const imports: TImportsHolder = {};
+  let importName = '';
+  let newImportObj: TImport = {};
+  for (let i = 0; i < rows.length; i++) {
+    const firstCell = rows[i].field1.trim();
+    if (firstCell.startsWith('Import:')) {
+      importName = getImportName(firstCell, imports);
+    } else if (!!importName) {
+      if (!/^[a-zA-Z0-9-_]+$/.test(firstCell)) {
+        throw Error(messages.errors.importProp + firstCell);
+      }
+      newImportObj[firstCell] = processValFromCell(rows[i].field2, imports);
+      if (isLastRow(rows, i)) {
+        imports[importName] = newImportObj;
+        importName = '';
+        newImportObj = {};
+      }
+    }
+  }
+  return imports;
+}
+
+/**
+ * Get the name of an import.
+ */
+function getImportName(firstCell: string, imports: TImportsHolder): string {
+  const firstCellArr = firstCell.split(' ');
+  if (firstCellArr.length !== 2) {
+    throw Error(messages.errors.importStart + ` '${firstCell}'`);
+  }
+  const importName = firstCellArr[1];
+  if (imports.hasOwnProperty(importName)) {
+    logger.warn(messages.warnings.importName + importName);
+  }
+  return importName;
+}
+
+/**
+ * Setup the decision tables from the rows.
+ */
+function getTables(rows: TRow[]): IDecisionTable[] {
+  const decisionTables: IDecisionTable[] = [];
+  let startCellArr: null | string[] = null;
+  let tableStart = -1;
+  for (let i = 0; i < rows.length; i++) {
+    const firstCol = rows[i].field1.trim();
+    if (!!firstCol.startsWith('Table:')) {
+      tableStart = i;
+      startCellArr = getStartCellArr(firstCol);
+    } else if (!!startCellArr && isLastRow(rows, i)) {
+      const tableRows = rows.slice(tableStart, i + 1);
+      const table = getNewDecisionTbl(startCellArr[1], tableRows, logger);
+      decisionTables.push(table);
+      tableStart = -1;
+      startCellArr = null;
+    }
+  }
+  return decisionTables;
+}
+
+/**
+ * Check table name
+ */
+function getStartCellArr(firstCol: string): string[] {
+  const startCellArr: string[] = firstCol.split(' ');
+  if (startCellArr.length !== 2) {
+    throw Error(startCellArr[0] + ' ' + messages.errors.startCell);
+  }
+  return startCellArr;
+}
+
+/**
+ * See if a row is the last row in the table.
+ */
+function isLastRow(rows: TRow[], idx: number): boolean {
+  const nextCell = (rows[idx + 1] ? rows[idx + 1].field1.trim() : '');
+  return !nextCell || nextCell.startsWith('Table:') || nextCell.startsWith('Import:');
+}
+
+/**
+ * Apply rules from the decision-tables to the facts.
+ */
+function applyRules<T extends TObject>(
+  this: IEngine,
+  factsHolder: T,
+  memImports?: TImportsHolder,
+): T {
+  const tableCount = this.decisionTables.length;
+  if (tableCount === 0) {
+    logger.warn(messages.warnings.noTables);
+    return factsHolder;
+  } else {
+    logger.info(tableCount + messages.applyingRules);
+  }
+  const imports = combineImports(this.csvImports, memImports);
+  const updatedFacts: TObject = {};
+  for (let i = 0; i < tableCount; i++) {
+    const table = this.decisionTables[i];
+    const factVal = factsHolder[table.factName];
+    const factArr = (factVal instanceof Array) ? factVal : [factVal];
+    updatedFacts[table.factName] = updateFacts(table, factArr, imports);
+  }
+  return updatedFacts as T;
+}
+
+/**
+ * Merge in-memory and csv imports to single object. If overlapping name, 
+ * memory imports take priority.
+ */
+function combineImports(
+  csvImports: TImportsHolder,
+  memImports?: TImportsHolder,
+): TImportsHolder {
+  const allImports: TImportsHolder = {};
+  for (const key in csvImports) {
+    allImports[key] = csvImports[key];
+  }
+  for (const key in memImports) {
+    allImports[key] = memImports[key];
+  }
+  return allImports;
+}
+
+/**
+ * Update a single array of facts.
+ */
+function updateFacts(
+  table: IDecisionTable,
+  facts: TObject[],
+  imports: TImportsHolder,
+): TObject[] {
+  const { tableRows, conditions, actions } = table;
+  for (let factIdx = 0; factIdx < facts.length; factIdx++) {
+    const fact = facts[factIdx];
+    rowLoop:
+    for (let rowIdx = 2; rowIdx < tableRows.length; rowIdx++) {
+      const ruleArr = rowToArr(tableRows[rowIdx]);
+      if (ruleArr[0] === '') {
+        throw Error(messages.errors.ruleNameEmpty);
+      }
+      let colIdx = 1;
+      for (let i = 0; i < conditions.length; i++) {
+        const passed = callCondOp(fact, conditions[i], ruleArr[colIdx++], imports);
+        if (!passed) { continue rowLoop; }
+      }
+      for (let i = 0; i < actions.length; i++) {
+        callActionOp(fact, actions[i], ruleArr[colIdx++], imports);
+      }
+    }
+  }
+  return facts;
+}
+
+/**
+ * Call an Condition function.
+ */
+function callCondOp(
+  fact: TFact,
+  condition: TCondition,
+  cellValStr: string,
+  imports: TImportsHolder,
+): boolean {
+  if (cellValStr === '') {
+    return true;
+  }
+  const retVal = processValFromCell(cellValStr, imports);
+  if (retVal === null) {
+    throw Error(messages.errors.invalidVal + ` '${cellValStr}'`);
+  }
+  return condition(fact, retVal);
+}
+
+/**
+ * Call an Action function.
+ */
+function callActionOp(
+  fact: TFact,
+  action: TAction,
+  cellValStr: string,
+  imports: TImportsHolder,
+): void {
+  if (cellValStr === '') {
+    return;
+  }
+  const cellVals = cellValStr.split(',');
+  const retVals = []
+  for (let i = 0; i < cellVals.length; i++) {
+    const val = processValFromCell(cellVals[i], imports);
+    if (val === null) {
+      throw Error(messages.errors.invalidVal + ` '${cellValStr}'`);
+    } else {
+      retVals.push(val);
+    }
+  }
+  action(fact, retVals);
+}
+
+/**
+ * Look at a value cell. And determine the value from the string.
+ */
+function processValFromCell(
+  cellValStr: string,
+  imports: TImportsHolder,
+): TPrimitive {
+  cellValStr = cellValStr.trim();
+  const cellValLowerCase = cellValStr.toLowerCase();
+  // Value is primitive
+  if (!isNaN(Number(cellValStr))) {
+    return Number(cellValStr);
+  } else if (cellValLowerCase === 'true') {
+    return true;
+  } else if (cellValLowerCase === 'false') {
+    return false;
+  } else if (cellValLowerCase === 'null') {
+    return null;
+  } else if (cellValStr.startsWith('\'')  && cellValStr.endsWith('\'')) {
+    return cellValStr.substring(1, cellValStr.length - 1);
+  } else if (cellValStr.startsWith('"')  && cellValStr.endsWith('"')) {
+    return cellValStr.substring(1, cellValStr.length - 1);
+  } else if (cellValStr.startsWith('“')  && cellValStr.endsWith('”')) {
+    return cellValStr.substring(1, cellValStr.length - 1);
+  }
+  // Value is from an import
+  let importKey = cellValStr;
+  let importVal;
+  if (cellValStr.includes('.')) {
+    const arr = cellValStr.split('.');
+    importKey = arr[0];
+    importVal = arr[1];
+  }
+  if (imports.hasOwnProperty(importKey)) {
+    if (importVal) {
+      return imports[importKey][importVal];
+    }
+  }
+  return null;
+};
+
+
+// **** Export default **** //
+
 export default trool;
