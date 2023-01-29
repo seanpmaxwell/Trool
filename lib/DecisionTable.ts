@@ -187,12 +187,11 @@ function _getActionOps(actionStr: string, factName: string): TAction {
       fact[opArr[0]] = cellVals[0];
     } else {
       const n = actionStr.lastIndexOf('('),
-        methodName = actionStr.substring(0, n),
-        fn = fact[methodName];
-      if (fn === undefined) {
+        methodName = actionStr.substring(0, n);
+      if (fact[methodName] === undefined) {
         throw new TblErr(factName, Errors.AttrUndef + op);
-      } else if (typeof fn === 'function') {
-        fn(...cellVals);
+      } else if (typeof fact[methodName] === 'function') {
+        (fact[methodName] as Function)(...cellVals);
       } else {
 
       }

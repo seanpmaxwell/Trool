@@ -1,0 +1,25 @@
+,,,,,,,
+Table: Visitors,Condition,Condition,Condition,Condition,Action,Action,Action
+,age >= $param,age < $param,partySize > $param,partySize <= $param,addToDiscount($param),type = $param,freeTShirt = $param
+Add Discount – Adult,18,65,,,0,VisitorTypes.ADULT,
+Add Discount – Senior,65,,,,30,VisitorTypes.SENIOR,
+Add Discount – Child,,18,,,15,VisitorTypes.CHILD,
+Add Discount – Medium Party,,,4,9,5,,FALSE
+Add Discount – Large Party,,,9,,10,,TRUE
+,,,,,,,
+,,,,,,,
+Table: Tickets,Condition,Action,,,,,
+,option == $param,price = $param,,,,,
+Set Price – Regular,TicketTypes.REGULAR,70,,,,,
+Set Price – Season,TicketTypes.SEASON,600,,,,,
+,,,,,,,
+,,,,,,,
+// Note: Imports can also be imported through code,,,,,,,
+Import: VisitorTypes,,,,,,,
+ADULT,“Adult”,,,,,,
+SENIOR,“Senior”,,,,,,
+CHILD,“Child”,,,,,,
+,,,,,,,
+Import: TicketTypes,,,,,,,
+REGULAR,“Regular”,,,,,,
+SEASON,“Season”,,,,,,

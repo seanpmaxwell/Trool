@@ -18,7 +18,7 @@
     "eslint": "^8.8.0"
   },
   "scripts": {
-    "test": "npm test",
+    "test": "npx ts-node ./test",
     "lint": "eslint . --ext .ts"
   },
   "repository": {

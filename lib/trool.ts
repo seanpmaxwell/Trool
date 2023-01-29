@@ -13,7 +13,6 @@ import DecisionTable, { IDecisionTable } from './DecisionTable';
 import {
   TAction,
   TCondition,
-  TFactsHolder,
   TPrimitive,
   TRow,
 } from './other/types';
@@ -189,7 +188,7 @@ function _isLastRow(rows: TRow[], idx: number): boolean {
 /**
  * Apply rules from the decision-tables to the facts.
  */
-function applyRules<T extends TFactsHolder>(
+function applyRules<T>(
   this: IEngine,
   factsHolder: T,
   memImports?: TImportsHolder,
@@ -203,11 +202,12 @@ function applyRules<T extends TFactsHolder>(
     logger.info(tableCount + Msgs.ApplyingRules);
   }
   // Apply rules
-  const imports = _combineImports(this.csvImports, memImports);
-  const updatedFacts: Record<string, unknown> = {};
+  const imports = _combineImports(this.csvImports, memImports),
+    updatedFacts: Record<string, unknown> = {},
+    factsHolderClone = { ...factsHolder } as Record<string, unknown>; 
   for (let i = 0; i < tableCount; i++) {
     const table = this.decisionTables[i],
-      factVal = factsHolder[table.factName],
+      factVal = factsHolderClone[table.factName],
       factArr = (Array.isArray(factVal) ? factVal : [factVal]);
     updatedFacts[table.factName] = _updateFacts<T>(table, factArr, imports);
   }

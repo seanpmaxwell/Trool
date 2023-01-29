@@ -8,9 +8,8 @@
 - Heavily inspired by Java's KnowledgeBase Library.
 - Allows use of `Import` objects so values can be reused. These can be passed dynamically through
 the code or hardcoded in the spreadsheet.
-- GitHub Repo contains fully-functional sample project so you can start practicing right away.
+- Looking at the test folder to see a working example.
 - Fully type-safe :)
-- Link to a sample project demonstrating usage can be found here: __https://github.com/seanpmaxwell/trool-sample__
 
 
 ## Requirements

@@ -3,6 +3,7 @@ package-lock.json
 node_modules/
 tsconfig.json
 images/
+test/
 
 # Ignore dev files
 lib/*.ts

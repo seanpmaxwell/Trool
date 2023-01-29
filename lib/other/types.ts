@@ -5,9 +5,6 @@
 // Misc
 export type TPrimitive = boolean | number | string | null | undefined;
 
-// Facts
-export type TFactsHolder = Record<string, Record<string, unknown>>;
-
 // Decision-Tables
 export type TRow = { [key in `field${number}`]: string };
 export type TCondition = (fact: Record<string, unknown>, paramVal: any) => boolean;
