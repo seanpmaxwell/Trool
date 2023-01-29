@@ -19,7 +19,7 @@ the code or hardcoded in the spreadsheet.
 
 
 ## Screenshot
-<img alt='fullOverview' src='https://github.com/seanpmaxwell/trool/raw/master/fullOverview.png' border='0'>
+<img alt='fullOverview' src='https://github.com/seanpmaxwell/trool/raw/master/images/fullOverview.png' border='0'>
 
 
 ## Quick Start
@@ -134,7 +134,7 @@ are specified (the cell is blank), the rule will skip that action column.
 - Whew that was a lot! Now that we've gone over the rules for creating tables, let's look at an
 example in detail. In the following snippet, we see an example on a decision-table and the fact `Tickets`.
 
-<img alt='sampleTable' src='https://github.com/seanpmaxwell/trool/raw/master/sampleTable.png' border='0'>
+<img alt='sampleTable' src='https://github.com/seanpmaxwell/trool/raw/master/images/sampleTable.png' border='0'>
 
 - To update this fact you needs to make sure the `Tickets` property exists on the facts-holder when it
 gets passed to `applyRules()`. If `Tickets` is an array, the decision-table will get applied to each
@@ -159,7 +159,7 @@ time without bugging your engineers, just have someone else make updates to the 
 
 - All imports must begin with the cell `Import: "Import Name"`. If you pass an import in the imports holder (via `applyRules()`) that has a key matching an import name in the spreadsheet, you will get the warning: `!!WARNING!! The spreadsheet is using an import name already passed via the imports object. The spreadsheet will overwrite the import: "Import Name"`.
 
-- The quick-start had an example of passing imports through `applyRules()`. Let's look at an example of an import hardcoded in the spreadsheet. <img alt='importExample' src='https://github.com/seanpmaxwell/trool/raw/master/importExample.png' border='0'>
+- The quick-start had an example of passing imports through `applyRules()`. Let's look at an example of an import hardcoded in the spreadsheet. <img alt='importExample' src='https://github.com/seanpmaxwell/trool/raw/master/images/importExample.png' border='0'>
 
 - With this import, each table will have access to an object named `TicketTypes` and all of its properties. If you were to place `TicketTypes.SEASON` in a cell for the operation `option == $param`, the Ticket object property `option` will be set to `"SEASON"` as the value.
 
