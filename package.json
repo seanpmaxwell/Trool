@@ -19,7 +19,8 @@
   },
   "scripts": {
     "test": "npx ts-node ./test",
-    "lint": "eslint . --ext .ts"
+    "lint": "eslint . --ext .ts",
+    "build": "tsc -p tsconfig.build.json"
   },
   "repository": {
     "type": "git",
