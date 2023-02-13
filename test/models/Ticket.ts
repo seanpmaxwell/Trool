@@ -37,9 +37,9 @@ class Ticket implements ITicket {
    */
   public toString(): string {
     return `Ticket Option: ${this.option} | ` +
-    `Visitor Type: ${this.visitorType} | ` +
-    `Ticket Price: $${this.price} | ` +
-    `Free T-Shirt: ${this.freeTShirt}`;
+      `Visitor Type: ${this.visitorType} | ` +
+      `Ticket Price: $${this.price} | ` +
+      `Free T-Shirt: ${this.freeTShirt}`;
   }
 }
 
