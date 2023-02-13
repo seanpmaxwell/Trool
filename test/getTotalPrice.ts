@@ -21,8 +21,8 @@ const CSV_FILE_PATH = './VisitorRules.csv';
 // **** Types **** //
 
 interface IFactsHolder {
-  Visitors: IVisitor[];
-  Tickets: ITicket[];
+  Visitors: Visitor[];
+  Tickets: Ticket[];
 }
 
 
@@ -31,8 +31,8 @@ interface IFactsHolder {
 /**
  * Calculate total price for an array of visitors.
  */
-async function calcTotalPrice(
-  visitors: IVisitor | readonly IVisitor[],
+async function getTotalPrice(
+  visitors: Visitor | Visitor[],
   ticketOpt: ITicket['option'],
   printDecisionTables?: boolean,
 ): Promise<string> {
@@ -58,13 +58,13 @@ async function calcTotalPrice(
  * Setup factors holder. Add party size to each visitor.
  */
 function _setupFactsHolder(
-  visitors: readonly IVisitor[],
+  visitors: readonly Visitor[],
   ticketOpt: ITicket['option'],
 ): IFactsHolder {
-  const tickets: ITicket[] = [];
+  const tickets: Ticket[] = [];
   visitors.forEach((visitor) => {
     visitor.partySize = visitors.length;
-    const ticket = Ticket.new(ticketOpt);
+    const ticket = new Ticket(ticketOpt);
     tickets.push(ticket);
   });
   return {
@@ -81,9 +81,9 @@ function _addUpEachTicketPrice(updatedFacts: IFactsHolder): number {
   let totalPrice = 0;
   Visitors.forEach((visitor, i) => {
     const ticket = Tickets[i];
-    Visitor.applyTicket(visitor, ticket);
+    visitor.applyTicket(ticket);
     totalPrice += ticket.price;
-    const ticketStr = Ticket.toString(ticket);
+    const ticketStr = ticket.toString();
     logger.info(ticketStr);
   });
   return totalPrice;
@@ -92,4 +92,4 @@ function _addUpEachTicketPrice(updatedFacts: IFactsHolder): number {
 
 // **** Export default **** //
 
-export default calcTotalPrice;
+export default getTotalPrice;

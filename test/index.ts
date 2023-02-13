@@ -11,35 +11,35 @@ import Visitor from './models/Visitor';
 
 // **** Data **** //
 
-const singleVisitor = Visitor.new(67);
+const singleVisitor = new Visitor(67);
 
 const PartyOf3 = [
-  Visitor.new(5),
-  Visitor.new(35),
-  Visitor.new(73),
-] as const;
+  new Visitor(5),
+  new Visitor(35),
+  new Visitor(73),
+];
 
 const PartyOf6 = [
-  Visitor.new(7),
-  Visitor.new(18),
-  Visitor.new(48),
-  Visitor.new(18), 
-  Visitor.new(65),
-  Visitor.new(101),
-] as const;
+  new Visitor(7),
+  new Visitor(18),
+  new Visitor(48),
+  new Visitor(18), 
+  new Visitor(65),
+  new Visitor(101),
+];
 
 const PartyOf10 = [
-  Visitor.new(7),
-  Visitor.new(12),
-  Visitor.new(19),
-  Visitor.new(64), 
-  Visitor.new(50),
-  Visitor.new(38),
-  Visitor.new(21),
-  Visitor.new(42),
-  Visitor.new(59), 
-  Visitor.new(17),
-] as const;
+  new Visitor(7),
+  new Visitor(12),
+  new Visitor(19),
+  new Visitor(64), 
+  new Visitor(50),
+  new Visitor(38),
+  new Visitor(21),
+  new Visitor(42),
+  new Visitor(59), 
+  new Visitor(17),
+];
 
 
 // **** Run **** //

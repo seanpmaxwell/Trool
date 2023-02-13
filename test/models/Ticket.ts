@@ -8,42 +8,42 @@ export interface ITicket {
 }
 
 
-// **** Functions **** //
+// **** Ticket Class **** //
 
-/**
- * Get a new ticket object.
- */
-function new_(
-  option?: ITicket['option'],
-  visitorType?: string,
-  price?: number,
-  freeTShirt?: boolean,
-): ITicket {
-  return {
-    option: (option ?? 'Regular'),
-    visitorType: (visitorType ?? ''),
-    price: (price ?? 0),
-    freeTShirt: (freeTShirt ?? false),
-  };
-}
+class Ticket implements ITicket {
 
-/**
- * Convert ticket to a string.
- */
-function toString(ticket?: ITicket): string {
-  if (!ticket) {
-    return 'Ticket value undefined';
+  public option: 'Regular' | 'Season' | null;
+  public visitorType: string;
+  public price: number;
+  public freeTShirt: boolean;
+
+  /**
+   * Constructor()
+   */
+  constructor(
+    option?: ITicket['option'],
+    visitorType?: string,
+    price?: number,
+    freeTShirt?: boolean,
+  ) {
+    this.option = (option ?? null);
+    this.visitorType = (visitorType ?? '');
+    this.price = (price ?? 0);
+    this.freeTShirt = !!freeTShirt;
   }
-  return `Ticket Option: ${ticket.option} | ` +
-    `Visitor Type: ${ticket.visitorType} | ` +
-    `Ticket Price: $${ticket.price} | ` +
-    `Free T-Shirt: ${ticket.freeTShirt}`;
+
+  /**
+   * Ticket to string
+   */
+  public toString(): string {
+    return `Ticket Option: ${this.option} | ` +
+    `Visitor Type: ${this.visitorType} | ` +
+    `Ticket Price: $${this.price} | ` +
+    `Free T-Shirt: ${this.freeTShirt}`;
+  }
 }
 
 
 // **** Export default **** //
 
-export default {
-  new: new_,
-  toString,
-} as const;
+export default Ticket;

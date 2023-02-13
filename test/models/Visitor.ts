@@ -16,53 +16,62 @@ export interface IVisitor {
   discount: number;
   freeTShirt: boolean;
   ticket?: ITicket;
-  addToDiscount?: (additionalDiscount: number) => void;
+  // addToDiscount?: (additionalDiscount: number) => void;
 }
 
 
-// **** Functions **** //
+// **** Visitor Class **** //
 
-/**
- * Create a new user object and append the addToDiscount method.
- */
-function _new(
-  age?: number,
-  partySize?: number,
-  type?: string,
-  discount?: number,
-  freeTShirt?: boolean,
-  ticket?: ITicket,
-): IVisitor {
-  return {
-    age: (age ?? 0),
-    partySize: (partySize ?? 1),
-    type: (type ?? ''),
-    discount: (discount ?? 0),
-    freeTShirt: (freeTShirt ?? false),
-    ticket,
-    addToDiscount(additionalDiscount: number) {
-      this.discount += additionalDiscount;
-    },
-  };
-}
+class Vistor implements IVisitor {
 
-/**
- * Set the ticket for a visitor. Note the discount needs to be applied.
- */
-function applyTicket(visitor: IVisitor, ticket: ITicket): void {
-  if (ticket) {
-    ticket.freeTShirt = visitor.freeTShirt;
-    ticket.visitorType = visitor.type;
-    const discount = 1 - (visitor.discount / 100);
-    ticket.price *= discount;
+  public age: number;
+  public partySize: number;
+  public type: string;
+  public discount: number;
+  public freeTShirt: boolean;
+  public ticket?: ITicket;
+
+  /**
+   * Constructor()
+   */
+  constructor(
+    age?: number,
+    partySize?: number,
+    type?: string,
+    discount?: number,
+    freeTShirt?: boolean,
+    ticket?: ITicket,
+  ) {
+    this.age = (age ?? 0);
+    this.partySize = (partySize ?? 1);
+    this.type = (type ?? '');
+    this.discount = (discount ?? 0);
+    this.freeTShirt = (freeTShirt ?? false);
+    this.ticket = ticket;
   }
-  visitor.ticket = ticket;
+
+  /**
+   * Add to discount
+   */
+  public addToDiscount(additionalDiscount: number) {
+    this.discount += additionalDiscount;
+  }
+
+  /**
+   * Apply Tickets
+   */
+  public applyTicket(ticket: ITicket): void {
+    if (ticket) {
+      ticket.freeTShirt = this.freeTShirt;
+      ticket.visitorType = this.type;
+      const discount = 1 - (this.discount / 100);
+      ticket.price *= discount;
+    }
+    this.ticket = ticket;
+  }
 }
 
 
 // **** Export default **** //
 
-export default {
-  new: _new,
-  applyTicket,
-} as const;
+export default Vistor;
