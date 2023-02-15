@@ -16,7 +16,6 @@ export interface IVisitor {
   discount: number;
   freeTShirt: boolean;
   ticket?: ITicket;
-  // addToDiscount?: (additionalDiscount: number) => void;
 }
 
 
