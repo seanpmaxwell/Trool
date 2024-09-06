@@ -35,7 +35,7 @@ You can look at the screen-shot above if you want a quick glimpse of what decisi
 - Export your spreadsheet as a CSV file. The rules for formatting the csv are the same as they are
 for the `csvtojson` library. That's what Trool uses internally to convert the csv to a JSON object.
 
-- Create a new NodeJS program (preferably with TypeScript) and import the `trool` library at the top.
+- Create a new NodeJS program (preferably with TypeScript) and import the `Trool` class from library.
 
 ```typescript
 import trool from 'trool';
@@ -44,16 +44,16 @@ import trool from 'trool';
 
 ```
 
-- To use Trool you must intialize it by calling `trool(...params)`. The `trool` function takes in the path to the CSV file, or you can pass in a string formatted as a csv and pass `true` as the second param. `trool()` is asynchronous so make sure to use `async/await` with it. `trool` returns the rule-engine containing the initialized decision-tables. Call `applyRules()` on the engine and pass in the facts-holder which in turn returns the updated facts.
+- To use Trool you must create a new instance of the class (`new Trool()`) and then intialize it by calling `.initialize(csv is a string or filePath)`. The csv can be the path to a CSV file, or you can pass in a string formatted as a csv and pass `true` as the second param. `initialize()` is asynchronous so make sure to use `async/await` with it. Now you can call `applyRules()` and pass in the facts-holder which returns the updated facts.
 
-- `trool()` has an additional optional param `showLogs` to turn logging on or off. If you want access to the decision-tables for some reason, there is the `.decisionTables` prop on the engine object. 
+- The constructor has an additional optional param `showLogs` to turn logging on or off.
 
 - The facts and the imports must be wrapped in holder objects, with the key being the name of the 
 fact/import to use in the spreadsheet and the value being the actual fact or import. The `imports`
 param is optional because you may only want to use the ones specified in the spreadsheet or have no need for any. 
 
 ```typescript
-import trool from 'trool';
+import Trool from 'trool';
 import logger from 'jet-logger';
 
 const csvFilePath = 'some-file-path';
@@ -72,8 +72,9 @@ const importsHolder = {
 
 (async () => {
     try {
-        const engine = await trool(csvFilePath);
-        const updatedFacts = engine.applyRules(factsHolder, importsHolder);
+        const trool = Trool();
+        await trool.initialize(csvFilePath);
+        const updatedFacts = trool.applyRules(factsHolder, importsHolder);
         totalPrice = addUpEachTicketPrice(updatedFacts);
         // Access decision tables if you want
         logger.info(engine.decisionTables);
