@@ -4,32 +4,21 @@
  * created by Sean Maxwell Mar 2, 2019
  */
 
-import { ITicket } from './Ticket';
-
-
-// **** Types **** //
-
-export interface IVisitor {
-  age: number;
-  partySize: number;
-  type: string;
-  discount: number;
-  freeTShirt: boolean;
-  ticket?: ITicket;
-}
+import Ticket from './Ticket';
 
 
 // **** Visitor Class **** //
 
-class Vistor implements IVisitor {
+class Visitor {
 
   public age: number;
   public partySize: number;
   public type: string;
   public discount: number;
   public freeTShirt: boolean;
-  public ticket?: ITicket;
+  public ticket?: Ticket;
 
+  
   /**
    * Constructor()
    */
@@ -39,7 +28,7 @@ class Vistor implements IVisitor {
     type?: string,
     discount?: number,
     freeTShirt?: boolean,
-    ticket?: ITicket,
+    ticket?: Ticket,
   ) {
     this.age = (age ?? 0);
     this.partySize = (partySize ?? 1);
@@ -59,7 +48,7 @@ class Vistor implements IVisitor {
   /**
    * Apply Tickets
    */
-  public applyTicket(ticket: ITicket): void {
+  public applyTicket(ticket: Ticket): void {
     if (ticket) {
       ticket.freeTShirt = this.freeTShirt;
       ticket.visitorType = this.type;
@@ -73,4 +62,4 @@ class Vistor implements IVisitor {
 
 // **** Export default **** //
 
-export default Vistor;
+export default Visitor;

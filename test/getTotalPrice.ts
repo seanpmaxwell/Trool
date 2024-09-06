@@ -8,9 +8,9 @@
 import path from 'path';
 import logger from 'jet-logger';
 
-import Ticket, { ITicket } from './models/Ticket';
-import Visitor, { IVisitor } from './models/Visitor';
-import trool from '../lib';
+import Ticket from './models/Ticket';
+import Visitor from './models/Visitor';
+import Trool from '../lib';
 
 
 // **** Variables **** //
@@ -33,20 +33,17 @@ interface IFactsHolder {
  */
 async function getTotalPrice(
   visitors: Visitor | Visitor[],
-  ticketOpt: ITicket['option'],
-  printDecisionTables?: boolean,
+  ticketOpt: Ticket['option'],
 ): Promise<string> {
   let totalPrice = 0;
   visitors = (visitors instanceof Array) ? visitors : [visitors];
   try {
     const csvFilePathFull = path.join(__dirname, CSV_FILE_PATH),
       facts = _setupFactsHolder(visitors, ticketOpt),
-      engine = await trool(csvFilePathFull),
-      updatedFacts = engine.applyRules<IFactsHolder>(facts);
+      trool = new Trool();
+    await trool.init(csvFilePathFull);
+    const updatedFacts = trool.applyRules<IFactsHolder>(facts);
     totalPrice = _addUpEachTicketPrice(updatedFacts);
-    if (printDecisionTables) {
-      logger.info(engine.decisionTables);
-    }
   } catch (err) {
     logger.err(err, true);
     totalPrice = -1;
@@ -59,7 +56,7 @@ async function getTotalPrice(
  */
 function _setupFactsHolder(
   visitors: readonly Visitor[],
-  ticketOpt: ITicket['option'],
+  ticketOpt: Ticket['option'],
 ): IFactsHolder {
   const tickets: Ticket[] = [];
   visitors.forEach((visitor) => {

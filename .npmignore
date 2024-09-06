@@ -2,6 +2,7 @@
 package-lock.json
 node_modules/
 tsconfig.json
+tsconfig.build.json
 images/
 test/
 

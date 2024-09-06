@@ -1,1 +1,1 @@
-export { default as default } from './trool';
+export { default as default } from './Trool';

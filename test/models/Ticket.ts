@@ -1,27 +1,19 @@
-// **** Types **** //
-
-export interface ITicket {
-  option: 'Regular' | 'Season' | null;
-  visitorType: string;
-  price: number;
-  freeTShirt: boolean;
-}
-
 
 // **** Ticket Class **** //
 
-class Ticket implements ITicket {
+class Ticket {
 
   public option: 'Regular' | 'Season' | null;
   public visitorType: string;
   public price: number;
   public freeTShirt: boolean;
 
+  
   /**
    * Constructor()
    */
   constructor(
-    option?: ITicket['option'],
+    option?: 'Regular' | 'Season' | null,
     visitorType?: string,
     price?: number,
     freeTShirt?: boolean,
