@@ -72,7 +72,7 @@ const importsHolder = {
 
 (async () => {
     try {
-        const trool = Trool();
+        const trool = new Trool();
         await trool.initialize(csvFilePath);
         const updatedFacts = trool.applyRules(factsHolder, importsHolder);
         totalPrice = addUpEachTicketPrice(updatedFacts);
