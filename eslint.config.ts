@@ -40,6 +40,7 @@ export default tseslint.config(
       '@typescript-eslint/no-floating-promises': 0,
       '@typescript-eslint/no-confusing-void-expression': 0,
       '@typescript-eslint/no-unnecessary-condition': 0,
+      '@typescript-eslint/no-unsafe-call': 0,
       '@typescript-eslint/restrict-template-expressions': [
         'error', { allowNumber: true },
       ],

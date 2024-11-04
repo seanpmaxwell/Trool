@@ -1,10 +1,3 @@
-/**
- * Decision Table class. Execute a group of rules on a table. There are two categories of
- * operations: Condition operations and Action operations.
- *
- * created by Sean Maxwell Mar 3, 2019
- */
-
 import { TAction, TCondition, TRow } from './common/types';
 
 
@@ -39,7 +32,7 @@ class DecisionTable {
   /**
    * Constructor()
    */
-  constructor(factName: string, tableRows: TRow[]) {
+  public constructor(factName: string, tableRows: TRow[]) {
     this.factName = factName;
     this.tableRows = tableRows;
     // Setup condition and actions
@@ -121,6 +114,7 @@ class DecisionTable {
       throw new TblErr(factName, Errors.MustEndWithParam + ` "${opStr}"`);
     }
 
+    // pick up here
     const condFn = this.getComparatorFn(arr[1], factName)
     
     // Return function
@@ -130,8 +124,8 @@ class DecisionTable {
       } 
       // For getter functions
       const factVal = fact[property];
-      let attrVal = null;
-      if (typeof factVal === 'function') {
+      let attrVal: unknown = null;
+      if (factVal instanceof Function) {
         attrVal = factVal();
       } else  {
         attrVal = factVal;
@@ -151,7 +145,7 @@ class DecisionTable {
       const argLength = actionStr.split('$param').length - 1;
       const op = ` "${actionStr}"`;
       if (argLength !== cellVals.length) {
-        throw new TblErr(factName, Errors.ParamCount + op)
+        throw new TblErr(factName, Errors.ParamCount + op);
       }
       const opArr = actionStr.split(' ');
       // Check if assignment or method call
@@ -168,7 +162,7 @@ class DecisionTable {
         if (fact[methodName] === undefined) {
           throw new TblErr(factName, Errors.AttrUndef + op);
         } else if (typeof fact[methodName] === 'function') {
-          (fact[methodName] as Function)(...cellVals);
+          fact[methodName](...cellVals);
         }
       }
     };

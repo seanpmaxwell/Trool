@@ -1,7 +1,3 @@
 **/node_modules
-
-# Transpiled files
-
-lib/**/*.js
-lib/**/*.js.map
-lib/**/*.d.ts
+dist/
+**/**/*.log
