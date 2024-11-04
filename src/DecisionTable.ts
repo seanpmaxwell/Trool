@@ -110,27 +110,33 @@ class DecisionTable {
    * Get the Condition functions.
    */
   private getCondFns(opStr: string, factName: string): TCondition {
+    // Process condition
+    const arr = opStr.split(' '),
+      property = arr[0].replace('()', '');
+    if (!opStr) {
+      throw new TblErr(factName, Errors.OpBlank);
+    } else if (arr.length !== 3) {
+      throw new TblErr(factName, Errors.OpFormat + ` "${opStr}"`);
+    } else if (arr[2] !== '$param') {
+      throw new TblErr(factName, Errors.MustEndWithParam + ` "${opStr}"`);
+    }
+
+    const condFn = this.getComparatorFn(arr[1], factName)
+    
+    // Return function
     return (fact: Record<string, unknown>, paramVal: unknown): boolean => {
-      const arr = opStr.split(' ');
-      const property = arr[0].replace('()', '');
-      if (!opStr) {
-        throw new TblErr(factName, Errors.OpBlank);
-      } else if (arr.length !== 3) {
-        throw new TblErr(factName, Errors.OpFormat + ` "${opStr}"`);
-      } else if (fact[property] === undefined) {
+      if (fact[property] === undefined) {
         throw new TblErr(factName, Errors.AttrUndef + ` "${opStr}"`);
-      } else if (arr[2] !== '$param') {
-        throw new TblErr(factName, Errors.MustEndWithParam + ` "${opStr}"`);
-      }
-      let attrVal = null;
+      } 
       // For getter functions
       const factVal = fact[property];
+      let attrVal = null;
       if (typeof factVal === 'function') {
         attrVal = factVal();
       } else  {
         attrVal = factVal;
       }
-      return this.compareVals(arr[1], attrVal, paramVal, factName);
+      return this.compareVals(condFn, attrVal, paramVal);
     };
   }
 
@@ -163,8 +169,6 @@ class DecisionTable {
           throw new TblErr(factName, Errors.AttrUndef + op);
         } else if (typeof fact[methodName] === 'function') {
           (fact[methodName] as Function)(...cellVals);
-        } else {
-
         }
       }
     };
@@ -174,10 +178,9 @@ class DecisionTable {
    * Determine an equality operation from a string.
    */
   private compareVals(
-    operator: string,
+    fn: (a: string | number, b: string| number) => boolean,
     val1: unknown,
     val2: unknown,
-    factName: string,
   ): boolean {
     if (typeof val1 !== 'string' && typeof val1 !== 'number') {
       return false;
@@ -185,22 +188,29 @@ class DecisionTable {
     if (typeof val2! !== 'string' && typeof val2 !== 'number') {
       return false;
     }
+    return fn(val1, val2);
+  }
+
+  /**
+   * Get comparator function.
+   */
+  private getComparatorFn(operator: string, factName: string) {
     if (operator === '===') {
-      return val1 === val2;
+      return (a: string | number, b: string | number) => a === b;
     } else if (operator === '==') {
-      return val1 === val2;
+      return (a: string | number, b: string | number) => a === b;
     } else if (operator === '!=') {
-      return val1 !== val2;
+      return (a: string | number, b: string | number) => a !== b;
     } else if (operator === '!==') {
-      return val1 !== val2;
+      return (a: string | number, b: string | number) => a !== b;
     } else if (operator === '>') {
-      return val1 > val2;
+      return (a: string | number, b: string | number) => a > b;
     } else if (operator === '>=') {
-      return val1 >= val2;
+      return (a: string | number, b: string | number) => a >= b;
     } else if (operator === '<') {
-      return val1 < val2;
+      return (a: string | number, b: string | number) => a < b;
     } else if (operator === '<=') {
-      return val1 <= val2;
+      return (a: string | number, b: string | number) => a <= b;
     } else {
       throw new TblErr(factName, Errors.NotAnOp + ` '${operator}'`);
     }

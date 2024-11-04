@@ -1,9 +1,3 @@
-/**
- * Calculate some prices for various party sizes.
- *
- * created by Sean Maxwell Mar 2, 2019
- */
-
 import logger from 'jet-logger';
 import getTotalPrice from './getTotalPrice';
 import Visitor from './models/Visitor';

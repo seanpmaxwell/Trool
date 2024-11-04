@@ -1,16 +1,9 @@
-/**
- * Process customers given a using rules specified in
- * a .csv file and the trool rule engine.
- *
- * created by Sean Maxwell Mar 2, 2019
- */
-
 import path from 'path';
 import logger from 'jet-logger';
+import Trool from '../src';
 
 import Ticket from './models/Ticket';
 import Visitor from './models/Visitor';
-import Trool from '../lib';
 
 
 // **** Variables **** //

@@ -2,23 +2,37 @@
   "name": "trool",
   "version": "3.0.1",
   "description": "a spreadsheet rule engine for NodeJS/TypeScript",
-  "main": "./lib/index.js",
-  "typings": "./lib/index.d.ts",
+  "main": "./dist/index.js",
+  "typings": "./dist/index.d.ts",
   "directories": {
-    "lib": "lib"
+    "dist": "dist"
   },
   "dependencies": {
     "csvtojson": "^2.0.10",
     "jet-logger": "^2.0.1"
   },
   "devDependencies": {
-    "@types/node": "^17.0.13",
-    "@typescript-eslint/eslint-plugin": "^5.10.2",
-    "@typescript-eslint/parser": "^5.10.2",
-    "eslint": "^8.8.0"
+    "@eslint/js": "^9.11.1",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-typescript": "^12.1.1",
+    "@stylistic/eslint-plugin-ts": "^2.8.0",
+    "@types/eslint__js": "^8.42.3",
+    "@types/node": "^22.8.1",
+    "eslint": "^9.11.1",
+    "eslint-plugin-n": "^17.10.3",
+    "i": "^0.3.7",
+    "jiti": "^2.3.3",
+    "npm": "^10.9.0",
+    "rollup": "^4.24.3",
+    "ts-node": "^10.9.2",
+    "tslib": "^2.8.0",
+    "typescript": "^5.6.3",
+    "typescript-eslint": "^8.8.0",
+    "vitest": "^2.1.4"
   },
   "scripts": {
-    "test": "npx ts-node ./test",
+    "clean-install": "rm -rf ./node_modules && rm -r package-lock.json && npm i",
+    "test": "ts-node ./test",
     "lint": "eslint . --ext .ts",
     "build": "tsc -p tsconfig.build.json"
   },
