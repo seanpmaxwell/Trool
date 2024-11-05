@@ -27,7 +27,14 @@ class Patron {
   public toString(): string {
     return `Full Name: ${this.firstName} ${this.lastName} | ` +
       `VIP Status: ${this.isVip} | ` +
-      `Allow Entry: $${this.isFlagged}`;
+      `Allow Entry: ${!this.isFlagged}`;
+  }
+
+  /**
+   * Check last-name
+   */
+  public checkLastName(val: string): boolean {
+    return (this.lastName.toLowerCase().includes(val.toLowerCase()));
   }
 }
 

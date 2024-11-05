@@ -34,7 +34,8 @@
     "clean-install": "rm -rf ./node_modules && rm -r package-lock.json && npm i",
     "lint": "eslint --flag unstable_ts_config",
     "build": "rm -rf ./dist/ && tsc -p tsconfig.build.json",
-    "test": "ts-node ./test"
+    "test:visitors": "ts-node ./test/VisitorRules",
+    "test:nightclub": "ts-node ./test/NightClubRules"
   },
   "repository": {
     "type": "git",

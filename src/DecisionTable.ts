@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
 import { TAction, TCondition, TRow } from './common/types';
 
 
@@ -11,6 +10,7 @@ const Errors = {
   OpBlank: 'Operation cannot be blank',
   OpFormat: 'The operation must began with the Fact\'s attribute, contain ' + 
     'one operator, and end with "$param". Operation:',
+  FunctionBad: 'The function was not found of the fact or was not a function.',
   AttrUndef: 'Attribute does not exist on the fact for operation:',
   MustEndWithParam: 'Condition operation must end with "$param". Operation:',
   ParamCount: 'The number of params for an action operation must match ' + 
@@ -109,37 +109,37 @@ class DecisionTable {
     let property = arr[0].replace('()', '');
     if (!opStr) {
       throw new TblErr(factName, Errors.OpBlank);
-    } else if (arr.length !== 3) {
-      throw new TblErr(factName, Errors.OpFormat + ` "${opStr}"`);
-    } else if (arr[2] !== '$param') {
-      throw new TblErr(factName, Errors.MustEndWithParam + ` "${opStr}"`);
     }
-
-    // pick up here
+    // Process operation
     let condFn: (a: string | number, b: string | number) => boolean;
-    let useAttrMethod = false,
-      valFnStr = '';
+    let useAttrMethod = false;
     if (property.endsWith('($param)')) {
-      const props = property.split('.');
       useAttrMethod = true;
-      property = props[0];
-      console.log(property)
-      valFnStr = props[1].substring(0, props[1].length - 8);
-      console.log(valFnStr) // pick up here
+      property = property.substring(0, property.length - 8);
     } else {
+      if (arr.length !== 3) {
+        throw new TblErr(factName, Errors.OpFormat + ` "${opStr}"`);
+      } else if (arr[2] !== '$param') {
+        throw new TblErr(factName, Errors.MustEndWithParam + ` "${opStr}"`);
+      }
       condFn = this.getComparatorFn(arr[1], factName);
     }
-
     // Return function
     return (fact: Record<string, unknown>, paramVal: unknown): boolean => {
       if (fact[property] === undefined) {
         throw new TblErr(factName, Errors.AttrUndef + ` "${opStr}"`);
-      } 
-      const factVal = fact[property];
+      }
+      // Call functions
       if (useAttrMethod) {
-        return this.safeCallAttrValMethod(property, factVal, valFnStr, 
-          paramVal);
+        if (typeof fact[property] === 'function') {
+          // eslint-disable-next-line
+          return (fact[property] as any)(paramVal);
+        } else {
+          throw new TblErr(factName, Errors.FunctionBad + ` "${property}"`);
+        }
+      // Assignment
       } else {
+        const factVal = fact[property];
         let attrVal: unknown = null;
         // For getter functions
         if (factVal instanceof Function) {
@@ -227,30 +227,6 @@ class DecisionTable {
       throw new TblErr(factName, Errors.NotAnOp + ` '${operator}'`);
     }
   }
-
-  /**
-   * Call an attribute values method like "some string".matches(...)
-   */
-  private safeCallAttrValMethod(
-    property: string,
-    factVal: unknown,
-    valFnStr: string,
-    paramVal: unknown, 
-  ): boolean {
-    try {
-      // eslint-disable-next-line
-      const fn: ((val: unknown) => boolean) = (factVal as any)?.[valFnStr];
-      if (typeof fn === 'function') {
-        return fn(paramVal);
-      }
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (err) {
-      throw new Error(`Function "${valFnStr}" does not exist or is not a ` + 
-        `function on the attribute: "${property}".`);
-    }
-    // Return
-    return false;
-  }
 }
 
 
@@ -259,7 +235,7 @@ class DecisionTable {
 class TblErr extends Error {
 
   public constructor(factName: string, message: string) {
-    super('Error on DecisionTable(' + factName + ') : ' + message);
+    super(`Error on DecisionTable "${factName}": ${message}`);
   }
 }
 

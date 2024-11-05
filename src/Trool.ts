@@ -310,11 +310,11 @@ class Trool {
       return false;
     } else if (cellValLowerCase === 'null') {
       return null;
-    } else if (cellValStr.startsWith('\'')  && cellValStr.endsWith('\'')) {
+    } else if (cellValStr.startsWith('\'') && cellValStr.endsWith('\'')) {
       return cellValStr.substring(1, cellValStr.length - 1);
-    } else if (cellValStr.startsWith('"')  && cellValStr.endsWith('"')) {
+    } else if (cellValStr.startsWith('"') && cellValStr.endsWith('"')) {
       return cellValStr.substring(1, cellValStr.length - 1);
-    } else if (cellValStr.startsWith('“')  && cellValStr.endsWith('”')) {
+    } else if (cellValStr.startsWith('“') && cellValStr.endsWith('”')) {
       return cellValStr.substring(1, cellValStr.length - 1);
     }
     // Value is from an import
