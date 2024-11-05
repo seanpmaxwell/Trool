@@ -3,8 +3,7 @@ import getTotalPrice from './getTotalPrice';
 import Visitor from './models/Visitor';
 
 
-// **** Data **** //
-
+// Data
 const singleVisitor = new Visitor(67);
 
 const PartyOf3 = [
@@ -36,10 +35,9 @@ const PartyOf10 = [
 ];
 
 
-// **** Run **** //
-
+// Start
 (async () => {
-  const p = (total: string) => logger.info('Total Price: ' + total + '\n')
+  const p = (total: string) => logger.info('Total Price: ' + total + '\n');
   // Party of 1
   let totalPrice = await getTotalPrice(singleVisitor, 'Regular');
   p(totalPrice);

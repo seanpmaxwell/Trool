@@ -1,6 +1,6 @@
 import path from 'path';
 import logger from 'jet-logger';
-import Trool from '../src';
+import Trool from '../../src';
 
 import Ticket from './models/Ticket';
 import Visitor from './models/Visitor';
@@ -10,16 +10,10 @@ import Visitor from './models/Visitor';
 
 const CSV_FILE_PATH = './VisitorRules.csv';
 
-
-// **** Types **** //
-
 interface IFactsHolder {
   Visitors: Visitor[];
   Tickets: Ticket[];
 }
-
-
-// **** Functions **** //
 
 /**
  * Calculate total price for an array of visitors.

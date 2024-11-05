@@ -1,6 +1,4 @@
 
-// **** Ticket Class **** //
-
 class Ticket {
 
   public option: 'Regular' | 'Season' | null;
@@ -12,7 +10,7 @@ class Ticket {
   /**
    * Constructor()
    */
-  constructor(
+  public constructor(
     option?: 'Regular' | 'Season' | null,
     visitorType?: string,
     price?: number,

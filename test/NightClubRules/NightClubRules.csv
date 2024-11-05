@@ -1,0 +1,7 @@
+,,,
+Table: Patrons,Condition,Action,Action
+,lastName.includes($param),isVip = $param,isFlagged = $param
+Set Falcones as VIPs,Falcone,TRUE,FALSE
+Set Marconis as not VIPs,Marconi,FALSE,FALSE
+Flag Giganti (don't let them in),Giganti,FALSE,TRUE
+,,,

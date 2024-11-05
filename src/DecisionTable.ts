@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
 import { TAction, TCondition, TRow } from './common/types';
 
 
@@ -104,8 +105,8 @@ class DecisionTable {
    */
   private getCondFns(opStr: string, factName: string): TCondition {
     // Process condition
-    const arr = opStr.split(' '),
-      property = arr[0].replace('()', '');
+    const arr = opStr.split(' ');
+    let property = arr[0].replace('()', '');
     if (!opStr) {
       throw new TblErr(factName, Errors.OpBlank);
     } else if (arr.length !== 3) {
@@ -115,22 +116,39 @@ class DecisionTable {
     }
 
     // pick up here
-    const condFn = this.getComparatorFn(arr[1], factName)
-    
+    let condFn: (a: string | number, b: string | number) => boolean;
+    let useAttrMethod = false,
+      valFnStr = '';
+    if (property.endsWith('($param)')) {
+      const props = property.split('.');
+      useAttrMethod = true;
+      property = props[0];
+      console.log(property)
+      valFnStr = props[1].substring(0, props[1].length - 8);
+      console.log(valFnStr) // pick up here
+    } else {
+      condFn = this.getComparatorFn(arr[1], factName);
+    }
+
     // Return function
     return (fact: Record<string, unknown>, paramVal: unknown): boolean => {
       if (fact[property] === undefined) {
         throw new TblErr(factName, Errors.AttrUndef + ` "${opStr}"`);
       } 
-      // For getter functions
       const factVal = fact[property];
-      let attrVal: unknown = null;
-      if (factVal instanceof Function) {
-        attrVal = factVal();
-      } else  {
-        attrVal = factVal;
+      if (useAttrMethod) {
+        return this.safeCallAttrValMethod(property, factVal, valFnStr, 
+          paramVal);
+      } else {
+        let attrVal: unknown = null;
+        // For getter functions
+        if (factVal instanceof Function) {
+          attrVal = factVal();
+        } else {
+          attrVal = factVal;
+        }
+        return this.compareVals(condFn, attrVal, paramVal);
       }
-      return this.compareVals(condFn, attrVal, paramVal);
     };
   }
 
@@ -208,6 +226,30 @@ class DecisionTable {
     } else {
       throw new TblErr(factName, Errors.NotAnOp + ` '${operator}'`);
     }
+  }
+
+  /**
+   * Call an attribute values method like "some string".matches(...)
+   */
+  private safeCallAttrValMethod(
+    property: string,
+    factVal: unknown,
+    valFnStr: string,
+    paramVal: unknown, 
+  ): boolean {
+    try {
+      // eslint-disable-next-line
+      const fn: ((val: unknown) => boolean) = (factVal as any)?.[valFnStr];
+      if (typeof fn === 'function') {
+        return fn(paramVal);
+      }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (err) {
+      throw new Error(`Function "${valFnStr}" does not exist or is not a ` + 
+        `function on the attribute: "${property}".`);
+    }
+    // Return
+    return false;
   }
 }
 

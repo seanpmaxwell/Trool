@@ -1,13 +1,5 @@
-/**
- * Visitor class
- *
- * created by Sean Maxwell Mar 2, 2019
- */
-
 import Ticket from './Ticket';
 
-
-// **** Visitor Class **** //
 
 class Visitor {
 
@@ -17,12 +9,11 @@ class Visitor {
   public discount: number;
   public freeTShirt: boolean;
   public ticket?: Ticket;
-
   
   /**
    * Constructor()
    */
-  constructor(
+  public constructor(
     age?: number,
     partySize?: number,
     type?: string,
