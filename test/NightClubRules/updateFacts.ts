@@ -4,7 +4,7 @@ import Trool from '../../src';
 import Patron from './Patron';
 
 
-// **** Variables/Types **** //
+// **** Setup **** //
 
 const CSV_FILE_PATH = './NightClubRules.csv';
 
@@ -22,17 +22,10 @@ interface IFactsHolder {
 }
 
 
-// **** Run ***** //
-
-// Print results
-(async () => {
-  const updatedFacts = await updateFacts();
-  updatedFacts?.Patrons.forEach(patron => logger.info(patron.toString()));
-})();
-
-
-// Update patrons status
-export async function updateFacts(): Promise<IFactsHolder | undefined> {
+/**
+ * Update patrons status
+ */
+async function updateFacts(): Promise<IFactsHolder | undefined> {
   try {
     const csvFilePathFull = path.join(__dirname, CSV_FILE_PATH),
       facts = { Patrons: patrons },
@@ -44,3 +37,8 @@ export async function updateFacts(): Promise<IFactsHolder | undefined> {
     logger.err(err);
   }
 }
+
+
+// **** Export Default **** //
+
+export default updateFacts;

@@ -7,6 +7,14 @@
   "directories": {
     "dist": "dist"
   },
+  "scripts": {
+    "clean-install": "rm -rf ./node_modules && rm -r package-lock.json && npm i",
+    "lint": "eslint --flag unstable_ts_config",
+    "build": "rm -rf ./dist/ && tsc -p tsconfig.build.json",
+    "test": "vitest",
+    "test:visitors": "ts-node ./test/VisitorRules/playground.ts",
+    "test:nightclub": "ts-node ./test/NightClubRules/playground.ts"
+  },
   "dependencies": {
     "csvtojson": "^2.0.10",
     "jet-logger": "^2.0.1"
@@ -29,14 +37,6 @@
     "typescript": "^5.6.3",
     "typescript-eslint": "^8.8.0",
     "vitest": "^2.1.4"
-  },
-  "scripts": {
-    "clean-install": "rm -rf ./node_modules && rm -r package-lock.json && npm i",
-    "lint": "eslint --flag unstable_ts_config",
-    "build": "rm -rf ./dist/ && tsc -p tsconfig.build.json",
-    "test": "vitest",
-    "test:visitors": "ts-node ./test/VisitorRules",
-    "test:nightclub": "ts-node ./test/NightClubRules"
   },
   "repository": {
     "type": "git",

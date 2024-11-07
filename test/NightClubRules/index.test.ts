@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest';
-import { updateFacts } from './index';
+import updateFacts from './updateFacts';
 
 
 test('NightClubRules spreadsheet', async () => {

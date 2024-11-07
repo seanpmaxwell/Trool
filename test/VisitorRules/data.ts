@@ -1,8 +1,6 @@
 import Visitor from './models/Visitor';
 
 
-export const CSV_FILE_PATH = './VisitorRules.csv';
-
 export const singleVisitor = new Visitor(67);
 
 export const PartyOf3 = [

@@ -48,6 +48,20 @@ class Visitor {
     }
     this.ticket = ticket;
   }
+
+  /**
+   * Get visitors ticket price.
+   */
+  public getTicketPrice(): number {
+    return this.ticket?.price ?? 0;
+  }
+
+  /**
+   * Get the string value of a ticket.
+   */
+  public getTicketStr(): string {
+    return this.ticket?.toString() ?? '';
+  }
 }
 
 
