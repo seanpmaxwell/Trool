@@ -1,9 +1,3 @@
-/**
- * Main class for the
- *
- * created by Sean Maxwell Mar 2, 2019
- */
-
 import csvToJson from 'csvtojson';
 import loggerLib, { JetLogger, LoggerModes } from 'jet-logger';
 
@@ -54,11 +48,10 @@ class Trool {
   private csvImports: TImportsHolder;
   private decisionTables: DecisionTable[];
 
-
   /**
    * Constructor
    */
-  constructor(showLogs?: boolean) {
+  public constructor(showLogs?: boolean) {
     // Logs
     if (showLogs === false) {
       this.logger = new JetLogger(LoggerModes.Off);
@@ -78,15 +71,15 @@ class Trool {
     initFromString?: boolean,
   ): Promise<void> {
     // Get rows
-    let rows;
+    let rows: TRow[] = [];
     if (initFromString) {
-      rows = await csvToJson().fromString(filePathOrContent);
+      rows = await csvToJson().fromString(filePathOrContent) as TRow[];
     } else {
-      rows = await csvToJson().fromFile(filePathOrContent);
+      rows = await csvToJson().fromFile(filePathOrContent) as TRow[];
     }
     // Setup private stuff
     this.csvImports = this.setupImports(rows);
-    this.decisionTables = this.getTables(rows)
+    this.decisionTables = this.getTables(rows);
   }
 
   /**
@@ -125,7 +118,7 @@ class Trool {
       throw Error(Msgs.Errs.ImportStart + ` '${firstCell}'`);
     }
     const importName = firstCellArr[1];
-    if (imports.hasOwnProperty(importName)) {
+    if (Object.prototype.hasOwnProperty.call(imports, importName)) {
       this.logger.warn(Msgs.Warnings.ImportName + importName);
     }
     return importName;
@@ -196,8 +189,9 @@ class Trool {
     for (let i = 0; i < tableCount; i++) {
       const table = this.decisionTables[i],
         factVal = factsHolderClone[table.getFactName()],
-        factArr = (Array.isArray(factVal) ? factVal : [factVal]);
-      updatedFacts[table.getFactName()] = this.updateFacts<T>(table, factArr, 
+        factArr = (Array.isArray(factVal) ? factVal : [factVal]) as 
+          Record<string, unknown>[];
+      updatedFacts[table.getFactName()] = this.updateFacts(table, factArr, 
         imports);
     }
     // Return
@@ -225,7 +219,7 @@ class Trool {
   /**
    * Update a single array of facts.
    */
-  private updateFacts<T>(
+  private updateFacts(
     table: DecisionTable,
     facts: Record<string, unknown>[],
     imports: TImportsHolder,
@@ -233,8 +227,7 @@ class Trool {
     const tableRows = table.getRows(),
       conditions = table.getConditions(),
       actions = table.getActions();
-    for (let factIdx = 0; factIdx < facts.length; factIdx++) {
-      const fact = facts[factIdx];
+    for (const fact of facts) {
       rowLoop:
       for (let rowIdx = 2; rowIdx < tableRows.length; rowIdx++) {
         const ruleArr = DecisionTable.rowToArr(tableRows[rowIdx]);
@@ -242,13 +235,13 @@ class Trool {
           throw Error(Msgs.Errs.RuleNameEmpty);
         }
         let colIdx = 1;
-        for (let i = 0; i < conditions.length; i++) {
-          const passed = this.callCondFn(fact, conditions[i], ruleArr[colIdx++], 
+        for (const condition of conditions) {
+          const passed = this.callCondFn(fact, condition, ruleArr[colIdx++], 
             imports);
           if (!passed) { continue rowLoop; }
         }
-        for (let i = 0; i < actions.length; i++) {
-          this.callActionFn(fact, actions[i], ruleArr[colIdx++], imports);
+        for (const action of actions) {
+          this.callActionFn(fact, action, ruleArr[colIdx++], imports);
         }
       }
     }
@@ -258,7 +251,7 @@ class Trool {
   /**
    * Call an Condition function.
    */
-  private callCondFn<T>(
+  private callCondFn(
     fact: Record<string, unknown>,
     condition: TCondition,
     cellValStr: string,
@@ -277,7 +270,7 @@ class Trool {
   /**
    * Call an Action function.
    */
-  private callActionFn<T>(
+  private callActionFn(
     fact: Record<string, unknown>,
     action: TAction,
     cellValStr: string,
@@ -287,9 +280,9 @@ class Trool {
       return;
     }
     const cellVals = cellValStr.split(',');
-    const retVals = []
-    for (let i = 0; i < cellVals.length; i++) {
-      const val = this.processValFromCell(cellVals[i], imports);
+    const retVals = [];
+    for (const cellVal of cellVals) {
+      const val = this.processValFromCell(cellVal, imports);
       if (val === null) {
         throw Error(Msgs.Errs.invalidVal + ` '${cellValStr}'`);
       } else {
@@ -317,11 +310,11 @@ class Trool {
       return false;
     } else if (cellValLowerCase === 'null') {
       return null;
-    } else if (cellValStr.startsWith('\'')  && cellValStr.endsWith('\'')) {
+    } else if (cellValStr.startsWith('\'') && cellValStr.endsWith('\'')) {
       return cellValStr.substring(1, cellValStr.length - 1);
-    } else if (cellValStr.startsWith('"')  && cellValStr.endsWith('"')) {
+    } else if (cellValStr.startsWith('"') && cellValStr.endsWith('"')) {
       return cellValStr.substring(1, cellValStr.length - 1);
-    } else if (cellValStr.startsWith('“')  && cellValStr.endsWith('”')) {
+    } else if (cellValStr.startsWith('“') && cellValStr.endsWith('”')) {
       return cellValStr.substring(1, cellValStr.length - 1);
     }
     // Value is from an import
@@ -332,7 +325,7 @@ class Trool {
       importKey = arr[0];
       importVal = arr[1];
     }
-    if (imports.hasOwnProperty(importKey)) {
+    if (Object.prototype.hasOwnProperty.call(imports, importKey)) {
       if (importVal) {
         return imports[importKey][importVal];
       }
