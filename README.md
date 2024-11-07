@@ -1,5 +1,6 @@
 # TROOL - a spreadsheet rule engine for TypeScript
 <h3>Get rules out of the code so non-engineers can make updates over time!</h3>
+<br/>
 
 
 ## Table of contents
@@ -11,6 +12,7 @@
   - [Decision Tables](#decision-tables)
   - [Imports](#imports)
   - [Special Notes](#special-notes)
+<br/>
 
 
 ## Reasons to use Trool <a href="reasons-to-use-trool"></a>
@@ -19,15 +21,18 @@
 - Allows use of `Import` objects so values can be reused. These can be passed dynamically through
 the code or hardcoded in the spreadsheet.
 - TypeScript First!
+<br/>
 
 
 ## Requirements <a href="requirements"></a>
 - The spreadsheet must be exported as a _.csv_ before usage. 
 - Works client-side or server side but if you want to uses file-paths for the csv you must use it server side.
+<br/>
 
 
 ## Screenshot <a href="screenshot"></a>
 <img alt='fullOverview' src='https://github.com/seanpmaxwell/trool/raw/master/images/fullOverview.png' border='0'>
+<br/>
 
 
 ## Quick Start <a href="quick-start"></a>
@@ -78,6 +83,7 @@ const importsHolder = {
 ```
 
 - The `updatedFacts` variable in the previous snippet will contain all the objects in the same order as the `factsHolder` that was passed in.
+<br/>
 
 
 ## Guide <a href="guide"></a>
