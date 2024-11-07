@@ -15,7 +15,7 @@
 <br/>
 
 
-## Reasons to use Trool <a href="reasons-to-use-trool"></a>
+## Reasons to use Trool <a name="reasons-to-use-trool"></a>
 - Manage rules in a business spreadsheet format.
 - Heavily inspired by Java's KnowledgeBase Library.
 - Allows use of `Import` objects so values can be reused. These can be passed dynamically through
@@ -24,18 +24,18 @@ the code or hardcoded in the spreadsheet.
 <br/>
 
 
-## Requirements <a href="requirements"></a>
+## Requirements <a name="requirements"></a>
 - The spreadsheet must be exported as a _.csv_ before usage. 
 - Works client-side or server side but if you want to uses file-paths for the csv you must use it server side.
 <br/>
 
 
-## Screenshot <a href="screenshot"></a>
+## Screenshot <a name="screenshot"></a>
 <img alt='fullOverview' src='https://github.com/seanpmaxwell/trool/raw/master/images/fullOverview.png' border='0'>
 <br/>
 
 
-## Quick Start <a href="quick-start"></a>
+## Quick Start <a name="quick-start"></a>
 - install `$ npm install --save trool`
 
 - Open Excel, LibreOffice Calc, or some other spreadsheet tool of your choice.
@@ -86,11 +86,11 @@ const importsHolder = {
 <br/>
 
 
-## Guide <a href="guide"></a>
+## Guide <a name="guide"></a>
 
 > **Important:** When you setup your decision-tables and imports there are some rules to follow in order for your tables/imports to be properly loaded into memory. Strict formatting is enforced for readability purposes.
 
-### Decision Tables: <a href="decision-tables"></a>
+### Decision Tables: <a name="decision-tables"></a>
 
 - All decision-tables must start with a cell containing the text `Table: "Fact Name"`. A table without a fact name will throw an error. If you create two tables that have the same fact-name, the second table will overwrite all the changes from the first.
 
@@ -126,7 +126,7 @@ is equal to the string `"Regular"`. If so, it will apply the action column to th
 - And that's how Trool works! If you need to change the price for a Regular or Seasonal ticket over time without bugging your engineers, just have someone else make updates to the spreadsheet :)
 
 
-### Imports: <a href="imports"></a>
+### Imports: <a name="imports"></a>
 
 - For large complicated spreadsheets you might want to reuse certain values. Suppose for Visitors who might be buying these tickets the maximum age for a child is `18`. One might need to reuse this value for multiple rules/tables and if it's updated in one place, it needs to be updated everywhere. For example, the maximum age for a child might change from `18` to `15` or something like that. This is where imports come in handy. An import basically sets up a simple JSON object that you can access in your tables. Imports can be created in the spreadsheet or passed through `applyRules()`. 
 
@@ -143,7 +143,7 @@ is equal to the string `"Regular"`. If so, it will apply the action column to th
 
 - One more thing, you cannot use nested properties on imports: i.e. `Import.key.key` This is intentional, it would lead to a very message spreadsheet.
 
-### Special Notes: <a href="special-notes"></a>
+### Special Notes: <a name="special-notes"></a>
 
 - In Trool spreadsheets, `==` under the hood is actually using `===`. 
 
