@@ -133,7 +133,7 @@ class DecisionTable {
       if (useAttrMethod) {
         if (typeof fact[property] === 'function') {
           // eslint-disable-next-line
-          return (fact[property] as any)(paramVal);
+          return !!(fact[property] as any)(paramVal);
         } else {
           throw new TblErr(factName, Errors.FunctionBad + ` "${property}"`);
         }
