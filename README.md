@@ -1,9 +1,19 @@
 # TROOL - a spreadsheet rule engine for TypeScript
 <h3>Get rules out of the code so non-engineers can make updates over time!</h3>
-<br>
 
 
-## Features
+## Table of contents
+- [Reasons to use Trool](#reasons-to-use-trool)
+- [Requirements](#requirements)
+- [Screenshot](#screenshot)
+- [Quick Start](#quick-start)
+- [Guide](#guide)
+  - [Decision Tables](#decision-tables)
+  - [Imports](#imports)
+  - [Special Notes](#special-notes)
+
+
+## Reasons to use Trool <a href="reasons-to-use-trool"></a>
 - Manage rules in a business spreadsheet format.
 - Heavily inspired by Java's KnowledgeBase Library.
 - Allows use of `Import` objects so values can be reused. These can be passed dynamically through
@@ -11,16 +21,16 @@ the code or hardcoded in the spreadsheet.
 - TypeScript First!
 
 
-## Requirements
+## Requirements <a href="requirements"></a>
 - The spreadsheet must be exported as a _.csv_ before usage. 
 - Works client-side or server side but if you want to uses file-paths for the csv you must use it server side.
 
 
-## Screenshot
+## Screenshot <a href="screenshot"></a>
 <img alt='fullOverview' src='https://github.com/seanpmaxwell/trool/raw/master/images/fullOverview.png' border='0'>
 
 
-## Quick Start
+## Quick Start <a href="quick-start"></a>
 - install `$ npm install --save trool`
 
 - Open Excel, LibreOffice Calc, or some other spreadsheet tool of your choice.
@@ -68,14 +78,13 @@ const importsHolder = {
 ```
 
 - The `updatedFacts` variable in the previous snippet will contain all the objects in the same order as the `factsHolder` that was passed in.
-<br>
 
 
-## Guide
+## Guide <a href="guide"></a>
 
-> **Important!** When you setup your decision-tables and imports there are some rules to follow in order for your tables/imports to be properly loaded into memory. Strict formatting is enforced for readability purposes.
+> **Important:** When you setup your decision-tables and imports there are some rules to follow in order for your tables/imports to be properly loaded into memory. Strict formatting is enforced for readability purposes.
 
-**Decision-Tables:**
+### Decision Tables: <a href="decision-tables"></a>
 
 - All decision-tables must start with a cell containing the text `Table: "Fact Name"`. A table without a fact name will throw an error. If you create two tables that have the same fact-name, the second table will overwrite all the changes from the first.
 
@@ -109,10 +118,9 @@ const importsHolder = {
 is equal to the string `"Regular"`. If so, it will apply the action column to the fact. The property `price` will be set to the value `70`. The exact same sequence of events will take place for the next rule `Set Price - Season`. In other words, if the Ticket option is `"Season"`, the price will be `600`, if the option is`"Regular"`, the price will be `70`.
 
 - And that's how Trool works! If you need to change the price for a Regular or Seasonal ticket over time without bugging your engineers, just have someone else make updates to the spreadsheet :)
-<br>
 
 
-**Imports:**
+### Imports: <a href="imports"></a>
 
 - For large complicated spreadsheets you might want to reuse certain values. Suppose for Visitors who might be buying these tickets the maximum age for a child is `18`. One might need to reuse this value for multiple rules/tables and if it's updated in one place, it needs to be updated everywhere. For example, the maximum age for a child might change from `18` to `15` or something like that. This is where imports come in handy. An import basically sets up a simple JSON object that you can access in your tables. Imports can be created in the spreadsheet or passed through `applyRules()`. 
 
@@ -127,11 +135,9 @@ is equal to the string `"Regular"`. If so, it will apply the action column to th
 
 - When using imports through `applyRules()`, you don't have to necessarily use an object as a property and could have it as a primitive. VisitorTypes itself could be a string or number. I don't recommend using imports this way though; it could be confusing in a collaborative environment.
 
-- One more thing, you cannot use nested properties on imports: i.e. `Import.key.key` This is intentional, it would lead to a very message spreadsheet. 
-<br>
+- One more thing, you cannot use nested properties on imports: i.e. `Import.key.key` This is intentional, it would lead to a very message spreadsheet.
 
-
-**Special Notes:**
+### Special Notes: <a href="special-notes"></a>
 
 - In Trool spreadsheets, `==` under the hood is actually using `===`. 
 
