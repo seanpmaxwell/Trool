@@ -4,6 +4,8 @@ import Trool from '../../src';
 import Patron from './Patron';
 
 
+// **** Variables/Types **** //
+
 const CSV_FILE_PATH = './NightClubRules.csv';
 
 const patrons: Patron[] = [
@@ -20,16 +22,25 @@ interface IFactsHolder {
 }
 
 
-// Start
+// **** Run ***** //
+
+// Print results
 (async () => {
+  const updatedFacts = await updateFacts();
+  updatedFacts?.Patrons.forEach(patron => logger.info(patron.toString()));
+})();
+
+
+// Update patrons status
+export async function updateFacts(): Promise<IFactsHolder | undefined> {
   try {
     const csvFilePathFull = path.join(__dirname, CSV_FILE_PATH),
       facts = { Patrons: patrons },
       trool = new Trool();
     await trool.init(csvFilePathFull);
     const updatedFacts = trool.applyRules<IFactsHolder>(facts);
-    updatedFacts.Patrons.forEach(patron => logger.info(patron.toString()));
+    return updatedFacts;
   } catch (err) {
     logger.err(err);
   }
-})();
+}

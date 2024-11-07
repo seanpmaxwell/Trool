@@ -34,20 +34,16 @@ const PartyOf10 = [
   new Visitor(17),
 ];
 
+const print = (total: string) => logger.info('Total Price: ' + total + '\n');
 
 // Start
 (async () => {
-  const p = (total: string) => logger.info('Total Price: ' + total + '\n');
-  // Party of 1
   let totalPrice = await getTotalPrice(singleVisitor, 'Regular');
-  p(totalPrice);
-  // Party of 3
+  print(totalPrice);
   totalPrice = await getTotalPrice(PartyOf3, 'Season');
-  p(totalPrice);
-  // Party of 6
+  print(totalPrice);
   totalPrice = await getTotalPrice(PartyOf6, 'Regular');
-  p(totalPrice);
-  // Party of 10
+  print(totalPrice);
   totalPrice = await getTotalPrice(PartyOf10, 'Regular');
-  p(totalPrice);
+  print(totalPrice);
 })();
