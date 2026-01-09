@@ -77,7 +77,7 @@ const importsHolder = {
         const updatedFacts = trool.applyRules(factsHolder, importsHolder);
         totalPrice = addUpEachTicketPrice(updatedFacts);
     } catch (err) {
-        logger.error(err.message);
+        logger.err(err.message);
     }
 })();
 ```
@@ -150,3 +150,4 @@ is equal to the string `"Regular"`. If so, it will apply the action column to th
 - The values you can pass through cells are `string`, `number`, `boolean`, and `null`. Don't use objects or `undefined`. Via imports, you could actually use an object as a `$param` value, but don't do it. This could be confusing for non-engineers. Stick with primitives.
 
 - Property name rules are the same as for JavaScript keys. That means alphanumeric, underscores, and dashes. Anything other than characters will throw an error.
+
